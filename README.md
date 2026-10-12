@@ -13,6 +13,7 @@
 - **PC (trên 1050px):** hai cột thiết lập khoản vay và kết quả, biểu đồ.
 - **Tablet (641–1050px):** bố cục một cột, ô nhập chia hàng hợp lý, có tóm tắt tiền trả hằng tháng.
 - **Điện thoại (đến 640px):** vùng chạm lớn, thanh kéo dễ sử dụng, thẻ kết quả hằng tháng nổi khi đang nhập thông số.
+- **iPhone/iPad:** chạm ra ngoài các ô nhập số sẽ tự ẩn bàn phím; chuyển sang ô nhập khác vẫn dùng bàn phím bình thường.
 - Biểu đồ hỗ trợ chọn năm, chạm vào cột và vuốt ngang. Bảng trả nợ có cột Năm cố định khi cuộn ngang.
 - Không dùng framework, thư viện CDN hay máy chủ; chỉ có `index.html`.
 
