@@ -401,73 +401,167 @@
     }
 
 
-    /* v3: task-driven workflow. Financial inputs live together, before prepayment and results. */
-    :root{--bg:#f5f7fc;--accent:#285bd4;--accent-deep:#1c419f;--ink:#172842;--muted:#60738f;--border:#e0e8f4;--shadow:0 16px 46px rgba(24,48,99,.065)}
-    .wrap{width:min(1360px,calc(100% - 64px))}
-    .layout{grid-template-columns:minmax(0,1.02fr) minmax(0,.98fr);gap:20px;align-items:start}
-    .panel{border-radius:22px}
-    .loan-workflow{min-width:0}
-    .financing-quick{background:linear-gradient(140deg,#f0f5ff,#f8fbff);border:1px solid #dce8ff;border-radius:17px;padding:17px 15px;margin:0 0 24px}
-    .financing-heading{display:flex;align-items:center;gap:10px;margin:0 0 13px;min-width:0}
-    .financing-heading h3{font-size:14px;margin:0;color:#243659;font-weight:800}
-    .financing-heading p{font-size:11px;color:#72819b;margin:2px 0 0;line-height:1.45}
-    .flow-step{display:grid;place-items:center;width:28px;height:28px;flex:0 0 auto;background:#e5ecff;color:#2d52bc;border-radius:9px;font-size:11px;font-weight:800}
-    .financing-quick .advanced-body{border:0;padding:0}
-    .financing-body .advanced-fields{grid-template-columns:repeat(2,minmax(0,1fr))}
-    .financing-body .mini-stats.three{grid-template-columns:repeat(3,minmax(0,1fr))}
-    .financing-body .mini-stats strong{font-size:clamp(12px,1.15vw,15px)}
-    .loan-section-heading{margin:4px 0 20px}
-    .scenario-block{margin-top:20px}
-    .scenario-block .financing-heading{margin-bottom:8px}
-    .scenario-block .advanced-panel{box-shadow:none;border-color:#d7e4fa;border-radius:16px;background:#fbfdff}
-    .scenario-block #early-panel{border-color:#bad0fc;background:#f8fbff}
-    .scenario-block .advanced-panel summary{padding:15px}
-    .scenario-block .advanced-body{padding:15px}
-    .scenario-block .advanced-tip{line-height:1.55}
-    .scenario-block .mini-stats{grid-template-columns:repeat(2,minmax(0,1fr))}
-    .scenario-block .mini-stats strong{font-size:clamp(13px,1.15vw,18px)}
-    .scenario-block .advanced-panel summary strong{font-size:14px}
-    .rate-block{margin-bottom:17px}
-    .main-nav{margin-top:20px;margin-bottom:0;padding-bottom:6px;gap:9px}
-    .main-nav a{min-height:36px;display:inline-flex;align-items:center;background:#fff;box-shadow:0 3px 12px rgba(34,59,109,.045)}
-    #advanced-root .advanced-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
-    #advanced-root #purchase-panel{grid-column:1/-1}
-    .input-preview{margin-top:15px}
-    .detail-heading{margin-top:24px}
-    .panel .chart-scroll{overscroll-behavior-x:contain}
-    [id]{scroll-margin-top:18px}
-    @media(min-width:1150px){.layout>.panel:first-child{position:static!important}.layout>.panel:nth-child(2){align-self:start}}
-    @media(max-width:1050px){
-      .wrap{width:min(100% - 36px,910px)}
-      .layout{grid-template-columns:1fr}
-      .financing-body .mini-stats strong{font-size:16px}
-      #advanced-root .advanced-grid{grid-template-columns:1fr}
-      #advanced-root #purchase-panel{grid-column:auto}
-    }
-    @media(max-width:640px){
-      .wrap{width:calc(100% - 24px)}
-      .financing-quick{padding:13px 11px;margin-bottom:20px}
-      .financing-heading h3{font-size:13px}
-      .financing-heading p{font-size:10px}
-      .financing-body .advanced-fields{grid-template-columns:1fr 1fr}
-      .financing-body .mini-stats.three{grid-template-columns:1fr 1fr}
-      .financing-body .mini-stats strong{font-size:13px}
-      .scenario-block{margin-top:15px}
-      .scenario-block .advanced-panel summary{padding:13px 11px}
-      .scenario-block .advanced-body{padding:13px 11px}
-      .main-nav{margin-top:14px;scroll-snap-type:x proximity}
-      .main-nav a{scroll-snap-align:start}
-      .event-row input,.event-row select{font-size:16px}
-      .advanced-body input,.advanced-body select{font-size:16px}
-      .quick-nav a{min-height:40px}
-      .buttons{margin-top:13px}
-    }
-    @media(max-width:390px){
-      .financing-body .advanced-fields{grid-template-columns:1fr}
-      .financing-body .mini-stats.three{grid-template-columns:1fr}
-    }
+    
+/* HomeLoan JP v4 — mobile-first, task-led layout with clear comparison surfaces. */
+:root{
+ --bg:#f3f6fc;--paper:#fff;--ink:#182945;--muted:#5f718d;
+ --border:#dce5f3;--accent:#285bd4;--accent-deep:#2146b0;
+ --shadow:0 12px 36px rgba(21,44,91,.055),0 2px 5px rgba(21,44,91,.025);
+}
+html{scroll-padding-top:24px}
+body{background:linear-gradient(170deg,#eef3ff 0,#f7f9fd 380px,#f5f7fc 100%)}
+.wrap{width:min(1320px,calc(100% - 56px))}
+.page-header{padding:14px 0 19px}
+.page-header .topbar{padding-bottom:13px}
+.hero{padding-top:18px}
+.hero h1{font-size:clamp(25px,2.8vw,37px);max-width:850px;margin:9px 0 6px}
+.hero .subtitle{font-size:13px;max-width:820px}
+.hero-details{margin-top:9px}
+.main-nav{margin:16px 0 1px;padding:2px 0 7px;gap:8px;display:flex;overflow-x:auto;overscroll-behavior-x:contain;scrollbar-width:thin}
+.main-nav a{display:inline-flex;align-items:center;min-height:39px;padding:8px 13px;background:white;color:#304b85;border:1px solid #dce5f2;border-radius:999px;box-shadow:0 2px 8px #132d4710;flex-shrink:0;font-size:12px;text-decoration:none;font-weight:750;scroll-snap-align:start}
+.main-nav a:hover,.main-nav a:focus-visible{background:#ecf3ff;border-color:#adc8f4;color:#2044af}
+.layout{display:grid;grid-template-columns:minmax(0,1.08fr) minmax(0,.92fr);gap:18px;align-items:stretch}
+.layout>.panel{min-width:0;align-self:stretch;border-radius:21px;padding:22px;background:#fff;border:1px solid #e1e8f2}
+.layout .section-heading{margin-bottom:19px}
+.layout .section-heading h2{font-size:18px}
+.loan-workflow{min-width:0}
+.financing-quick{background:linear-gradient(145deg,#f2f6ff,#fbfcff);border:1px solid #dbe6f9;border-radius:17px;padding:16px;margin-bottom:21px}
+.financing-heading{display:flex;align-items:center;gap:11px;margin:0 0 11px;min-width:0}
+.financing-heading h3{font-size:14px;margin:0;color:#23385d;font-weight:800}
+.financing-heading p{font-size:11px;color:#667d9c;margin:2px 0 0;line-height:1.45}
+.flow-step{display:grid;place-items:center;width:30px;height:30px;flex:0 0 auto;background:#e3ebff;color:#3055c2;border-radius:9px;font-size:12px;font-weight:800}
+.financing-quick .advanced-body{padding:0;border:0}
+.financing-body .advanced-fields{grid-template-columns:repeat(2,minmax(0,1fr))}
+.financing-body .advanced-fields label{min-width:0}
+.financing-body .mini-stats.three{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.financing-body .mini-stats strong{font-size:clamp(13px,1.2vw,16px);overflow-wrap:anywhere}
+.financing-body .inline-actions{gap:7px}
+.financing-body .inline-actions button{min-height:38px;padding-inline:12px}
+.financing-body #purchase-warning{margin:8px 0 0}
+.loan-section-heading{margin:0 0 15px}
+.fields-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:15px}
+.fields-grid>.field:first-child{grid-column:1/-1}
+.fields-grid>.field{min-width:0;margin:0 0 18px}
+.fields-grid .field-header{gap:8px}
+.fields-grid .field-header label{font-size:13px}
+.fields-grid .field-header .tiny{font-size:10px}
+.fields-grid .input-group input{font-size:22px;min-height:52px}
+.fields-grid .input-group .suffix{padding-inline:11px}
+.fields-grid .range-input{height:36px}
+.fields-grid .chip{min-height:36px}
+.scenario-block{margin-top:16px}
+.scenario-block .financing-heading{margin-bottom:9px}
+.scenario-block .advanced-panel{box-shadow:none;border-color:#d7e3f5;border-radius:15px;background:#fff}
+.scenario-block #early-panel{background:#f9fbff;border-color:#bcd0f6}
+.scenario-block .advanced-panel summary{padding:14px 15px;min-height:74px}
+.scenario-block .advanced-panel summary strong{font-size:14px}
+.scenario-block .advanced-panel summary small{font-size:11px}
+.scenario-block .advanced-body{padding:14px}
+.scenario-block .advanced-tip{line-height:1.6}
+.scenario-block .mini-stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+.scenario-block .mini-stats strong{font-size:clamp(13px,1.25vw,18px)}
+.scenario-block .event-row{grid-template-columns:1fr 1fr minmax(0,1.12fr) 40px}
+.scenario-block .remove-event{min-height:40px}
+.scenario-block .advanced-add{min-height:44px}
+.scenario-summary{display:flex;align-items:center;gap:7px;margin:9px 1px 0;color:#365db6;font-size:12px;line-height:1.45;font-weight:700;overflow-wrap:anywhere}
+.scenario-summary:empty{display:none}
+.rate-block{margin-bottom:16px}
+.input-preview{display:none}
+.loan-workflow .buttons{margin-top:18px}
+.loan-workflow .buttons .btn{min-height:44px}
+.layout .panel[aria-labelledby="result-title"]{min-width:0}
+.result-top{background:#fff;border-radius:16px;padding-bottom:14px;z-index:2}
+.result-top .result-highlight{box-shadow:0 7px 26px rgba(37,73,168,.13)}
+.result-top .metrics{margin-top:12px}
+.detail-heading{margin-top:22px}
+.chart-scroll,.table-wrap{overscroll-behavior-x:contain}
+#advanced-root{margin:24px 0}
+#advanced-root .advanced-head{margin-bottom:13px}
+#advanced-root .advanced-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px;align-items:start}
+#advanced-root #purchase-panel{grid-column:auto}
+#advanced-root #bank-panel{grid-column:1/-1}
+#advanced-root .advanced-panel{min-width:0}
+#advanced-root .advanced-panel summary{min-height:74px}
+#advanced-root .advanced-body input,#advanced-root .advanced-body select{min-height:44px}
+#advanced-root .banks-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+[id]{scroll-margin-top:19px}
+@media(min-width:1101px){
+ .layout>.panel:first-child{position:static!important}
+ .layout>.panel:nth-child(2){position:relative;align-self:stretch}
+ .result-top{position:sticky;top:12px;box-shadow:0 8px 18px #1a397514}
+}
+@media(min-width:641px) and (max-width:1100px){
+ .wrap{width:min(100% - 36px,960px)}
+ .layout{grid-template-columns:1fr;gap:15px}
+ .layout>.panel{padding:23px}
+ .input-preview{display:flex;align-items:center;justify-content:space-between;gap:15px;background:#eaf1ff;border:1px solid #cedefe;border-radius:13px;padding:12px 16px;margin:0 0 18px}
+ .input-preview>div{display:flex;flex-direction:column}
+ .input-preview strong{font-size:23px;color:#204cbd}
+ .input-preview a{white-space:nowrap;font-weight:800}
+ .fields-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:0 16px}
+ #advanced-root .advanced-grid{grid-template-columns:1fr 1fr}
+ #advanced-root #bank-panel{grid-column:1/-1}
+ #advanced-root .banks-grid{grid-template-columns:1fr 1fr}
+}
+@media(max-width:640px){
+ .wrap{width:calc(100% - 24px)}
+ .page-header{padding:10px 0 12px}
+ .page-header .topbar{padding-bottom:10px}
+ .hero{padding-top:12px}
+ .hero h1{font-size:clamp(24px,7vw,32px);margin:8px 0 5px}
+ .hero .subtitle{font-size:12px;line-height:1.6}
+ .hero-details{display:none}
+ .main-nav{margin-top:12px;margin-bottom:2px;scroll-snap-type:x proximity}
+ .main-nav a{min-height:42px;padding:9px 12px;font-size:12px}
+ .layout{grid-template-columns:1fr;gap:12px}
+ .layout>.panel{padding:16px 14px;border-radius:17px}
+ .layout .section-heading{margin-bottom:14px}
+ .financing-quick{padding:13px 11px;margin-bottom:17px}
+ .financing-heading h3{font-size:13px}
+ .financing-heading p{font-size:11px}
+ .financing-body .advanced-fields{grid-template-columns:1fr}
+ .financing-body .mini-stats.three{grid-template-columns:1fr 1fr;gap:7px}
+ .financing-body .mini-stats strong{font-size:13px}
+ .financing-body .inline-actions button{min-height:43px}
+ .fields-grid{display:block}
+ .fields-grid>.field{margin-bottom:17px}
+ .fields-grid .input-group input{font-size:21px;min-height:49px}
+ .fields-grid .range-input{height:42px}
+ .fields-grid .chip{min-height:40px}
+ .scenario-block{margin-top:14px}
+ .scenario-block .advanced-panel summary{padding:13px 11px;min-height:66px}
+ .scenario-block .advanced-body{padding:12px}
+ .scenario-block .advanced-panel summary strong{font-size:13px}
+ .scenario-block .advanced-panel summary small{font-size:10px}
+ .scenario-block .event-row{grid-template-columns:minmax(0,1fr) minmax(0,1fr) 40px;gap:8px}
+ .scenario-block .event-row[data-kind=early] label:nth-child(3){grid-column:1/3}
+ .scenario-block .event-row[data-kind=early] .remove-event{grid-column:3;grid-row:1}
+ .scenario-block .event-row[data-kind=rate]{grid-template-columns:minmax(0,1fr) minmax(0,1fr) 40px}
+ .scenario-block .mini-stats strong{font-size:13px}
+ .scenario-summary{font-size:11px}
+ .input-preview{display:flex;align-items:center;justify-content:space-between;gap:10px;background:#eaf1ff;border:1px solid #cedeef;border-radius:12px;padding:11px 12px;margin:0 0 14px}
+ .input-preview div{display:flex;flex-direction:column;gap:1px}
+ .input-preview strong{font-size:21px;color:#2149b5}
+ .input-preview a{font-size:12px;white-space:nowrap;text-decoration:none}
+ .loan-workflow .buttons{grid-template-columns:1fr 1fr;gap:9px}
+ #advanced-root{margin-top:18px}
+ #advanced-root .advanced-grid{grid-template-columns:1fr;gap:11px}
+ #advanced-root #bank-panel{grid-column:auto}
+ #advanced-root .banks-grid{grid-template-columns:1fr}
+ #advanced-root .advanced-head h2{font-size:22px}
+ #advanced-root .advanced-body input,#advanced-root .advanced-body select,.scenario-block .advanced-body input,.scenario-block .advanced-body select{font-size:16px;min-height:44px}
+ .result-top .metrics{gap:8px}
+ .result-top .metric{min-width:0}
+ .mobile-pay{bottom:max(8px,env(safe-area-inset-bottom));left:10px;right:10px}
+ body:has(input:focus) .mobile-pay,body:has(select:focus) .mobile-pay{opacity:0;pointer-events:none;transform:translateY(16px)}
+}
+@media(max-width:370px){
+ .financing-body .mini-stats.three{grid-template-columns:1fr}
+ .loan-workflow .buttons{grid-template-columns:1fr}
+ .result-top .metrics{grid-template-columns:1fr}
+}
+@media(prefers-reduced-motion:reduce){.result-top,.mobile-pay{transition:none}}
 
-  
     /* Form validation — accessible inline feedback for desktop, tablet and mobile */
     .field-error{display:block;margin:7px 0 12px;color:#b42318;font-size:12px;font-weight:650;line-height:1.5}
     .field-error[hidden]{display:none!important}
@@ -484,7 +578,7 @@
 </head>
 <body>
   <main class="wrap">
-    <div style="display:flex;justify-content:flex-end;gap:8px;padding:9px 0 0"><a href="./bank-rates.html" style="display:inline-flex;align-items:center;gap:6px;border:1px solid #cbd6f4;background:#eef2ff;color:#2f50c5;padding:9px 15px;border-radius:12px;font-size:13px;font-weight:750;text-decoration:none">↗ Lãi suất SMBC / Suruga Bank</a></div>
+    
     <header class="page-header">
       <div class="topbar">
         <div class="brand"><div class="brand-mark" aria-hidden="true">¥</div><div><strong>HomeLoan <span>JP</span></strong><small>Máy tính vay mua nhà</small></div></div>
@@ -495,12 +589,21 @@
         <h1>Lên kế hoạch mua nhà <span>thông minh hơn.</span></h1>
         <p class="subtitle">Tùy chỉnh khoản vay, lãi suất và thời hạn bằng cách nhập hoặc kéo thanh. Xem ngay số tiền cần trả mỗi tháng và chi tiết gốc, lãi theo từng năm.</p>
         <div class="hero-details"><span><span class="hero-check">✓</span> Tính ngay, không cần đăng ký</span><span><span class="hero-check">✓</span> Đơn vị tiền Nhật (JPY / 万円)</span></div>
-        <nav class="quick-nav main-nav" aria-label="Đi đến chức năng"><a href="#financing-panel">Giá nhà &amp; tiền vay</a><a href="#variable-panel">Lãi suất</a><a href="#result-title">Kết quả</a><a href="#income-panel">Thu nhập</a><a href="./bank-rates.html">Lãi suất ngân hàng ↗</a><a href="#purchase-panel">Chi phí</a><a href="#early-panel">Trả nợ trước hạn</a></nav>
+        <nav class="quick-nav main-nav" aria-label="Đi đến chức năng chính">
+          <a href="#financing-panel">Giá nhà &amp; tiền tự có</a>
+          <a href="#input-title">Khoản vay</a>
+          <a href="#early-panel">Trả trước hạn</a>
+          <a href="#variable-panel">Lãi suất</a>
+          <a href="#result-title">Kết quả</a>
+          <a href="#advanced-title">Phân tích thêm</a>
+          <a href="./bank-rates.html">Lãi suất ngân hàng ↗</a>
+        </nav>
       </div>
     </header>
     <div class="layout">
       <section class="panel loan-workflow" aria-labelledby="input-title">
         <div class="section-heading"><span class="section-icon" aria-hidden="true">⌂</span><div class="section-heading-content"><div class="section-eyebrow">BƯỚC 01 · THIẾT LẬP</div><h2 id="input-title">Thiết lập khoản vay</h2></div><span class="section-tag">Nhập & kéo</span></div>
+        <div class="input-preview" aria-live="polite"><div><span>Tạm tính mỗi tháng</span><strong id="quick-monthly">171.594 ¥</strong></div><a href="#result-title">Chi tiết <span aria-hidden="true">→</span></a></div>
         <section class="financing-quick" id="financing-panel" aria-labelledby="financing-title">
           <div class="financing-heading"><span class="flow-step">01</span><div><h3 id="financing-title">Giá nhà và vốn tự có</h3><p>Nhập giá nhà, vốn tự có hoặc chọn tỷ lệ vay nhanh.</p></div></div>
           <div class="advanced-body financing-body"><div class="advanced-fields"><label>Giá nhà (man)<input id="property-price" type="number" value="3400" min="1" step="10" inputmode="decimal"></label><label>Tiền tự có / đặt cọc (man)<input id="down-payment" type="number" value="0" min="0" step="10" inputmode="decimal"></label></div>
@@ -538,15 +641,7 @@
           <div class="presets" aria-label="Thời hạn mẫu"><button type="button" class="chip" data-years="20">20 năm</button><button type="button" class="chip" data-years="30">30 năm</button><button type="button" class="chip" data-years="35">35 năm</button></div>
         </div>
         </div>
-        <div class="scenario-block rate-block"><div class="financing-heading"><span class="flow-step">04</span><div><h3>Lãi suất theo các giai đoạn</h3><p>Chọn cố định hoặc thêm các mốc thay đổi.</p></div></div><details class="advanced-panel" id="variable-panel">
-          <summary><span class="advanced-icon">≈</span><span><strong>Lãi suất biến động · 変動金利</strong><small>Thay đổi lãi suất theo các mốc năm</small></span><span class="chevron">⌄</span></summary>
-          <div class="advanced-body">
-            <div class="advanced-field"><label for="rate-mode">Chế độ lãi suất</label><select id="rate-mode"><option value="fixed">Lãi suất cố định trong kỳ vay</option><option value="variable">Lãi suất thay đổi theo các mốc</option></select></div>
-            <div id="rate-change-controls" hidden><p class="advanced-tip">Ví dụ: bắt đầu từ năm thứ 6 với lãi suất mới 4,5%. Mô hình tính lại khoản trả tại thời điểm đổi lãi suất, không giả lập quy tắc 5 năm / 125% của từng ngân hàng.</p><div id="rate-events" class="event-stack"></div><button type="button" id="add-rate" class="advanced-add">+ Thêm mốc thay đổi lãi suất</button></div>
-            <div class="milestone-header" id="schedule-label">Lãi suất cố định</div><div id="payment-milestones" class="milestones"></div>
-          </div>
-        </details></div>
-        <div class="scenario-block"><div class="financing-heading"><span class="flow-step">03</span><div><h3>Mô phỏng trả nợ trước hạn</h3><p>Tiết kiệm lãi bằng cách trả thêm tiền gốc.</p></div></div><details class="advanced-panel" id="early-panel">
+        <div class="scenario-block"><div class="financing-heading"><span class="flow-step">03</span><div><h3>Mô phỏng trả nợ trước hạn</h3><p>Tiết kiệm lãi bằng cách trả thêm tiền gốc.</p></div></div><details class="advanced-panel" id="early-panel" open>
           <summary><span class="advanced-icon">↘</span><span><strong>Trả nợ trước hạn · 繰上返済</strong><small>Rút ngắn kỳ hạn hoặc giảm tiền hằng tháng</small></span><span class="chevron">⌄</span></summary>
           <div class="advanced-body">
             <p class="advanced-tip">Mỗi lần trả trước được thực hiện vào <strong>cuối năm</strong> đã chọn, sau kỳ thanh toán tháng đó. Tiền trả trước được trừ trực tiếp vào dư nợ gốc.</p>
@@ -555,9 +650,17 @@
             <div class="mini-stats"><div><span>Tổng tiền trả trước thực tế</span><strong id="prepay-extra">—</strong></div><div><span>Lãi tiết kiệm so với không trả trước</span><strong id="prepay-saved">—</strong></div><div><span>Thời điểm trả hết nợ</span><strong id="prepay-paid-off">—</strong></div><div><span>Thời gian trả thực tế</span><strong id="prepay-years">—</strong></div></div>
             <p class="advanced-tip">Mô phỏng chưa trừ phí trả trước do ngân hàng áp dụng. Chọn giảm thời hạn: giữ tiền trả định kỳ trừ khi lãi suất thay đổi; chọn giảm tháng: giữ ngày đáo hạn ban đầu.</p>
           </div>
+        </details><p class="scenario-summary" id="prepay-quick-summary" aria-live="polite">Chưa thêm khoản trả trước. Mở mục trên để thiết lập.</p></div>
+        
+        <div class="scenario-block rate-block"><div class="financing-heading"><span class="flow-step">04</span><div><h3>Lãi suất theo các giai đoạn</h3><p>Chọn cố định hoặc thêm các mốc thay đổi.</p></div></div><details class="advanced-panel" id="variable-panel">
+          <summary><span class="advanced-icon">≈</span><span><strong>Lãi suất biến động · 変動金利</strong><small>Thay đổi lãi suất theo các mốc năm</small></span><span class="chevron">⌄</span></summary>
+          <div class="advanced-body">
+            <div class="advanced-field"><label for="rate-mode">Chế độ lãi suất</label><select id="rate-mode"><option value="fixed">Lãi suất cố định trong kỳ vay</option><option value="variable">Lãi suất thay đổi theo các mốc</option></select></div>
+            <div id="rate-change-controls" hidden><p class="advanced-tip">Ví dụ: bắt đầu từ năm thứ 6 với lãi suất mới 4,5%. Mô hình tính lại khoản trả tại thời điểm đổi lãi suất, không giả lập quy tắc 5 năm / 125% của từng ngân hàng.</p><div id="rate-events" class="event-stack"></div><button type="button" id="add-rate" class="advanced-add">+ Thêm mốc thay đổi lãi suất</button></div>
+            <div class="milestone-header" id="schedule-label">Lãi suất cố định</div><div id="payment-milestones" class="milestones"></div>
+          </div>
         </details></div>
         
-        <div class="input-preview" aria-live="polite"><div><span>Tạm tính mỗi tháng</span><strong id="quick-monthly">171.594 ¥</strong></div><a href="#result-title">Chi tiết <span aria-hidden="true">→</span></a></div>
         <div class="buttons">
           <button class="btn" id="reset" type="button"><span aria-hidden="true">↺</span> Đặt lại</button>
           <button class="btn" id="copy" type="button"><span aria-hidden="true">⧉</span> Sao chép kết quả</button>
@@ -567,14 +670,16 @@
       </section>
       <section class="panel" aria-labelledby="result-title">
         <div class="section-heading result-heading"><span class="section-icon result-icon" aria-hidden="true">↗</span><div class="section-heading-content"><div class="section-eyebrow">KẾT QUẢ · TỰ ĐỘNG CẬP NHẬT</div><h2 id="result-title">Kết quả tính toán</h2></div><span class="section-tag">Tự động cập nhật</span></div>
+        <div class="result-top">
         <div class="result-highlight">
           <div class="caption"><span class="result-label-dot"></span> Ước tính phải trả mỗi tháng</div>
-          <div class="big-number" id="monthly">171.594 <small>¥ / tháng</small></div>
+          <div class="big-number" id="monthly" aria-live="polite">171.594 <small>¥ / tháng</small></div>
           <div class="highlight-bottom">Phương thức 元利均等返済 — khoản trả hiển thị là kỳ đầu; các kỳ sau có thể thay đổi</div>
         </div>
         <div class="metrics">
           <div class="metric interest"><div class="label">Tổng tiền lãi</div><div id="total-interest" class="value">38.069.400 ¥</div></div>
           <div class="metric"><div class="label">Tổng gốc + lãi</div><div id="total-paid" class="value">72.069.400 ¥</div></div>
+        </div>
         </div>
         <div class="detail-heading"><h3>Tỷ lệ tiền gốc và lãi</h3><div class="legend"><span><i class="dot"></i> Gốc</span><span><i class="dot orange"></i> Lãi</span></div></div>
         <div class="bar-track" role="img" aria-label="Tỷ lệ gốc và lãi" id="split-label"><div id="principal-bar" class="bar-main" style="width:47.18%"></div><div class="bar-interest"></div></div>
@@ -609,7 +714,7 @@
       <div class="advanced-grid">
         
         
-        <details class="advanced-panel" id="purchase-panel" open>
+        <details class="advanced-panel" id="purchase-panel">
           <summary><span class="advanced-icon">⌂</span><span><strong>Thuế, bảo hiểm và chi phí mua nhà</strong><small>Ước tính khoản tiền cần chuẩn bị khi mua nhà</small></span><span class="chevron">⌄</span></summary>
           <div class="advanced-body">
             <h3 class="advanced-subtitle">Chi phí mua nhà ước tính</h3>
@@ -627,7 +732,7 @@
             <div class="mini-stats three"><div><span>Tổng phí dự toán</span><strong id="fee-total">—</strong></div><div><span>Tiền mặt cần (giá − vay + phí)</span><strong id="cash-needed">—</strong></div><div><span>Vốn tự có + gốc, lãi và phí</span><strong id="total-housing">—</strong></div></div><p class="advanced-tip" id="fee-breakdown"></p>
           </div>
         </details>
-        <details class="advanced-panel" id="income-panel" open>
+        <details class="advanced-panel" id="income-panel">
           <summary><span class="advanced-icon">◉</span><span><strong>Khả năng trả nợ theo thu nhập</strong><small>DTI, ngân sách tháng và stress test lãi suất</small></span><span class="chevron">⌄</span></summary>
           <div class="advanced-body">
             <div class="advanced-fields">
@@ -641,7 +746,7 @@
             <div id="afford-status" class="state-label"></div><p class="advanced-tip">Đây chỉ là phép thử dòng tiền, không phải kết luận được duyệt vay. Ngưỡng 30%, mức stress test là tùy chỉnh, không được trình bày là tiêu chí chính thức của SMBC / Suruga. Chưa tính thuế thu nhập, chi phí sinh hoạt và chênh lệch điều kiện visa.</p>
           </div>
         </details>
-        <details class="advanced-panel" id="bank-panel" open>
+        <details class="advanced-panel" id="bank-panel">
           <summary><span class="advanced-icon">⇄</span><span><strong>So sánh 2 ngân hàng</strong><small>Nhập lãi suất, phí của SMBC, Suruga hoặc ngân hàng khác</small></span><span class="chevron">⌄</span></summary>
           <div class="advanced-body">
             <p class="advanced-tip">Đây là <strong>hai kịch bản lãi suất cố định để so sánh</strong>, không phải lãi suất ưu đãi hoặc điều kiện xét duyệt chính thức. Các lần trả trước đang nhập vẫn áp dụng cho cả hai.</p>
@@ -668,7 +773,7 @@
     <p class="foot"><strong>Lưu ý:</strong> Công cụ hỗ trợ mô phỏng trả trước, lãi suất thay đổi, phí mua nhà và khả năng trả nợ dựa trên thông số do bạn nhập. Các mức phí/ngân hàng chỉ là giả định và không thể dùng thay cho báo giá hoặc xét duyệt ngân hàng. Dữ liệu tính toán chạy ngay trong trình duyệt, không gửi lên máy chủ.</p>
   </main>
   <aside class="mobile-pay" id="mobile-pay" aria-label="Thanh toán mỗi tháng"><div><span>Trả hằng tháng</span><strong id="mobile-monthly">171.594 ¥</strong></div><a href="#result-title">Xem kết quả <span aria-hidden="true">↗</span></a></aside>
-  <script src="calculator-core.js?v=20261012-hotfix1"></script><script src="advanced.js?v=20261012-hotfix1"></script><script src="validation.js?v=20261012-hotfix1"></script><script>
+  <script src="calculator-core.js?v=20261012-responsive-v4"></script><script src="advanced.js?v=20261012-responsive-v4"></script><script src="validation.js?v=20261012-responsive-v4"></script><script>
     "use strict";
     const $ = id => document.getElementById(id);
     const fields = ["principal", "rate", "years"];
