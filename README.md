@@ -1,6 +1,6 @@
 # HomeLoan JP — tính vay mua nhà Nhật Bản
 
-Công cụ tính khoản vay mua nhà theo phương thức **元利均等返済** (trả đều tổng gốc + lãi mỗi tháng). Chạy hoàn toàn trong trình duyệt, không cần đăng nhập hoặc backend.
+Công cụ tính khoản vay mua nhà theo phương thức **元利均等返済** (trả đều tổng gốc + lãi mỗi tháng). Máy tính chạy trong trình duyệt và không cần đăng nhập. Trang theo dõi lãi suất đọc dữ liệu do GitHub Actions thu thập theo lịch.
 
 ## Tính năng
 
@@ -8,7 +8,7 @@ Công cụ tính khoản vay mua nhà theo phương thức **元利均等返済*
 - **Trả trước 繰上返済:** nhiều lần trả thêm vào cuối năm chọn; phương án giảm kỳ hạn (期間短縮型) hoặc giảm tiền trả tháng (返済額軽減型), hiển thị thời điểm tất toán và lãi tiết kiệm.
 - **Lãi suất thay đổi 変動金利:** nhập nhiều mốc năm bắt đầu và mức lãi suất tương ứng; điều chỉnh lại khoản trả định kỳ và cập nhật dòng tiền. Khi đã rút ngắn kỳ hạn, việc đổi lãi suất không tự kéo khoản vay trở về kỳ hạn gốc.
 - **Mua nhà:** nhập giá nhà, tiền tự có, chọn LTV 80/90/100%, phân tích vốn cần chuẩn bị và các chi phí (phí ngân hàng, môi giới, đăng ký, thuế, bảo hiểm, phí khác). Không áp phí mặc định nếu chưa xác nhận.
-- **So sánh hai ngân hàng:** tùy chỉnh tên, lãi suất, phí theo man hoặc %, so sánh tổng chi phí; không lấy dữ liệu lãi suất thời gian thực.
+- **So sánh ngân hàng:** có thể nhập hai phương án thủ công; trang bank-rates.html dùng dữ liệu ngân hàng công bố đã được thu thập theo lịch.
 - **Khả năng trả nợ:** thu nhập năm trước thuế, nợ khác, chi phí duy trì, tỷ lệ trả nợ (DTI), ngân sách tháng và số vay mô phỏng theo lãi suất stress test.
 - **Trực quan:** biểu đồ gốc/lãi theo năm, bảng trả nợ theo năm, xuất CSV theo năm và theo tháng, sao chép kết quả, lưu cài đặt vào localStorage.
 - **Responsive:** giao diện PC, tablet, iPhone/iPad; bảng và biểu đồ cuộn ngang; tự ẩn bàn phím iOS khi chạm ra ngoài ô nhập.
@@ -41,4 +41,17 @@ Các giá trị đã nhập được lưu trong trình duyệt của chính thi�
 
 ## Theo dõi lãi suất SMBC / Suruga
 
-Mở `bank-rates.html` để xem lãi suất công bố và giải thích bằng tiếng Việt. Endpoint `/api/rates` (Vercel Serverless Function) đọc từ các trang ngân hàng chính thức, xác nhận số liệu trong HTML và phản hồi lỗi khi không thể lấy dữ liệu. Dữ liệu được cache khoảng 4 giờ và trang lưu lịch sử quan sát tại localStorage của chính thiết bị (không phải lịch sử server). Không có xác suất duyệt vay hoặc lãi suất cá nhân. Nút tính toán chuyển lãi suất *tối thiểu công bố* vào máy tính để mô phỏng; không có nghĩa người vay chắc chắn nhận mức giá đó.
+Dữ liệu ngân hàng được kiểm tra hai lần mỗi ngày: **08:30 và 20:30 JST**, qua workflow .github/workflows/rate-sync.yml. GitHub Actions hỗ trợ timezone Asia/Tokyo; lịch có thể chạy trễ. Khi người dùng mở website, ứng dụng chỉ đọc bản dữ liệu đã lưu, KHÔNG gọi website ngân hàng.
+
+- Parser: lib/bank-source.js, chỉ dùng các trang chính thức đã cho phép, kiểm tra ngày hiệu lực và dải lãi suất.
+- Collector: scripts/sync-rates.js chống trùng trong mỗi ô lịch, lưu log thành công/thất bại và không thay thế bản đã xác minh khi truy cập ngân hàng lỗi.
+- Kho dữ liệu chung trong repository: data/latest.json, data/history.json, data/fetch-logs.json. Đây là JSON có phiên bản, không phải PostgreSQL. Tài khoản Supabase liên kết hiện chỉ có database của một ứng dụng khác, nên không sử dụng.
+- API Vercel /api/rates chỉ đọc bản JSON từ GitHub raw, cache khoảng 15 phút. Giao diện GitHub Pages đọc JSON từ GitHub raw với bản static dự phòng.
+- Phần dịch tiếng Việt gồm tên gói, mô tả và thuật ngữ tài chính đã chuẩn hóa. Nội dung hợp đồng đầy đủ vẫn phải kiểm tra qua liên kết tiếng Nhật chính thức.
+- Hồ sơ người vay lưu ở localStorage thiết bị, không gửi thông tin visa hoặc thu nhập lên máy chủ.
+
+Chạy tests: node --test tests/*.test.js. GitHub Actions kiểm tra syntax và tests khi có push lên main.
+
+Workflow production qua GitHub Pages: .github/workflows/deploy-pages.yml. Nếu Pages chưa bật, chủ repository cần vào Settings > Pages > Source: GitHub Actions một lần. Vercel yêu cầu tài khoản đang kết nối có quyền đối với chính project HomeLoan, không thể dùng project của ứng dụng khác.
+
+Lãi suất công bố không phải đề nghị lãi suất cá nhân. Gói cố định 10 năm không được giả định cố định trọn 35 năm. Phí chưa xác minh không được tự coi là miễn phí. Repo công khai có thể tự tắt scheduled workflows sau 60 ngày không có hoạt động.
