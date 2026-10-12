@@ -27,7 +27,7 @@
 </div></details>
 <div class="warning">⚠ Kết quả là mô phỏng theo lãi suất công bố. Không phải xác nhận được vay 100%, được duyệt thẩm định hay được áp dụng lãi suất thấp nhất.</div>
 </section></aside>
-<main><div class="panel"><div class="content-head"><div><h2>So sánh sản phẩm ngân hàng</h2><p class="caption">So sánh theo mức công bố. Chọn sản phẩm để đưa lãi suất vào máy tính vay; khoản trả tháng chỉ là mô phỏng.</p></div><span class="tag">VN / 日本語</span></div>
+<main><div class="panel"><div class="content-head"><div><h2>So sánh sản phẩm ngân hàng</h2><p class="caption">So sánh theo mức công bố. Chọn sản phẩm để đưa lãi suất vào máy tính vay; khoản trả tháng chỉ là mô phỏng.</p></div><label class="bank-fresh" for="sort-rates">Sắp xếp <select id="sort-rates" class="btn" aria-label="Sắp xếp sản phẩm"><option value="rate">Lãi suất thấp nhất</option><option value="monthly">Tiền trả tháng</option><option value="bank">Theo ngân hàng</option></select></label></div>
 <div class="error" id="errors" role="alert"></div><div id="cards" class="cards"><div id="placeholder">Đang kết nối nguồn lãi suất chính thức…</div></div>
 </div>
 <section class="info"><h3>Đánh giá điều kiện theo hồ sơ</h3><div id="assessment"><p>Nhập thông tin ở bên trái để xem các lưu ý liên quan đến mức vay và việc đăng ký với từng ngân hàng.</p></div></section>
@@ -40,7 +40,7 @@
 'use strict';
 const ids=['price','down','years','age','income','debts','tenure','residency','it','japanese','olive'];
 const el=id=>document.getElementById(id);
-let products=[],loadStamp=null;
+let products=[],loadStamp=null,bankStatuses={},serverHistory=[];
 const money=yen=>Math.round(yen).toLocaleString('vi-VN')+' ¥';
 const fmt=n=>Number(n).toLocaleString('vi-VN',{maximumFractionDigits:3});
 const safe=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -61,23 +61,32 @@ if(s.tenure<1)w.push('Thâm niên công ty dưới 1 năm: cần xác nhận cá
 return w;
 }
 function card(p,s){
-let lower=pmt(s.loan,p.min,s.years*12),higher=pmt(s.loan,p.max,s.years*12),dti=s.income>0?(higher+s.debts*10000)/(s.income*10000/12)*100:null;
-let stale=!p.effectiveDate||((Date.now()-new Date(p.effectiveDate+'T00:00:00+09:00').getTime())/86400000>45);
-const warn=warnings(s,p.bank);const bank=p.bank==='smbc'?'SMBC (三井住友銀行)':'Suruga Bank (スルガ銀行)';
-let kind=p.bank==='smbc'&&s.residency==='nonpr'?'unknown':'';
-return '<article class="ratecard"><div class="bank">'+safe(bank)+'</div><div><h3>'+safe(p.name)+'</h3><div class="jp" lang="ja">'+safe(p.japanese)+'</div></div>'+
-'<div class="rate">'+fmt(p.min)+'% <small>– '+fmt(p.max)+'%/năm</small></div>'+
-'<div class="mini">Lãi công bố · Hiệu lực: '+safe(p.effectiveDate||'chưa trích xuất được')+' '+(stale?badge('Nguồn cũ / cần kiểm tra','unknown'):badge('Đã trích xuất','valid'))+'</div>'+
-'<div class="monthly"><span>Trả tháng, khoảng lãi thấp nhất</span><b>'+money(lower)+'</b></div>'+
-'<div class="mini">Khoảng trả tháng đến '+money(higher)+(dti===null?'':' · DTI ở mức lãi cao: '+fmt(dti)+'%')+'</div>'+
-'<p class="fine">'+safe(p.info)+'</p>'+
-'<div>'+badge('Cần thẩm định cá nhân',kind)+' '+(warn.length?badge(warn.length+' lưu ý','unknown'):'')+'</div>'+
-'<div class="actions"><button class="btn primary use-rate" type="button" data-id="'+safe(p.id)+'">Tính với lãi thấp nhất ↗</button><a class="btn" target="_blank" rel="noopener noreferrer" href="'+safe(p.source)+'">Nguồn Nhật ↗</a></div></article>';
+const lower=pmt(s.loan,p.min,s.years*12),higher=pmt(s.loan,p.max,s.years*12);
+const dti=s.income>0?(higher+s.debts*10000)/(s.income*10000/12)*100:null;
+const bankName=p.bank==='smbc'?'SMBC (三井住友銀行)':'Suruga Bank (スルガ銀行)';
+const bankStatus=(bankStatuses||{})[p.bank]||{};
+const failed=bankStatus.status==='error';
+const lastOK=bankStatus.lastSuccessAt||p.verifiedAt;
+const intro=p.type==='intro-fixed';
+const incomplete=warnings(s,p.bank).length;
+return '<article class="ratecard">'+
+ '<div class="rate-heading"><div class="bank">'+safe(bankName)+'</div>'+badge('Cần thẩm định cá nhân','unknown')+'</div>'+
+ '<div class="rate-main"><div><h3>'+safe(p.name)+'</h3><div class="jp" lang="ja">'+safe(p.japanese)+'</div></div><div class="rate">'+fmt(p.min)+'% <small>– '+fmt(p.max)+'%/năm</small></div></div>'+
+ '<div class="rate-grid">'+
+ '<div class="rate-metric"><small>Trả mỗi tháng · mức lãi thấp</small><strong>'+money(lower)+'</strong></div>'+
+ '<div class="rate-metric"><small>Trả tháng · mức lãi cao</small><strong>'+money(higher)+'</strong></div>'+
+ '<div class="rate-metric"><small>Phí và tổng chi phí</small><strong>Chưa xác minh</strong></div>'+
+ '</div>'+
+ '<div class="bank-fresh">Lãi công bố có hiệu lực '+safe(p.effectiveDate||'chưa rõ')+' · Xác minh lần cuối '+safe(lastOK?new Date(lastOK).toLocaleString('vi-VN',{timeZone:'Asia/Tokyo'}):'chưa xác minh')+' JST</div>'+
+ '<div>'+ (failed?badge('Ngân hàng đang lỗi, hiển thị bản cũ','unknown'):badge('Bản đã lưu','valid'))+' '+badge(incomplete+' lưu ý hồ sơ','unknown')+'</div>'+
+ (intro?'<p class="fine">⚠ Đây là lãi cố định 10 năm đầu. Khoản trả tháng chỉ minh họa trong giai đoạn đầu, không đại diện tổng chi phí cả kỳ vay.</p>':'')+
+ '<p class="fine">'+safe(p.info)+' '+(dti===null?'':'DTI mô phỏng mức lãi cao: '+fmt(dti)+'%.')+'</p>'+
+ '<div class="actions"><button class="btn primary use-rate" type="button" data-id="'+safe(p.id)+'">Dùng lãi thấp nhất để tính ↗</button><a class="btn" target="_blank" rel="noopener noreferrer" href="'+safe(p.source)+'">Nguồn gốc tiếng Nhật ↗</a></div></article>';
 }
 function render(){
 const s=state();
 el('borrow').textContent=fmt(s.loan/10000)+' 万円';el('ltv').textContent=fmt(s.ltv)+'%';
-if(products.length){el('cards').innerHTML=products.slice().sort((a,b)=>a.min-b.min).map(p=>card(p,s)).join('');}else{el('cards').innerHTML='<div id="placeholder">Không có số liệu có thể xác minh lúc này. Kiểm tra trực tiếp: <a target="_blank" rel="noopener" href="https://www.smbc.co.jp/gadget/loan_shinki/">SMBC ↗</a> hoặc <a target="_blank" rel="noopener" href="https://www.surugabank.co.jp/suruga/pc/Rate?formNo=00204&amp;startUp=suruga_lkinri">Suruga ↗</a>.</div>';}
+if(products.length){el('cards').innerHTML=products.slice().sort((a,b)=>{const sort=el('sort-rates').value;return sort==='bank'?a.bank.localeCompare(b.bank)||a.min-b.min:sort==='monthly'?pmt(s.loan,a.min,s.years*12)-pmt(s.loan,b.min,s.years*12):a.min-b.min;}).map(p=>card(p,s)).join('');}else{el('cards').innerHTML='<div id="placeholder">Không có số liệu có thể xác minh lúc này. Kiểm tra trực tiếp: <a target="_blank" rel="noopener" href="https://www.smbc.co.jp/gadget/loan_shinki/">SMBC ↗</a> hoặc <a target="_blank" rel="noopener" href="https://www.surugabank.co.jp/suruga/pc/Rate?formNo=00204&amp;startUp=suruga_lkinri">Suruga ↗</a>.</div>';}
 const maxDti=products.length&&s.income>0?Math.max(...products.map(p=>(pmt(s.loan,p.max,s.years*12)+s.debts*10000)/(s.income*10000/12)*100)):null;
 const notes=['Đây là đánh giá sơ bộ theo hồ sơ, không phải kết quả 事前審査 hay xác suất được duyệt.','SMBC: '+warnings(s,'smbc').join(' '),'Suruga: '+warnings(s,'suruga').join(' '),'LTV '+fmt(s.ltv)+'%; '+(maxDti===null?'chưa có DTI.':'DTI tham khảo ở mức lãi cao nhất trong sản phẩm được lấy: '+fmt(maxDti)+'%.')+' DTI không phải ngưỡng chính thức của ngân hàng.'].filter(v=>v.trim());
 el('assessment').innerHTML='<ul>'+notes.map(n=>'<li>'+safe(n)+'</li>').join('')+'</ul>';
@@ -113,6 +122,7 @@ finally{el('refresh').disabled=false;render();}
 ids.forEach(id=>{const n=el(id);n.addEventListener('input',render);n.addEventListener('change',()=>{render();try{localStorage.setItem('home-loan-rate-profile-v1',JSON.stringify(Object.fromEntries(ids.map(k=>[k,el(k).type==='checkbox'?el(k).checked:el(k).value]))));}catch(_){}});});
 try{const p=JSON.parse(localStorage.getItem('home-loan-rate-profile-v1')||'null');if(p&&typeof p==='object')ids.forEach(k=>{if(Object.prototype.hasOwnProperty.call(p,k)){if(el(k).type==='checkbox')el(k).checked=!!p[k];else el(k).value=String(p[k]);}});}catch(_){}
 el('refresh').addEventListener('click',loadRates);
+el('sort-rates').addEventListener('change',render);
 document.addEventListener('pointerdown',e=>{if(!e.target.closest('input,select,button,textarea')&&document.activeElement&&/INPUT|SELECT|TEXTAREA/.test(document.activeElement.tagName))document.activeElement.blur();});
 render();renderHistory();loadRates();
 })();
