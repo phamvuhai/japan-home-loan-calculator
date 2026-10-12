@@ -26,13 +26,39 @@ function read(){
   amountMan:Number(r.querySelector('[data-key="amount"]').value),
   mode:r.querySelector('[data-key="mode"]').value
  }));
- const rateChanges=$("rate-mode").value==="variable"?Array.from(document.querySelectorAll('[data-kind="rate"]')).map(r=>({
+ const rateChanges=$("rate-mode")?.value==="variable"?Array.from(document.querySelectorAll('[data-kind="rate"]')).map(r=>({
   month:(Number(r.querySelector('[data-key="year"]').value)-1)*12+1,
   rate:Number(r.querySelector('[data-key="rate"]').value)
  })):[];
  return {prepayments,rateChanges};
 }
+// When a page is loaded with an older HTML/JS version (browser/CDN cache),
+// optional analytics must not prevent the core monthly repayment from rendering.
+// Keep the DOM contract explicit so missing nodes are observable in the console.
+const RESULT_IDS=[
+ "prepay-saved","prepay-paid-off","prepay-extra","prepay-years","schedule-label",
+ "ltv-result","cash-down","loan-gap","fee-total","cash-needed","total-housing",
+ "purchase-warning","fee-breakdown","debt-ratio","monthly-budget",
+ "housing-monthly","max-estimated","afford-status","compare-difference",
+ "payment-milestones",
+ "bank-a-monthly","bank-a-interest","bank-a-cost","bank-a-payoff",
+ "bank-b-monthly","bank-b-interest","bank-b-cost","bank-b-payoff"
+];
+let missingUiReported=false;
+function availableResults(){
+ const missing=RESULT_IDS.filter(id=>!$(id));
+ if(missing.length){
+  if(!missingUiReported){
+   console.warn("[HomeLoan JP] Missing advanced UI elements; keeping base calculation available:",missing.join(", "));
+   missingUiReported=true;
+  }
+  return false;
+ }
+ missingUiReported=false;
+ return true;
+}
 function render(base,simulation){
+ if(!availableResults())return;
  const standard=C.simulate({...base,prepayments:[]});
  const saved=standard.totalInterest-simulation.totalInterest;
  $("prepay-saved").textContent=money(saved);
@@ -95,6 +121,12 @@ function render(base,simulation){
  }catch(e){}
 }
 function init(){
+ const required=["rate-mode","rate-change-controls","csv-monthly","advanced-root"];
+ const missing=required.filter(id=>!$(id));
+ if(missing.length){
+  console.warn("[HomeLoan JP] Incomplete advanced controls (possible stale cached HTML):",missing.join(", "));
+  return;
+ }
  let restored=false;
  try{
   const saved=JSON.parse(localStorage.getItem("loan-advanced-v2")||"null");
