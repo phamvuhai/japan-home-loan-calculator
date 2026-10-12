@@ -482,7 +482,7 @@
         <h1>Lên kế hoạch mua nhà <span>thông minh hơn.</span></h1>
         <p class="subtitle">Tùy chỉnh khoản vay, lãi suất và thời hạn bằng cách nhập hoặc kéo thanh. Xem ngay số tiền cần trả mỗi tháng và chi tiết gốc, lãi theo từng năm.</p>
         <div class="hero-details"><span><span class="hero-check">✓</span> Tính ngay, không cần đăng ký</span><span><span class="hero-check">✓</span> Đơn vị tiền Nhật (JPY / 万円)</span></div>
-        <nav class="quick-nav main-nav" aria-label="Đi đến chức năng"><a href="#financing-panel">Giá nhà &amp; tiền vay</a><a href="#early-panel">Trả trước</a><a href="#variable-panel">Lãi suất</a><a href="#result-title">Kết quả</a><a href="#purchase-panel">Chi phí</a><a href="#bank-panel">Ngân hàng</a><a href="#income-panel">Khả năng trả nợ</a></nav>
+        <nav class="quick-nav main-nav" aria-label="Đi đến chức năng"><a href="#financing-panel">Giá nhà &amp; tiền vay</a><a href="#variable-panel">Lãi suất</a><a href="#result-title">Kết quả</a><a href="#income-panel">Thu nhập</a><a href="./bank-rates.html">Lãi suất ngân hàng ↗</a><a href="#purchase-panel">Chi phí</a><a href="#early-panel">Trả nợ trước hạn</a></nav>
       </div>
     </header>
     <div class="layout">
@@ -525,7 +525,15 @@
           <div class="presets" aria-label="Thời hạn mẫu"><button type="button" class="chip" data-years="20">20 năm</button><button type="button" class="chip" data-years="30">30 năm</button><button type="button" class="chip" data-years="35">35 năm</button></div>
         </div>
         </div>
-        <div class="scenario-block"><div class="financing-heading"><span class="flow-step">03</span><div><h3>Lập kế hoạch trả trước</h3><p>Tiết kiệm lãi bằng cách trả thêm tiền gốc.</p></div></div><details class="advanced-panel" id="early-panel" open>
+        <div class="scenario-block rate-block"><div class="financing-heading"><span class="flow-step">04</span><div><h3>Lãi suất theo các giai đoạn</h3><p>Chọn cố định hoặc thêm các mốc thay đổi.</p></div></div><details class="advanced-panel" id="variable-panel">
+          <summary><span class="advanced-icon">≈</span><span><strong>Lãi suất biến động · 変動金利</strong><small>Thay đổi lãi suất theo các mốc năm</small></span><span class="chevron">⌄</span></summary>
+          <div class="advanced-body">
+            <div class="advanced-field"><label for="rate-mode">Chế độ lãi suất</label><select id="rate-mode"><option value="fixed">Lãi suất cố định trong kỳ vay</option><option value="variable">Lãi suất thay đổi theo các mốc</option></select></div>
+            <div id="rate-change-controls" hidden><p class="advanced-tip">Ví dụ: bắt đầu từ năm thứ 6 với lãi suất mới 4,5%. Mô hình tính lại khoản trả tại thời điểm đổi lãi suất, không giả lập quy tắc 5 năm / 125% của từng ngân hàng.</p><div id="rate-events" class="event-stack"></div><button type="button" id="add-rate" class="advanced-add">+ Thêm mốc thay đổi lãi suất</button></div>
+            <div class="milestone-header" id="schedule-label">Lãi suất cố định</div><div id="payment-milestones" class="milestones"></div>
+          </div>
+        </details></div>
+        <div class="scenario-block"><div class="financing-heading"><span class="flow-step">03</span><div><h3>Mô phỏng trả nợ trước hạn</h3><p>Tiết kiệm lãi bằng cách trả thêm tiền gốc.</p></div></div><details class="advanced-panel" id="early-panel">
           <summary><span class="advanced-icon">↘</span><span><strong>Trả nợ trước hạn · 繰上返済</strong><small>Rút ngắn kỳ hạn hoặc giảm tiền hằng tháng</small></span><span class="chevron">⌄</span></summary>
           <div class="advanced-body">
             <p class="advanced-tip">Mỗi lần trả trước được thực hiện vào <strong>cuối năm</strong> đã chọn, sau kỳ thanh toán tháng đó. Tiền trả trước được trừ trực tiếp vào dư nợ gốc.</p>
@@ -535,14 +543,7 @@
             <p class="advanced-tip">Mô phỏng chưa trừ phí trả trước do ngân hàng áp dụng. Chọn giảm thời hạn: giữ tiền trả định kỳ trừ khi lãi suất thay đổi; chọn giảm tháng: giữ ngày đáo hạn ban đầu.</p>
           </div>
         </details></div>
-        <div class="scenario-block rate-block"><div class="financing-heading"><span class="flow-step">04</span><div><h3>Điều chỉnh lãi suất</h3><p>Chọn cố định hoặc thêm các mốc thay đổi.</p></div></div><details class="advanced-panel" id="variable-panel">
-          <summary><span class="advanced-icon">≈</span><span><strong>Lãi suất biến động · 変動金利</strong><small>Thay đổi lãi suất theo các mốc năm</small></span><span class="chevron">⌄</span></summary>
-          <div class="advanced-body">
-            <div class="advanced-field"><label for="rate-mode">Chế độ lãi suất</label><select id="rate-mode"><option value="fixed">Lãi suất cố định trong kỳ vay</option><option value="variable">Lãi suất thay đổi theo các mốc</option></select></div>
-            <div id="rate-change-controls" hidden><p class="advanced-tip">Ví dụ: bắt đầu từ năm thứ 6 với lãi suất mới 4,5%. Mô hình tính lại khoản trả tại thời điểm đổi lãi suất, không giả lập quy tắc 5 năm / 125% của từng ngân hàng.</p><div id="rate-events" class="event-stack"></div><button type="button" id="add-rate" class="advanced-add">+ Thêm mốc thay đổi lãi suất</button></div>
-            <div class="milestone-header" id="schedule-label">Lãi suất cố định</div><div id="payment-milestones" class="milestones"></div>
-          </div>
-        </details></div>
+        
         <div class="input-preview" aria-live="polite'><div><span>Tạm tính mỗi tháng</span><strong id="quick-monthly">171.594 ¥</strong></div><a href="#result-title">Chi tiết <span aria-hidden="true">→</span></a></div>
         <div class="buttons">
           <button class="btn" id="reset" type="button"><span aria-hidden="true">↺</span> Đặt lại</button>
@@ -613,16 +614,6 @@
             <div class="mini-stats three"><div><span>Tổng phí dự toán</span><strong id="fee-total">—</strong></div><div><span>Tiền mặt cần (giá − vay + phí)</span><strong id="cash-needed">—</strong></div><div><span>Vốn tự có + gốc, lãi và phí</span><strong id="total-housing">—</strong></div></div><p class="advanced-tip" id="fee-breakdown"></p>
           </div>
         </details>
-        <details class="advanced-panel" id="bank-panel" open>
-          <summary><span class="advanced-icon">⇄</span><span><strong>So sánh 2 ngân hàng</strong><small>Nhập lãi suất, phí của SMBC, Suruga hoặc ngân hàng khác</small></span><span class="chevron">⌄</span></summary>
-          <div class="advanced-body">
-            <p class="advanced-tip">Đây là <strong>hai kịch bản lãi suất cố định để so sánh</strong>, không phải lãi suất ưu đãi hoặc điều kiện xét duyệt chính thức. Các lần trả trước đang nhập vẫn áp dụng cho cả hai.</p>
-            <div class="banks-grid">
-              <div class="bank-column"><h3>Phương án A</h3><label>Tên ngân hàng<input id="bank-a-name" type="text" value="SMBC" maxlength="40"></label><label>Lãi suất (%/năm)<input id="bank-a-rate" type="number" value="2.5" min="0" max="100" step=".01" inputmode="decimal"></label><label>Phí ngân hàng (% tiền vay)<input id="bank-a-fee-pct" type="number" value="0" min="0" step=".01" inputmode="decimal"></label><label>Phí cố định (man)<input id="bank-a-fee" type="number" value="0" min="0" step="1" inputmode="decimal"></label><div class="bank-out"><span>Hằng tháng</span><strong id="bank-a-monthly">—</strong><span>Tổng tiền lãi</span><strong id="bank-a-interest">—</strong><span>Gốc + lãi + phí NH</span><strong id="bank-a-cost">—</strong><span>Thanh toán hết</span><strong id="bank-a-payoff">—</strong></div></div>
-              <div class="bank-column"><h3>Phương án B</h3><label>Tên ngân hàng<input id="bank-b-name" type="text" value="Suruga Bank" maxlength="40"></label><label>Lãi suất (%/năm)<input id="bank-b-rate" type="number" value="3" min="0" max="100" step=".01" inputmode="decimal"></label><label>Phí ngân hàng (% tiền vay)<input id="bank-b-fee-pct" type="number" value="0" min="0" step=".01" inputmode="decimal"></label><label>Phí cố định (man)<input id="bank-b-fee" type="number" value="0" min="0" step="1" inputmode="decimal"></label><div class="bank-out"><span>Hằng tháng</span><strong id="bank-b-monthly">—</strong><span>Tổng tiền lãi</span><strong id="bank-b-interest">—</strong><span>Gốc + lãi + phí NH</span><strong id="bank-b-cost">—</strong><span>Thanh toán hết</span><strong id="bank-b-payoff">—</strong></div></div>
-            </div><p id="compare-difference" class="compare-note" aria-live="polite"></p>
-          </div>
-        </details>
         <details class="advanced-panel" id="income-panel" open>
           <summary><span class="advanced-icon">◉</span><span><strong>Khả năng trả nợ theo thu nhập</strong><small>DTI, ngân sách tháng và stress test lãi suất</small></span><span class="chevron">⌄</span></summary>
           <div class="advanced-body">
@@ -637,6 +628,17 @@
             <div id="afford-status" class="state-label"></div><p class="advanced-tip">Đây chỉ là phép thử dòng tiền, không phải kết luận được duyệt vay. Ngưỡng 30%, mức stress test là tùy chỉnh, không được trình bày là tiêu chí chính thức của SMBC / Suruga. Chưa tính thuế thu nhập, chi phí sinh hoạt và chênh lệch điều kiện visa.</p>
           </div>
         </details>
+        <details class="advanced-panel" id="bank-panel" open>
+          <summary><span class="advanced-icon">⇄</span><span><strong>So sánh 2 ngân hàng</strong><small>Nhập lãi suất, phí của SMBC, Suruga hoặc ngân hàng khác</small></span><span class="chevron">⌄</span></summary>
+          <div class="advanced-body">
+            <p class="advanced-tip">Đây là <strong>hai kịch bản lãi suất cố định để so sánh</strong>, không phải lãi suất ưu đãi hoặc điều kiện xét duyệt chính thức. Các lần trả trước đang nhập vẫn áp dụng cho cả hai.</p>
+            <div class="banks-grid">
+              <div class="bank-column"><h3>Phương án A</h3><label>Tên ngân hàng<input id="bank-a-name" type="text" value="SMBC" maxlength="40"></label><label>Lãi suất (%/năm)<input id="bank-a-rate" type="number" value="2.5" min="0" max="100" step=".01" inputmode="decimal"></label><label>Phí ngân hàng (% tiền vay)<input id="bank-a-fee-pct" type="number" value="0" min="0" step=".01" inputmode="decimal"></label><label>Phí cố định (man)<input id="bank-a-fee" type="number" value="0" min="0" step="1" inputmode="decimal"></label><div class="bank-out"><span>Hằng tháng</span><strong id="bank-a-monthly">—</strong><span>Tổng tiền lãi</span><strong id="bank-a-interest">—</strong><span>Gốc + lãi + phí NH</span><strong id="bank-a-cost">—</strong><span>Thanh toán hết</span><strong id="bank-a-payoff">—</strong></div></div>
+              <div class="bank-column"><h3>Phương án B</h3><label>Tên ngân hàng<input id="bank-b-name" type="text" value="Suruga Bank" maxlength="40"></label><label>Lãi suất (%/năm)<input id="bank-b-rate" type="number" value="3" min="0" max="100" step=".01" inputmode="decimal"></label><label>Phí ngân hàng (% tiền vay)<input id="bank-b-fee-pct" type="number" value="0" min="0" step=".01" inputmode="decimal"></label><label>Phí cố định (man)<input id="bank-b-fee" type="number" value="0" min="0" step="1" inputmode="decimal"></label><div class="bank-out"><span>Hằng tháng</span><strong id="bank-b-monthly">—</strong><span>Tổng tiền lãi</span><strong id="bank-b-interest">—</strong><span>Gốc + lãi + phí NH</span><strong id="bank-b-cost">—</strong><span>Thanh toán hết</span><strong id="bank-b-payoff">—</strong></div></div>
+            </div><p id="compare-difference" class="compare-note" aria-live="polite"></p>
+          </div>
+        </details>
+        
       </div>
       <p class="advanced-note">Giả định: trả góp đều 元利均等返済, lãi tính mỗi tháng trên dư nợ, lãi suất điều chỉnh tại đầu mốc năm, phí và lãi ngân hàng nhập thủ công. Các ngân hàng có thể áp dụng quy tắc làm tròn, lãi suất, trả trước và điều chỉnh khoản thanh toán khác.</p>
       <div class="advanced-download"><button class="btn primary" id="csv-monthly" type="button">↓ Xuất CSV chi tiết từng tháng (bao gồm trả trước)</button></div>
