@@ -780,12 +780,13 @@
     // editable fields; never preventDefault(), so sliders/buttons keep working.
     function dismissKeyboardOnOutsideTap(event) {
       const focused = document.activeElement;
-      if (!focused || !fields.includes(focused.id)) return;
+      // Includes purchase, bank comparison and affordability fields as well.
+      if (!focused || !focused.matches('input:not([type="checkbox"]):not([type="range"]), textarea')) return;
       const target = event.target;
       if (!(target instanceof Element)) return;
       if (target === focused) return;
       // Switching between inputs should keep the normal native focus behavior.
-      if (target.closest('input[type="number"],input[type="text"],textarea,[contenteditable="true"]')) return;
+      if (target.closest('input:not([type="checkbox"]):not([type="range"]),textarea,select,[contenteditable="true"]')) return;
       const linkedLabel = target.closest("label[for]");
       if (linkedLabel && fields.includes(linkedLabel.htmlFor)) return;
       focused.blur();
