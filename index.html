@@ -668,7 +668,7 @@
     <p class="foot"><strong>Lưu ý:</strong> Công cụ hỗ trợ mô phỏng trả trước, lãi suất thay đổi, phí mua nhà và khả năng trả nợ dựa trên thông số do bạn nhập. Các mức phí/ngân hàng chỉ là giả định và không thể dùng thay cho báo giá hoặc xét duyệt ngân hàng. Dữ liệu tính toán chạy ngay trong trình duyệt, không gửi lên máy chủ.</p>
   </main>
   <aside class="mobile-pay" id="mobile-pay" aria-label="Thanh toán mỗi tháng"><div><span>Trả hằng tháng</span><strong id="mobile-monthly">171.594 ¥</strong></div><a href="#result-title">Xem kết quả <span aria-hidden="true">↗</span></a></aside>
-  <script src="calculator-core.js"></script><script src="advanced.js"></script><script src="validation.js"></script><script>
+  <script src="calculator-core.js?v=20261012-hotfix1"></script><script src="advanced.js?v=20261012-hotfix1"></script><script src="validation.js?v=20261012-hotfix1"></script><script>
     "use strict";
     const $ = id => document.getElementById(id);
     const fields = ["principal", "rate", "years"];
@@ -709,8 +709,18 @@
       syncSliders();
       const man=Number($("principal").value),annualPercent=Number($("rate").value),years=Number($("years").value);
       const error=$("error");
+      // If any script failed to load, show a useful message instead of
+      // exposing a raw TypeError or leaving the page half-rendered.
+      if(!window.LoanValidation || !window.LoanCore || !window.LoanAdvanced){
+        error.style.display="block";
+        error.textContent="Một phần ứng dụng chưa tải đầy đủ. Vui lòng tải lại trang (Ctrl+Shift+R). Nếu lỗi tiếp tục, hãy thử cửa sổ ẩn danh.";
+        console.error("[HomeLoan JP] Required scripts are unavailable",{
+          core:!!window.LoanCore,advanced:!!window.LoanAdvanced,validation:!!window.LoanValidation
+        });
+        return;
+      }
       const validation=window.LoanValidation.validate();
-       const isValid=validation.valid;
+      const isValid=validation.valid;
       error.style.display=isValid?"none":"block";
       if(!isValid){
         error.textContent=validation.errors.length+" mục cần kiểm tra. Các ô sai được viền đỏ, kèm hướng dẫn ngay bên dưới. Vui lòng sửa trước khi tính tiếp.";
@@ -748,7 +758,11 @@
         renderAmortizationChart(yearlyRows);
         window.LoanAdvanced.render(base,result);
         try{localStorage.setItem("home-loan-jp-inputs",JSON.stringify({man,annualPercent,years}))}catch(_){}
-      }catch(e){error.style.display="block";error.textContent=e.message||"Thông số chưa hợp lệ";}
+      }catch(e){
+        console.error("[HomeLoan JP] Could not complete calculation:",e);
+        error.style.display="block";
+        error.textContent="Không thể cập nhật một số kết quả. Hãy tải lại trang để đồng bộ dữ liệu mới nhất; nếu vẫn lỗi, vui lòng gửi ảnh Console để kiểm tra.";
+      }
     }
 
     function amortization(principal, monthly, rate, months) {
