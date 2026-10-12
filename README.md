@@ -5,6 +5,7 @@
 - Chỉnh sửa **số tiền vay** theo **万円 (man)**, **lãi suất %/năm** và **thời hạn vay năm** bằng cả **ô nhập số lẫn thanh kéo**; hai cách nhập luôn đồng bộ. Thanh kéo tự mở rộng phạm vi khi nhập giá trị lớn hơn mức mặc định.
 - Tự tính khoản trả hằng tháng (元利均等返済), tổng gốc + lãi và tổng lãi.
 - Bảng trả nợ từng năm, tải CSV, sao chép kết quả; giao diện dùng tốt trên điện thoại.
+- Biểu đồ hai cột gốc/lãi theo từng năm ngay dưới kết quả tính toán; chọn năm để xem số tiền chính xác (¥). Biểu đồ tự cập nhật khi thay đổi khoản vay và cuộn ngang được trên điện thoại.
 - Ghi nhớ thông số trong trình duyệt. Không gửi dữ liệu cho bên thứ ba.
 
 ## Sử dụng
