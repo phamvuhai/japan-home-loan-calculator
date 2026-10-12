@@ -44,7 +44,7 @@
   if((INTEGERS.has(input.id)||input.dataset&&input.dataset.key==="year")&&!Number.isInteger(n))return label+" phải là số nguyên.";
   if(input.hasAttribute("min")&&n<Number(input.min))return label+" phải từ "+input.min+" trở lên.";
   if(input.hasAttribute("max")&&n>Number(input.max))return label+" không được vượt quá "+input.max+".";
-  const price=document.getElementById("property-price");
+  const price=typeof document==="undefined"?null:document.getElementById("property-price");
   if(input.id==="down-payment"&&price&&price.value.trim()&&Number.isFinite(Number(price.value))&&n>Number(price.value))return "Tiền trả trước không thể lớn hơn giá nhà.";
   if(input.dataset&&input.dataset.key==="year"&&Number.isFinite(n)){
    const years=document.getElementById("years");
