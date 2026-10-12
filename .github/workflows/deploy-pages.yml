@@ -29,7 +29,7 @@ jobs:
       - name: Prepare static website (no private API)
         run: |
           mkdir -p public/data
-          cp index.html bank-rates.html calculator-core.js advanced.js public/
+          cp index.html bank-rates.html calculator-core.js advanced.js validation.js public/
           cp data/latest.json data/history.json public/data/
           touch public/.nojekyll
       - uses: actions/upload-pages-artifact@v4
