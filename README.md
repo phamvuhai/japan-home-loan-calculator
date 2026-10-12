@@ -38,3 +38,7 @@ node --test tests/loan-core.test.js
 Đây là **mô phỏng tài chính**, không phải kết quả phê duyệt vay. Lãi suất và phí ngân hàng do người dùng tự nhập và không được mô tả là điều kiện hiện tại của SMBC hay Suruga. Không tự áp dụng quy tắc 5 năm/125% đối với biến động lãi, hay phí trả nợ trước hạn. Có thể chênh vài yen do phương pháp làm tròn của ngân hàng. Phí duy trì hằng tháng được hiển thị riêng, chưa cộng vào tổng gốc/lãi và chi phí ban đầu. Phí môi giới chỉ là phép tính tham khảo theo giả định đã ghi.
 
 Các giá trị đã nhập được lưu trong trình duyệt của chính thiết bị, không gửi đến máy chủ của ứng dụng.
+
+## Theo dõi lãi suất SMBC / Suruga
+
+Mở `bank-rates.html` để xem lãi suất công bố và giải thích bằng tiếng Việt. Endpoint `/api/rates` (Vercel Serverless Function) đọc từ các trang ngân hàng chính thức, xác nhận số liệu trong HTML và phản hồi lỗi khi không thể lấy dữ liệu. Dữ liệu được cache khoảng 4 giờ và trang lưu lịch sử quan sát tại localStorage của chính thiết bị (không phải lịch sử server). Không có xác suất duyệt vay hoặc lãi suất cá nhân. Nút tính toán chuyển lãi suất *tối thiểu công bố* vào máy tính để mô phỏng; không có nghĩa người vay chắc chắn nhận mức giá đó.
