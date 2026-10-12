@@ -98,7 +98,7 @@ function init(){
    (saved.events?.early||[]).forEach(e=>newEvent("early",e));(saved.events?.rates||[]).forEach(e=>newEvent("rate",e));restored=true;
   }
  }catch(e){}
- if(!restored){newEvent("early");newEvent("rate");}
+ if(!restored){}
  $("advanced-root").addEventListener("input",e=>{if(e.target.matches("input,select"))calculate()});
  $("advanced-root").addEventListener("change",e=>{
   if(e.target.matches("input,select"))calculate();
