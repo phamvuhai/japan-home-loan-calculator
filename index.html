@@ -331,11 +331,11 @@
         <div class="section-heading"><span class="section-icon" aria-hidden="true">⌘</span><div class="section-heading-content"><div class="section-eyebrow">BƯỚC 01 · TÙY CHỈNH</div><h2 id="input-title">Thông tin khoản vay</h2></div><span class="section-tag">3 thông số</span></div>
         <div class="fields-grid">
         <div class="field">
-          <div class="field-header"><label for="principal">Số tiền vay</label><span class="tiny">Đơn vị Nhật Bản</span></div>
-          <div class="input-group"><input id="principal" type="number" value="3400" min="1" max="100000" step="10" inputmode="decimal" aria-describedby="principal-hint" /><span class="suffix">万円 (man)</span></div>
+          <div class="field-header"><label for="principal">Số tiền vay</label><span class="tiny">Bước kéo: 10 man</span></div>
+          <div class="input-group"><input id="principal" type="number" value="3400" min="1" max="100000" step="any" inputmode="decimal" aria-describedby="principal-hint" /><span class="suffix">万円 (man)</span></div>
           <div class="slider-block">
-            <input class="range-input" id="principal-slider" type="range" min="1" max="10000" step="1" value="3400" aria-label="Kéo để chỉnh số tiền vay, đơn vị man" />
-            <div class="slider-ends"><span>1 man</span><span id="principal-slider-max">10.000 man</span></div>
+            <input class="range-input" id="principal-slider" type="range" min="10" max="10000" step="10" value="3400" aria-label="Kéo để chỉnh số tiền vay, mỗi nấc 10 man" />
+            <div class="slider-ends"><span>10 man</span><span id="principal-slider-max">10.000 man</span></div>
           </div>
           <div id="principal-hint" class="note" aria-live="polite">Tương đương: <strong id="loan-in-yen">34.000.000 ¥</strong></div>
           <div class="presets" aria-label="Mức vay mẫu"><button type="button" class="chip" data-amount="2000">2.000 man</button><button type="button" class="chip" data-amount="3000">3.000 man</button><button type="button" class="chip" data-amount="4000">4.000 man</button></div>
