@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="theme-color" content="#f5f7fc" />
+  <meta name="theme-color" content="#f3f6fb" />
   <meta name="description" content="Công cụ tính khoản vay mua nhà Nhật Bản: tiền trả hằng tháng, tổng tiền lãi và lịch trả nợ." />
   <title>Tính Vay Mua Nhà Nhật Bản | Home Loan Calculator</title>
   <style>
@@ -110,18 +110,226 @@
     @media(max-width:830px){.layout{grid-template-columns:1fr}.panel{padding:21px}.schedule{margin-top:16px}}
     @media(max-width:540px){header{padding:26px 0 18px}.wrap{width:min(100% - 24px,1160px)}.panel{border-radius:16px;padding:18px}.metrics{grid-template-columns:1fr 1fr;gap:9px}.metric{padding:13px 11px}.metric .value{font-size:17px}.big-number{font-size:35px}.result-highlight{padding:19px}.legend{font-size:11px}th,td{padding:11px 10px}}
     @media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important}}
+  
+    /* Responsive design system — desktop / tablet / mobile */
+    :root{
+      --bg:#f3f6fb;--paper:#fff;--ink:#17243d;--muted:#697893;--border:#e2e9f3;
+      --accent:#355bd9;--accent-deep:#2445b0;--blue:#4b6af0;--orange:#f19c52;
+      --shadow:0 14px 40px rgba(29,48,105,.055),0 2px 9px rgba(29,48,105,.025)
+    }
+    html{scroll-behavior:smooth}
+    body{background:radial-gradient(ellipse 60% 30% at 0% 0%,#e6edff 0,transparent 100%),radial-gradient(ellipse 50% 36% at 100% 7%,#eaf4ff 0,transparent 100%),var(--bg)}
+    .wrap{width:min(1260px,calc(100% - 72px));margin:auto}
+    .page-header{padding:22px 0 27px}
+    .topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-bottom:23px;border-bottom:1px solid #dce5f2}
+    .brand{display:flex;align-items:center;gap:10px;color:#1c2b4b}
+    .brand-mark{width:40px;height:40px;display:grid;place-items:center;border-radius:13px;background:#234ecf;color:#fff;font-size:24px;font-weight:900;box-shadow:0 7px 15px #2c52bc32}
+    .brand strong{display:block;font-size:17px;line-height:1.15;letter-spacing:-.04em}
+    .brand strong span{color:#3563da}
+    .brand small{display:block;color:#8390a5;font-size:11px;margin-top:3px;font-weight:600}
+    .topbar-pill{display:flex;align-items:center;gap:9px;border:1px solid #dbe5f4;background:#ffffffae;border-radius:50px;padding:9px 13px;font-size:12px;color:#6e7e97;font-weight:650}
+    .live-dot{display:inline-block;flex:0 0 auto;width:7px;height:7px;border-radius:50%;background:#2cb58a;box-shadow:0 0 0 3px #ddf6ec}
+    .hero{padding-top:27px}
+    .eyebrow{background:#e5ecff;border:1px solid #d7e2ff;color:#2951c3;padding:6px 12px;font-size:10px;letter-spacing:.08em}
+    .eyebrow .live-dot{background:#4169de;box-shadow:none;width:6px;height:6px}
+    h1{max-width:780px;margin:11px 0 11px;font-size:clamp(28px,3.3vw,41px);letter-spacing:-.045em;line-height:1.14}
+    h1 span{color:#3461d9}
+    .subtitle{color:#657691;font-size:14px;line-height:1.75;max-width:780px}
+    .hero-details{display:flex;flex-wrap:wrap;gap:12px 21px;margin-top:17px;color:#6a7b93;font-size:12px;font-weight:600}
+    .hero-details>span{display:flex;align-items:center;gap:7px}
+    .hero-check{display:grid;place-items:center;width:17px;height:17px;border-radius:50%;background:#dff6ec;color:#098962;font-size:10px;font-weight:900}
+    .layout{grid-template-columns:minmax(320px,.79fr) minmax(0,1.21fr);gap:20px}
+    .panel{padding:26px;border:1px solid #e0e7f2;border-radius:21px;box-shadow:var(--shadow);min-width:0}
+    .section-heading{display:flex;align-items:center;gap:12px;margin-bottom:25px;min-width:0}
+    .section-icon{display:grid;place-items:center;flex:0 0 auto;width:42px;height:42px;border-radius:13px;background:#eaf0ff;color:#3e62d3;font-size:23px;font-weight:750}
+    .result-icon{color:#0d946d;background:#ddf7ed}
+    .section-heading-content{min-width:0;flex:1}
+    .section-eyebrow{font-size:10px;font-weight:800;line-height:1.4;letter-spacing:.11em;color:#8291aa;margin-bottom:4px}
+    .section-heading h2{margin:0;font-size:18px;font-weight:800}
+    .section-tag{flex:0 0 auto;font-size:11px;color:#54719c;background:#f1f5fc;border:1px solid #e6ecf8;padding:6px 9px;border-radius:20px;font-weight:700}
+    .field{margin-bottom:25px;min-width:0}
+    .field-header{margin-bottom:10px}
+    label{font-size:13px;font-weight:750}
+    .input-group{border-radius:12px;border-color:#d7e0ee;box-shadow:0 2px 3px #07163403}
+    .input-group input{font-size:25px;line-height:1.35;font-weight:790;min-height:54px;padding:10px 15px}
+    .input-group .suffix{font-size:12px;padding:0 11px;color:#627793;background:#f5f8fc}
+    .input-group:focus-within{border-color:#4d70e1;box-shadow:0 0 0 4px #5478f31c}
+    .range-input{height:35px}
+    .range-input::-webkit-slider-runnable-track{height:7px}
+    .range-input::-moz-range-track{height:7px}
+    .range-input::-webkit-slider-thumb{width:25px;height:25px;margin-top:-9px}
+    .range-input::-moz-range-thumb{width:19px;height:19px}
+    .slider-block{margin-top:9px}
+    .slider-ends{font-size:11px}
+    .note{font-size:12px;margin-top:7px}
+    .chip{min-height:33px;font-size:12px;padding:6px 12px;border-radius:9px;background:#f6f8fd;white-space:nowrap}
+    .chip:active{background:#e2eafa;transform:scale(.98)}
+    .buttons{display:grid;grid-template-columns:1fr 1.35fr;gap:10px;margin-top:4px}
+    .btn{min-height:44px;font-size:12px;border-radius:11px;padding:10px 12px;white-space:normal;line-height:1.35}
+    .btn:focus-visible,.chip:focus-visible,.year-picker select:focus-visible,.mobile-pay a:focus-visible,.input-preview a:focus-visible{outline:3px solid #75a1fc;outline-offset:3px}
+    .input-preview{display:none}
+    .result-highlight{border-radius:16px;background:linear-gradient(117deg,#2446b1 0%,#3865e3 68%,#6789ef 100%);padding:26px 27px;min-width:0}
+    .result-highlight::after{font-size:210px;right:6px;bottom:-84px;color:#ffffff0d}
+    .result-highlight::before{content:"";position:absolute;width:200px;height:200px;right:-65px;top:-113px;border:1px solid #ffffff23;border-radius:50%;box-shadow:0 0 0 45px #ffffff08,0 0 0 85px #ffffff08}
+    .result-highlight .caption{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600}
+    .result-label-dot{display:inline-block;width:7px;height:7px;background:#86efd5;box-shadow:0 0 0 4px #ffffff18;border-radius:50%}
+    .big-number{font-size:clamp(31px,3.6vw,46px);white-space:normal;overflow-wrap:anywhere;line-height:1.17;margin-top:13px}
+    .big-number small{display:inline-block;font-size:clamp(15px,1.3vw,17px);vertical-align:baseline;white-space:nowrap}
+    .highlight-bottom{font-size:12px;color:#e0e9ff;margin-top:16px}
+    .metrics{gap:12px;margin-top:13px}
+    .metric{background:#f8faff;border-radius:13px;padding:17px 16px}
+    .metric .label{font-size:12px;line-height:1.5}
+    .metric .value{white-space:normal;overflow-wrap:anywhere;font-size:clamp(17px,2vw,23px);letter-spacing:-.05em}
+    .detail-heading{margin-top:27px;flex-wrap:wrap}
+    .legend{gap:8px 12px;font-size:12px}
+    .bar-track{height:12px}
+    .detail-items{margin-top:18px}
+    .detail-line{gap:14px;align-items:start}
+    .detail-line strong{text-align:right;overflow-wrap:anywhere}
+    .repayment-chart{margin-top:27px}
+    .chart-heading{align-items:start}
+    .chart-toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:11px 0 0;flex-wrap:wrap}
+    .chart-caption{margin:0}
+    .year-picker{display:flex;align-items:center;gap:8px;font-size:12px;color:#7483a0;white-space:nowrap}
+    .year-picker select{min-height:37px;min-width:105px;padding:7px 26px 7px 10px;background:#f7f9fd;border:1px solid #dce5f3;border-radius:9px;color:#2b416c;font-size:13px;font-weight:750;cursor:pointer}
+    .chart-scroll{margin-top:11px}
+    .chart-summary{align-items:center}
+    .schedule{margin-top:20px;padding:26px}
+    .schedule-head{margin-bottom:19px}
+    .schedule-head h3{font-size:18px;margin:0}
+    .schedule .desc{font-size:12px}
+    .table-wrap{scrollbar-width:thin}
+    .table-wrap table{min-width:750px}
+    td:nth-child(2){color:#365bd1;font-weight:700}
+    td:nth-child(3){color:#bf7639;font-weight:700}
+    th:first-child,td:first-child{position:sticky;left:0;z-index:1;background:#fff;box-shadow:inset -1px 0 #e6ebf3}
+    th:first-child{background:#f7f9fd;z-index:2}
+    .table-swipe-hint{display:none}
+    .foot{margin-bottom:44px}
+    .mobile-pay{display:none}
+    @media(min-width:1150px) and (min-height:930px){
+      .layout > .panel:first-child{position:sticky;top:18px}
+    }
+    @media(max-width:1050px){
+      .wrap{width:min(100% - 36px,910px)}
+      .page-header{padding-top:17px}
+      .layout{grid-template-columns:1fr;gap:15px}
+      .layout > .panel:first-child{position:static}
+      .fields-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 19px}
+      .fields-grid>.field:first-child{grid-column:1/-1}
+      .input-group input{font-size:23px}
+      .input-preview{display:flex;align-items:center;justify-content:space-between;gap:10px;background:#eff4ff;border:1px solid #dbe6ff;border-radius:13px;padding:14px 16px;margin:0 0 13px}
+      .input-preview div{display:flex;flex-direction:column;gap:1px}
+      .input-preview span{color:#657a9f;font-size:11px}
+      .input-preview strong{color:#2147bd;font-size:23px;line-height:1.25;font-variant-numeric:tabular-nums;letter-spacing:-.03em}
+      .input-preview a{display:flex;align-items:center;gap:7px;color:#2854d1;font-size:12px;font-weight:750;text-decoration:none;white-space:nowrap}
+    }
+    @media(max-width:640px){
+      body{font-size:14px}
+      .wrap{width:calc(100% - 24px)}
+      .page-header{padding:12px 0 16px}
+      .topbar{padding-bottom:14px}
+      .brand-mark{width:36px;height:36px;border-radius:11px;font-size:22px}
+      .brand strong{font-size:15px}
+      .brand small{font-size:10px}
+      .topbar-pill{font-size:0;padding:7px;border:none;background:transparent}
+      .topbar-pill .live-dot{width:9px;height:9px}
+      .hero{padding-top:18px}
+      .eyebrow{font-size:9px;letter-spacing:.045em;padding:5px 10px}
+      h1{font-size:clamp(27px,7.6vw,36px);margin:11px 0 8px;line-height:1.18}
+      .subtitle{font-size:12px;line-height:1.65}
+      .hero-details{gap:7px 12px;margin-top:12px;font-size:10px}
+      .hero-check{width:15px;height:15px;font-size:10px}
+      .layout{gap:13px}
+      .panel{padding:18px 15px;border-radius:17px}
+      .section-heading{gap:10px;margin-bottom:17px}
+      .section-heading h2{font-size:16px}
+      .section-eyebrow{font-size:9px}
+      .section-icon{width:37px;height:37px;font-size:19px;border-radius:11px}
+      .section-tag{font-size:10px;padding:5px 7px}
+      .fields-grid{display:block}
+      .field{margin-bottom:19px}
+      .field-header{margin-bottom:7px}
+      .field-header .tiny{font-size:10px;text-align:right}
+      .input-group input{min-height:49px;font-size:22px;padding:8px 12px}
+      .input-group .suffix{font-size:11px;padding:0 10px}
+      .slider-block{margin-top:6px}
+      .range-input{height:40px}
+      .range-input::-webkit-slider-thumb{width:29px;height:29px;margin-top:-11px}
+      .range-input::-moz-range-thumb{width:23px;height:23px}
+      .presets{gap:6px;margin-top:7px}
+      .chip{min-height:36px;padding:7px 10px}
+      .input-preview{padding:12px 13px;margin:2px 0 12px}
+      .input-preview strong{font-size:21px}
+      .buttons{grid-template-columns:1fr 1.4fr}
+      .result-highlight{padding:23px 20px;border-radius:14px}
+      .result-highlight .caption{font-size:12px}
+      .big-number{font-size:clamp(29px,8.3vw,41px);margin-top:11px;overflow-wrap:anywhere}
+      .big-number small{display:block;font-size:13px;margin:5px 0 0;color:#e4eaff}
+      .highlight-bottom{font-size:11px;margin-top:11px}
+      .metrics{gap:9px}
+      .metric{padding:13px 11px}
+      .metric .value{font-size:clamp(16px,4.6vw,21px);line-height:1.2}
+      .metric .label{font-size:11px}
+      .detail-heading{margin-top:22px;gap:6px}
+      .detail-items{gap:11px}
+      .detail-line{font-size:12px}
+      .detail-line strong{font-size:12px}
+      .repayment-chart{padding-top:18px;margin-top:22px}
+      .chart-heading h3{font-size:15px}
+      .legend{font-size:10px}
+      .chart-toolbar{margin-top:10px}
+      .chart-caption{font-size:11px}
+      .chart-scroll{border-radius:11px}
+      .chart-summary{display:grid;grid-template-columns:auto 1fr;gap:6px 14px}
+      .chart-summary>strong{grid-row:span 2;align-self:center;color:#2b4fc6}
+      .chart-summary span{font-size:11px}
+      .chart-hint{font-size:11px}
+      .schedule{margin-top:13px;padding:17px 14px}
+      .schedule-head h3{font-size:16px}
+      .schedule .desc{font-size:11px}
+      .schedule-head .btn{width:100%;margin-top:4px}
+      .table-swipe-hint{display:block;color:#8090aa;font-size:11px;text-align:right;margin:0 0 9px}
+      th,td{padding:11px 12px;font-size:12px}
+      .foot{font-size:11px;line-height:1.7;padding:0 4px;margin:18px 0 100px}
+      .mobile-pay{display:flex;position:fixed;bottom:max(12px,env(safe-area-inset-bottom));left:12px;right:12px;align-items:center;justify-content:space-between;gap:12px;padding:11px 12px 11px 15px;border:1px solid #cfdbf2;border-radius:16px;background:#ffffffed;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);box-shadow:0 9px 37px #122d6450;z-index:40;transition:opacity .18s,transform .18s;max-width:560px;margin:auto}
+      .mobile-pay>div{display:flex;flex-direction:column;gap:0;min-width:0}
+      .mobile-pay>div span{font-size:10px;color:#71829d}
+      .mobile-pay strong{font-size:20px;font-weight:850;color:#1d45bf;letter-spacing:-.04em;font-variant-numeric:tabular-nums;overflow-wrap:anywhere;line-height:1.3}
+      .mobile-pay a{background:#2a50d0;color:#fff;border-radius:11px;min-height:44px;display:flex;align-items:center;gap:5px;padding:0 12px;font-size:11px;font-weight:750;text-decoration:none;white-space:nowrap}
+      .result-in-view .mobile-pay{opacity:0;pointer-events:none;transform:translateY(18px)}
+    }
+    @media(max-width:365px){
+      .section-tag{display:none}
+      .hero-details{display:none}
+      .metric .value{font-size:16px}
+      .chart-summary{grid-template-columns:1fr}
+      .chart-summary>strong{grid-row:auto}
+      .mobile-pay strong{font-size:18px}
+      .mobile-pay a{padding:0 9px}
+    }
+    @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.mobile-pay{transition:none}}
+
   </style>
 </head>
 <body>
   <main class="wrap">
-    <header>
-      <div class="eyebrow">🏠 Japan home loan calculator</div>
-      <h1>Tính khoản vay mua nhà Nhật Bản</h1>
-      <p class="subtitle">Nhập số tiền vay, lãi suất và thời hạn. Kết quả cập nhật ngay lập tức, bao gồm lịch trả nợ từng năm.</p>
+    <header class="page-header">
+      <div class="topbar">
+        <div class="brand"><div class="brand-mark" aria-hidden="true">¥</div><div><strong>HomeLoan <span>JP</span></strong><small>Máy tính vay mua nhà</small></div></div>
+        <span class="topbar-pill"><span class="live-dot"></span> Dành cho người mua nhà tại Nhật</span>
+      </div>
+      <div class="hero">
+        <div class="eyebrow"><span class="live-dot"></span> TÍNH KHOẢN VAY NHANH &amp; CHÍNH XÁC</div>
+        <h1>Lên kế hoạch mua nhà <span>thông minh hơn.</span></h1>
+        <p class="subtitle">Tùy chỉnh khoản vay, lãi suất và thời hạn bằng cách nhập hoặc kéo thanh. Xem ngay số tiền cần trả mỗi tháng và chi tiết gốc, lãi theo từng năm.</p>
+        <div class="hero-details"><span><span class="hero-check">✓</span> Tính ngay, không cần đăng ký</span><span><span class="hero-check">✓</span> Đơn vị tiền Nhật (JPY / 万円)</span></div>
+      </div>
     </header>
     <div class="layout">
       <section class="panel" aria-labelledby="input-title">
-        <h2 id="input-title">Thông tin khoản vay</h2>
+        <div class="section-heading"><span class="section-icon" aria-hidden="true">⌘</span><div class="section-heading-content"><div class="section-eyebrow">BƯỚC 01 · TÙY CHỈNH</div><h2 id="input-title">Thông tin khoản vay</h2></div><span class="section-tag">3 thông số</span></div>
+        <div class="fields-grid">
         <div class="field">
           <div class="field-header"><label for="principal">Số tiền vay</label><span class="tiny">Đơn vị Nhật Bản</span></div>
           <div class="input-group"><input id="principal" type="number" value="3400" min="1" max="100000" step="10" inputmode="decimal" aria-describedby="principal-hint" /><span class="suffix">万円 (man)</span></div>
@@ -150,17 +358,19 @@
           </div>
           <div class="presets" aria-label="Thời hạn mẫu"><button type="button" class="chip" data-years="20">20 năm</button><button type="button" class="chip" data-years="30">30 năm</button><button type="button" class="chip" data-years="35">35 năm</button></div>
         </div>
+        </div>
+        <div class="input-preview" aria-live="polite"><div><span>Tạm tính mỗi tháng</span><strong id="quick-monthly">171.594 ¥</strong></div><a href="#result-title">Chi tiết <span aria-hidden="true">→</span></a></div>
         <div class="buttons">
-          <button class="btn" id="reset" type="button">↻ Đặt lại</button>
-          <button class="btn" id="copy" type="button">⧉ Sao chép kết quả</button>
+          <button class="btn" id="reset" type="button"><span aria-hidden="true">↺</span> Đặt lại</button>
+          <button class="btn" id="copy" type="button"><span aria-hidden="true">⧉</span> Sao chép kết quả</button>
         </div>
         <p class="error" id="error" role="alert"></p>
         <p id="notice" aria-live="polite"></p>
       </section>
       <section class="panel" aria-labelledby="result-title">
-        <h2 id="result-title">Kết quả tính toán</h2>
+        <div class="section-heading result-heading"><span class="section-icon result-icon" aria-hidden="true">↗</span><div class="section-heading-content"><div class="section-eyebrow">BƯỚC 02 · DỰ TOÁN</div><h2 id="result-title">Kết quả tính toán</h2></div><span class="section-tag">Tự động cập nhật</span></div>
         <div class="result-highlight">
-          <div class="caption">Thanh toán gốc + lãi mỗi tháng</div>
+          <div class="caption"><span class="result-label-dot"></span> Ước tính phải trả mỗi tháng</div>
           <div class="big-number" id="monthly">171.594 <small>¥ / tháng</small></div>
           <div class="highlight-bottom">Phương thức 元利均等返済 — trả góp đều hằng tháng</div>
         </div>
@@ -181,7 +391,7 @@
             <h3 id="chart-title">Biểu đồ tiền gốc và tiền lãi</h3>
             <div class="legend"><span><i class="dot"></i> Gốc</span><span><i class="dot orange"></i> Lãi</span></div>
           </div>
-          <p class="chart-caption">Hai cột mỗi năm thể hiện tiền gốc và tiền lãi đã trả (đơn vị: 万円).</p>
+          <div class="chart-toolbar"><p class="chart-caption">Số tiền đã trả từng năm · Đơn vị 万円</p><label class="year-picker">Xem năm <select id="chart-year-select" aria-label="Chọn năm xem chi tiết biểu đồ"><option value="1">Năm 1</option></select></label></div>
           <div class="chart-scroll" tabindex="0" role="region" aria-label="Biểu đồ tiền gốc và lãi theo năm, có thể cuộn ngang">
             <svg id="amortization-chart" xmlns="http://www.w3.org/2000/svg" width="600" height="252" role="group" aria-label="Biểu đồ gốc và lãi theo năm"></svg>
           </div>
@@ -196,13 +406,15 @@
     </div>
     <section class="panel schedule" aria-labelledby="schedule-title">
       <div class="schedule-head">
-        <div><h3 id="schedule-title">Lịch trả nợ theo năm</h3><p class="desc">Theo dư nợ giảm dần, mỗi tháng trả cùng một khoản gốc và lãi.</p></div>
-        <button class="btn primary" id="csv" type="button">↓ Xuất bảng CSV</button>
+        <div><div class="section-eyebrow">PHÂN TÍCH CHI TIẾT</div><h3 id="schedule-title">Lịch trả nợ theo năm</h3><p class="desc">Đối chiếu tiền gốc, tiền lãi và dư nợ của từng năm.</p></div>
+        <button class="btn primary" id="csv" type="button"><span aria-hidden="true">↓</span> Tải bảng CSV</button>
       </div>
+      <div class="table-swipe-hint">↔ Vuốt ngang để xem đầy đủ các cột</div>
       <div class="table-wrap"><table><thead><tr><th>Năm</th><th>Gốc trả trong năm</th><th>Lãi trả trong năm</th><th>Tổng trả trong năm</th><th>Dư nợ cuối năm</th></tr></thead><tbody id="schedule-body"></tbody></table></div>
     </section>
     <p class="foot"><strong>Lưu ý:</strong> Công cụ giả định lãi suất cố định suốt thời gian vay và dùng phương thức trả đều gốc + lãi (元利均等返済). Chưa tính phí ngân hàng, bảo hiểm 団信, thuế, phí mua nhà, chi phí sửa chữa hoặc làm tròn riêng theo quy tắc từng ngân hàng. Nếu sử dụng 変動金利 (lãi suất thả nổi), số tiền thực tế có thể thay đổi. Dữ liệu tính toán chạy ngay trong trình duyệt, không gửi lên máy chủ.</p>
   </main>
+  <aside class="mobile-pay" id="mobile-pay" aria-label="Thanh toán mỗi tháng"><div><span>Trả hằng tháng</span><strong id="mobile-monthly">171.594 ¥</strong></div><a href="#result-title">Xem kết quả <span aria-hidden="true">↗</span></a></aside>
   <script>
     "use strict";
     const $ = id => document.getElementById(id);
@@ -253,6 +465,8 @@
       if (!isValid) {
         error.textContent = "Nhập số tiền vay lớn hơn 0 (tối đa 100.000 man), lãi suất 0–100% và thời hạn nguyên từ 1–50 năm.";
         $("monthly").innerHTML = '— <small>¥ / tháng</small>';
+        $("quick-monthly").textContent = "—";
+        $("mobile-monthly").textContent = "—";
         ["total-interest","total-paid","principal-result","interest-share","payments","first-interest"].forEach(id => $(id).textContent = "—");
         $("loan-in-yen").textContent = "—";
         $("principal-bar").style.width = "0%";
@@ -274,6 +488,8 @@
       current = {man, annualPercent, years, principal, monthly, total, interest, months};
       $("loan-in-yen").textContent = yen(principal);
       $("monthly").innerHTML = monthly.toLocaleString("vi-VN", {maximumFractionDigits:0}) + ' <small>¥ / tháng</small>';
+      $("quick-monthly").textContent = yen(monthly);
+      $("mobile-monthly").textContent = yen(monthly);
       $("total-interest").textContent = yen(interest);
       $("total-paid").textContent = yen(total);
       $("principal-result").textContent = yen(principal);
@@ -347,6 +563,10 @@
       svg.setAttribute("viewBox",`0 0 ${width} 252`);
       svg.setAttribute("aria-label",`Biểu đồ hai cột gốc và lãi từng năm, thời hạn ${rows.length} năm; đơn vị vạn yên (万円)`);
       svg.innerHTML=`<text class="chart-axis" x="${left}" y="16">万円 / năm</text>${tickLabels}${bars}<text class="chart-axis" x="${width-right}" y="243" text-anchor="end">Năm vay →</text>`;
+      const select=$("chart-year-select");
+      if(select.options.length!==rows.length) {
+        select.replaceChildren(...rows.map(row=>new Option("Năm "+row.year,String(row.year))));
+      }
       selectChartYear(Math.min(selectedChartYear,rows.length));
     }
 
@@ -354,6 +574,7 @@
       const row=yearlyRows[year-1];
       if (!row) return;
       selectedChartYear=year;
+      $("chart-year-select").value=String(year);
       $("chart-year-label").textContent=`Năm ${year}`;
       $("chart-year-principal").textContent=yen(row.principal);
       $("chart-year-interest").textContent=yen(row.interest);
@@ -362,6 +583,22 @@
       svg.querySelector(`[data-chart-year="${year}"]`)?.classList.add("is-selected");
     }
 
+    $("chart-year-select").addEventListener("change",e=>{
+      const year=Number(e.target.value);
+      selectChartYear(year);
+      const scroller=document.querySelector(".chart-scroll");
+      const bar=scroller.querySelector('[data-chart-year="'+year+'"]');
+      if(bar) {
+        const x=bar.getBBox().x;
+        scroller.scrollTo({left:Math.max(0,x-scroller.clientWidth/2),behavior:"smooth"});
+      }
+    });
+    if ("IntersectionObserver" in window) {
+      const observer=new IntersectionObserver(entries=>{
+        document.body.classList.toggle("result-in-view",entries[0].isIntersecting);
+      },{threshold:0.05});
+      observer.observe(document.querySelector(".result-highlight"));
+    }
     const chart=$("amortization-chart");
     function chartYearFromTarget(target) {
       const group=target.closest?.("[data-chart-year]");
