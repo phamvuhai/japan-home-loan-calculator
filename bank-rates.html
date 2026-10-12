@@ -71,7 +71,7 @@ return '<article class="ratecard"><div class="bank">'+safe(bank)+'</div><div><h3
 function render(){
 const s=state();
 el('borrow').textContent=fmt(s.loan/10000)+' 万円';el('ltv').textContent=fmt(s.ltv)+'%';
-if(products.length){el('cards').innerHTML=products.slice().sort((a,b)=>a.min-b.min).map(p=>card(p,s)).join('');}else{el('cards').innerHTML='<div id="placeholder">Không có số liệu có thể xác minh. Hãy xem trực tiếp liên kết của ngân hàng phía dưới.</div>';}
+if(products.length){el('cards').innerHTML=products.slice().sort((a,b)=>a.min-b.min).map(p=>card(p,s)).join('');}else{el('cards').innerHTML='<div id="placeholder">Không có số liệu có thể xác minh lúc này. Kiểm tra trực tiếp: <a target="_blank" rel="noopener" href="https://www.smbc.co.jp/gadget/loan_shinki/">SMBC ↗</a> hoặc <a target="_blank" rel="noopener" href="https://www.surugabank.co.jp/suruga/pc/Rate?formNo=00204&amp;startUp=suruga_lkinri">Suruga ↗</a>.</div>';}
 const maxDti=products.length&&s.income>0?Math.max(...products.map(p=>(pmt(s.loan,p.max,s.years*12)+s.debts*10000)/(s.income*10000/12)*100)):null;
 const notes=['Đây là đánh giá sơ bộ theo hồ sơ, không phải kết quả 事前審査 hay xác suất được duyệt.','SMBC: '+warnings(s,'smbc').join(' '),'Suruga: '+warnings(s,'suruga').join(' '),'LTV '+fmt(s.ltv)+'%; '+(maxDti===null?'chưa có DTI.':'DTI tham khảo ở mức lãi cao nhất trong sản phẩm được lấy: '+fmt(maxDti)+'%.')+' DTI không phải ngưỡng chính thức của ngân hàng.'].filter(v=>v.trim());
 el('assessment').innerHTML='<ul>'+notes.map(n=>'<li>'+safe(n)+'</li>').join('')+'</ul>';
