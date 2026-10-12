@@ -400,7 +400,74 @@
       .quick-nav{margin-right:-12px}
     }
 
-</style>
+
+    /* v3: task-driven workflow. Financial inputs live together, before prepayment and results. */
+    :root{--bg:#f5f7fc;--accent:#285bd4;--accent-deep:#1c419f;--ink:#172842;--muted:#60738f;--border:#e0e8f4;--shadow:0 16px 46px rgba(24,48,99,.065)}
+    .wrap{width:min(1360px,calc(100% - 64px))}
+    .layout{grid-template-columns:minmax(0,1.02fr) minmax(0,.98fr);gap:20px;align-items:start}
+    .panel{border-radius:22px}
+    .loan-workflow{min-width:0}
+    .financing-quick{background:linear-gradient(140deg,#f0f5ff,#f8fbff);border:1px solid #dce8ff;border-radius:17px;padding:17px 15px;margin:0 0 24px}
+    .financing-heading{display:flex;align-items:center;gap:10px;margin:0 0 13px;min-width:0}
+    .financing-heading h3{font-size:14px;margin:0;color:#243659;font-weight:800}
+    .financing-heading p{font-size:11px;color:#72819b;margin:2px 0 0;line-height:1.45}
+    .flow-step{display:grid;place-items:center;width:28px;height:28px;flex:0 0 auto;background:#e5ecff;color:#2d52bc;border-radius:9px;font-size:11px;font-weight:800}
+    .financing-quick .advanced-body{border:0;padding:0}
+    .financing-body .advanced-fields{grid-template-columns:repeat(2,minmax(0,1fr))}
+    .financing-body .mini-stats.three{grid-template-columns:repeat(3,minmax(0,1fr))}
+    .financing-body .mini-stats strong{font-size:clamp(12px,1.15vw,15px)}
+    .loan-section-heading{margin:4px 0 20px}
+    .scenario-block{margin-top:20px}
+    .scenario-block .financing-heading{margin-bottom:8px}
+    .scenario-block .advanced-panel{box-shadow:none;border-color:#d7e4fa;border-radius:16px;background:#fbfdff}
+    .scenario-block #early-panel{border-color:#bad0fc;background:#f8fbff}
+    .scenario-block .advanced-panel summary{padding:15px}
+    .scenario-block .advanced-body{padding:15px}
+    .scenario-block .advanced-tip{line-height:1.55}
+    .scenario-block .mini-stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+    .scenario-block .mini-stats strong{font-size:clamp(13px,1.15vw,18px)}
+    .scenario-block .advanced-panel summary strong{font-size:14px}
+    .rate-block{margin-bottom:17px}
+    .main-nav{margin-top:20px;margin-bottom:0;padding-bottom:6px;gap:9px}
+    .main-nav a{min-height:36px;display:inline-flex;align-items:center;background:#fff;box-shadow:0 3px 12px rgba(34,59,109,.045)}
+    #advanced-root .advanced-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+    #advanced-root #purchase-panel{grid-column:1/-1}
+    .input-preview{margin-top:15px}
+    .detail-heading{margin-top:24px}
+    .panel .chart-scroll{overscroll-behavior-x:contain}
+    [id]{scroll-margin-top:18px}
+    @media(min-width:1150px){.layout>.panel:first-child{position:static!important}.layout>.panel:nth-child(2){align-self:start}}
+    @media(max-width:1050px){
+      .wrap{width:min(100% - 36px,910px)}
+      .layout{grid-template-columns:1fr}
+      .financing-body .mini-stats strong{font-size:16px}
+      #advanced-root .advanced-grid{grid-template-columns:1fr}
+      #advanced-root #purchase-panel{grid-column:auto}
+    }
+    @media(max-width:640px){
+      .wrap{width:calc(100% - 24px)}
+      .financing-quick{padding:13px 11px;margin-bottom:20px}
+      .financing-heading h3{font-size:13px}
+      .financing-heading p{font-size:10px}
+      .financing-body .advanced-fields{grid-template-columns:1fr 1fr}
+      .financing-body .mini-stats.three{grid-template-columns:1fr 1fr}
+      .financing-body .mini-stats strong{font-size:13px}
+      .scenario-block{margin-top:15px}
+      .scenario-block .advanced-panel summary{padding:13px 11px}
+      .scenario-block .advanced-body{padding:13px 11px}
+      .main-nav{margin-top:14px;scroll-snap-type:x proximity}
+      .main-nav a{scroll-snap-align:start}
+      .event-row input,.event-row select{font-size:16px}
+      .advanced-body input,.advanced-body select{font-size:16px}
+      .quick-nav a{min-height:40px}
+      .buttons{margin-top:13px}
+    }
+    @media(max-width:390px){
+      .financing-body .advanced-fields{grid-template-columns:1fr}
+      .financing-body .mini-stats.three{grid-template-columns:1fr}
+    }
+
+  </style>
 </head>
 <body>
   <main class="wrap">
@@ -414,11 +481,19 @@
         <h1>Lên kế hoạch mua nhà <span>thông minh hơn.</span></h1>
         <p class="subtitle">Tùy chỉnh khoản vay, lãi suất và thời hạn bằng cách nhập hoặc kéo thanh. Xem ngay số tiền cần trả mỗi tháng và chi tiết gốc, lãi theo từng năm.</p>
         <div class="hero-details"><span><span class="hero-check">✓</span> Tính ngay, không cần đăng ký</span><span><span class="hero-check">✓</span> Đơn vị tiền Nhật (JPY / 万円)</span></div>
+        <nav class="quick-nav main-nav" aria-label="Đi đến chức năng"><a href="#financing-panel">Giá nhà &amp; tiền vay</a><a href="#early-panel">Trả trước</a><a href="#variable-panel">Lãi suất</a><a href="#result-title">Kết quả</a><a href="#purchase-panel">Chi phí</a><a href="#bank-panel">Ngân hàng</a><a href="#income-panel">Khả năng trả nợ</a></nav>
       </div>
     </header>
     <div class="layout">
-      <section class="panel" aria-labelledby="input-title">
-        <div class="section-heading"><span class="section-icon" aria-hidden="true">⌘</span><div class="section-heading-content"><div class="section-eyebrow">BƯỚC 01 · TÙY CHỈNH</div><h2 id="input-title">Thông tin khoản vay</h2></div><span class="section-tag">3 thông số</span></div>
+      <section class="panel loan-workflow" aria-labelledby="input-title">
+        <div class="section-heading"><span class="section-icon" aria-hidden="true">⌂</span><div class="section-heading-content"><div class="section-eyebrow">BƯỚC 01 · THIẾT LẬP</div><h2 id="input-title">Thiết lập khoản vay</h2></div><span class="section-tag">Nhập & kéo</span></div>
+        <section class="financing-quick" id="financing-panel" aria-labelledby="financing-title">
+          <div class="financing-heading"><span class="flow-step">01</span><div><h3 id="financing-title">Giá nhà và vốn tự có</h3><p>Nhập giá nhà, vốn tự có hoặc chọn tỷ lệ vay nhanh.</p></div></div>
+          <div class="advanced-body financing-body"><div class="advanced-fields"><label>Giá nhà (man)<input id="property-price" type="number" value="3400" min="1" step="10" inputmode="decimal"></label><label>Tiền tự có / đặt cọc (man)<input id="down-payment" type="number" value="0" min="0" step="10" inputmode="decimal"></label></div>
+            <div class="inline-actions"><span>Tỷ lệ vay theo giá nhà</span><button type="button" data-ltv="80">80%</button><button type="button" data-ltv="90">90%</button><button type="button" data-ltv="100">100%</button><button type="button" id="property-sync">Giá nhà − tiền tự có</button></div>
+            <div class="mini-stats three"><div><span>Tỷ lệ vay / giá nhà (LTV)</span><strong id="ltv-result">—</strong></div><div><span>Tiền tự có</span><strong id="cash-down">—</strong></div><div><span>Chênh lệch giá − vốn − vay</span><strong id="loan-gap">—</strong></div></div><p class="advanced-tip" id="purchase-warning" aria-live="polite"></p></div>
+        </section>
+        <div class="financing-heading loan-section-heading"><span class="flow-step">02</span><div><h3>Thông số khoản vay</h3><p>Số tiền vay, lãi suất và thời hạn hoàn trả.</p></div></div>
         <div class="fields-grid">
         <div class="field">
           <div class="field-header"><label for="principal">Số tiền vay</label><span class="tiny">Bước kéo: 10 man</span></div>
@@ -431,7 +506,7 @@
           <div class="presets" aria-label="Mức vay mẫu"><button type="button" class="chip" data-amount="2000">2.000 man</button><button type="button" class="chip" data-amount="3000">3.000 man</button><button type="button" class="chip" data-amount="4000">4.000 man</button></div>
         </div>
         <div class="field">
-          <div class="field-header"><label for="rate">Lãi suất hằng năm</label><span class="tiny">Điều chỉnh ở phần nâng cao</span></div>
+          <div class="field-header"><label for="rate">Lãi suất hằng năm</label><span class="tiny">Chi tiết ở mục lãi suất dưới</span></div>
           <div class="input-group"><input id="rate" type="number" value="5" min="0" max="100" step="0.1" inputmode="decimal" /><span class="suffix">% / năm</span></div>
           <div class="slider-block">
             <input class="range-input" id="rate-slider" type="range" min="0" max="10" step="0.01" value="5" aria-label="Kéo để chỉnh lãi suất hằng năm" />
@@ -449,7 +524,25 @@
           <div class="presets" aria-label="Thời hạn mẫu"><button type="button" class="chip" data-years="20">20 năm</button><button type="button" class="chip" data-years="30">30 năm</button><button type="button" class="chip" data-years="35">35 năm</button></div>
         </div>
         </div>
-        <div class="input-preview" aria-live="polite"><div><span>Tạm tính mỗi tháng</span><strong id="quick-monthly">171.594 ¥</strong></div><a href="#result-title">Chi tiết <span aria-hidden="true">→</span></a></div>
+        <div class="scenario-block"><div class="financing-heading"><span class="flow-step">03</span><div><h3>Lập kế hoạch trả trước</h3><p>Tiết kiệm lãi bằng cách trả thêm tiền gốc.</p></div></div><details class="advanced-panel" id="early-panel" open>
+          <summary><span class="advanced-icon">↘</span><span><strong>Trả nợ trước hạn · 繰上返済</strong><small>Rút ngắn kỳ hạn hoặc giảm tiền hằng tháng</small></span><span class="chevron">⌄</span></summary>
+          <div class="advanced-body">
+            <p class="advanced-tip">Mỗi lần trả trước được thực hiện vào <strong>cuối năm</strong> đã chọn, sau kỳ thanh toán tháng đó. Tiền trả trước được trừ trực tiếp vào dư nợ gốc.</p>
+            <div id="early-events" class="event-stack"></div>
+            <button type="button" id="add-early" class="advanced-add">+ Thêm một lần trả trước</button>
+            <div class="mini-stats"><div><span>Tổng tiền trả trước thực tế</span><strong id="prepay-extra">—</strong></div><div><span>Lãi tiết kiệm so với không trả trước</span><strong id="prepay-saved">—</strong></div><div><span>Thời điểm trả hết nợ</span><strong id="prepay-paid-off">—</strong></div><div><span>Thời gian trả thực tế</span><strong id="prepay-years">—</strong></div></div>
+            <p class="advanced-tip">Mô phỏng chưa trừ phí trả trước do ngân hàng áp dụng. Chọn giảm thời hạn: giữ tiền trả định kỳ trừ khi lãi suất thay đổi; chọn giảm tháng: giữ ngày đáo hạn ban đầu.</p>
+          </div>
+        </details></div>
+        <div class="scenario-block rate-block"><div class="financing-heading"><span class="flow-step">04</span><div><h3>Điều chỉnh lãi suất</h3><p>Chọn cố định hoặc thêm các mốc thay đổi.</p></div></div><details class="advanced-panel" id="variable-panel">
+          <summary><span class="advanced-icon">≈</span><span><strong>Lãi suất biến động · 変動金利</strong><small>Thay đổi lãi suất theo các mốc năm</small></span><span class="chevron">⌄</span></summary>
+          <div class="advanced-body">
+            <div class="advanced-field"><label for="rate-mode">Chế độ lãi suất</label><select id="rate-mode"><option value="fixed">Lãi suất cố định trong kỳ vay</option><option value="variable">Lãi suất thay đổi theo các mốc</option></select></div>
+            <div id="rate-change-controls" hidden><p class="advanced-tip">Ví dụ: bắt đầu từ năm thứ 6 với lãi suất mới 4,5%. Mô hình tính lại khoản trả tại thời điểm đổi lãi suất, không giả lập quy tắc 5 năm / 125% của từng ngân hàng.</p><div id="rate-events" class="event-stack"></div><button type="button" id="add-rate" class="advanced-add">+ Thêm mốc thay đổi lãi suất</button></div>
+            <div class="milestone-header" id="schedule-label">Lãi suất cố định</div><div id="payment-milestones" class="milestones"></div>
+          </div>
+        </details></div>
+        <div class="input-preview" aria-live="polite'><div><span>Tạm tính mỗi tháng</span><strong id="quick-monthly">171.594 ¥</strong></div><a href="#result-title">Chi tiết <span aria-hidden="true">→</span></a></div>
         <div class="buttons">
           <button class="btn" id="reset" type="button"><span aria-hidden="true">↺</span> Đặt lại</button>
           <button class="btn" id="copy" type="button"><span aria-hidden="true">⧉</span> Sao chép kết quả</button>
@@ -458,7 +551,7 @@
         <p id="notice" aria-live="polite"></p>
       </section>
       <section class="panel" aria-labelledby="result-title">
-        <div class="section-heading result-heading"><span class="section-icon result-icon" aria-hidden="true">↗</span><div class="section-heading-content"><div class="section-eyebrow">BƯỚC 02 · DỰ TOÁN</div><h2 id="result-title">Kết quả tính toán</h2></div><span class="section-tag">Tự động cập nhật</span></div>
+        <div class="section-heading result-heading"><span class="section-icon result-icon" aria-hidden="true">↗</span><div class="section-heading-content"><div class="section-eyebrow">KẾT QUẢ · TỰ ĐỘNG CẬP NHẬT</div><h2 id="result-title">Kết quả tính toán</h2></div><span class="section-tag">Tự động cập nhật</span></div>
         <div class="result-highlight">
           <div class="caption"><span class="result-label-dot"></span> Ước tính phải trả mỗi tháng</div>
           <div class="big-number" id="monthly">171.594 <small>¥ / tháng</small></div>
@@ -496,33 +589,14 @@
     </div>
 
     <section id="advanced-root" aria-labelledby="advanced-title">
-      <div class="advanced-head"><div><div class="section-eyebrow">BƯỚC 03 · PHÂN TÍCH NÂNG CAO</div><h2 id="advanced-title">Mô phỏng khoản vay thực tế</h2><p>Tùy chỉnh kịch bản. Mọi kết quả, biểu đồ và lịch trả nợ đều tính trên cùng một mô hình.</p></div><span class="section-tag">Dữ liệu riêng tư · Không cần đăng ký</span></div>
-      <nav class="quick-nav" aria-label="Mục phân tích nâng cao"><a href="#early-panel">Trả trước</a><a href="#variable-panel">Lãi suất</a><a href="#purchase-panel">Chi phí mua nhà</a><a href="#bank-panel">So sánh ngân hàng</a><a href="#income-panel">Khả năng trả nợ</a></nav>
+      <div class="advanced-head"><div><div class="section-eyebrow">PHÂN TÍCH BỔ SUNG</div><h2 id="advanced-title">Chi phí và quyết định mua nhà</h2><p>Thông số vay và trả trước phía trên được tự động sử dụng cho các phân tích bên dưới.</p></div><span class="section-tag">Dữ liệu riêng tư · Không cần đăng ký</span></div>
+      
       <div class="advanced-grid">
-        <details class="advanced-panel" id="early-panel" open>
-          <summary><span class="advanced-icon">↘</span><span><strong>Trả nợ trước hạn · 繰上返済</strong><small>Rút ngắn kỳ hạn hoặc giảm tiền hằng tháng</small></span><span class="chevron">⌄</span></summary>
-          <div class="advanced-body">
-            <p class="advanced-tip">Mỗi lần trả trước được thực hiện vào <strong>cuối năm</strong> đã chọn, sau kỳ thanh toán tháng đó. Tiền trả trước được trừ trực tiếp vào dư nợ gốc.</p>
-            <div id="early-events" class="event-stack"></div>
-            <button type="button" id="add-early" class="advanced-add">+ Thêm một lần trả trước</button>
-            <div class="mini-stats"><div><span>Tổng tiền trả trước thực tế</span><strong id="prepay-extra">—</strong></div><div><span>Lãi tiết kiệm so với không trả trước</span><strong id="prepay-saved">—</strong></div><div><span>Thời điểm trả hết nợ</span><strong id="prepay-paid-off">—</strong></div><div><span>Thời gian trả thực tế</span><strong id="prepay-years">—</strong></div></div>
-            <p class="advanced-tip">Mô phỏng chưa trừ phí trả trước do ngân hàng áp dụng. Chọn giảm thời hạn: giữ tiền trả định kỳ trừ khi lãi suất thay đổi; chọn giảm tháng: giữ ngày đáo hạn ban đầu.</p>
-          </div>
-        </details>
-        <details class="advanced-panel" id="variable-panel" open>
-          <summary><span class="advanced-icon">≈</span><span><strong>Lãi suất biến động · 変動金利</strong><small>Thay đổi lãi suất theo các mốc năm</small></span><span class="chevron">⌄</span></summary>
-          <div class="advanced-body">
-            <div class="advanced-field"><label for="rate-mode">Chế độ lãi suất</label><select id="rate-mode"><option value="fixed">Lãi suất cố định trong kỳ vay</option><option value="variable">Lãi suất thay đổi theo các mốc</option></select></div>
-            <div id="rate-change-controls" hidden><p class="advanced-tip">Ví dụ: bắt đầu từ năm thứ 6 với lãi suất mới 4,5%. Mô hình tính lại khoản trả tại thời điểm đổi lãi suất, không giả lập quy tắc 5 năm / 125% của từng ngân hàng.</p><div id="rate-events" class="event-stack"></div><button type="button" id="add-rate" class="advanced-add">+ Thêm mốc thay đổi lãi suất</button></div>
-            <div class="milestone-header" id="schedule-label">Lãi suất cố định</div><div id="payment-milestones" class="milestones"></div>
-          </div>
-        </details>
+        
+        
         <details class="advanced-panel" id="purchase-panel" open>
-          <summary><span class="advanced-icon">⌂</span><span><strong>Giá nhà và chi phí mua</strong><small>Tỷ lệ vay 80% / 90% / 100%, tiền mặt và phí</small></span><span class="chevron">⌄</span></summary>
+          <summary><span class="advanced-icon">⌂</span><span><strong>Thuế, bảo hiểm và chi phí mua nhà</strong><small>Ước tính khoản tiền cần chuẩn bị khi mua nhà</small></span><span class="chevron">⌄</span></summary>
           <div class="advanced-body">
-            <div class="advanced-fields"><label>Giá nhà (man)<input id="property-price" type="number" value="3400" min="1" step="10" inputmode="decimal"></label><label>Tiền tự có / đặt cọc (man)<input id="down-payment" type="number" value="0" min="0" step="10" inputmode="decimal"></label></div>
-            <div class="inline-actions"><span>Tỷ lệ vay theo giá nhà</span><button type="button" data-ltv="80">80%</button><button type="button" data-ltv="90">90%</button><button type="button" data-ltv="100">100%</button><button type="button" id="property-sync">Giá nhà − tiền tự có</button></div>
-            <div class="mini-stats three"><div><span>Tỷ lệ vay / giá nhà (LTV)</span><strong id="ltv-result">—</strong></div><div><span>Tiền tự có</span><strong id="cash-down">—</strong></div><div><span>Chênh lệch giá − vốn − vay</span><strong id="loan-gap">—</strong></div></div><p class="advanced-tip" id="purchase-warning" aria-live="polite"></p>
             <h3 class="advanced-subtitle">Chi phí mua nhà ước tính</h3>
             <p class="advanced-tip">Các khoản phí do bạn nhập; giá trị 0 nghĩa là chưa dự toán, không phải miễn phí. Không tự áp mức phí cụ thể của bất kỳ ngân hàng nào.</p>
             <div class="advanced-fields">
