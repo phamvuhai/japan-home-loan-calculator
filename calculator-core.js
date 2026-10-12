@@ -17,6 +17,13 @@ function normalizedChanges(changes,initialRate,months){
  list.sort((a,b)=>a.month-b.month);
  return list.filter((x,i)=>i===0||x.month!==list[i-1].month);
 }
+function payoffMonths(balance,annualRate,installment){
+ const r=annualRate/1200;
+ if(balance<=0)return 0;
+ if(r===0)return installment>0?Math.ceil(balance/installment-1e-10):Infinity;
+ if(installment<=balance*r)return Infinity;
+ return Math.ceil(-Math.log1p(-balance*r/installment)/Math.log1p(r)-1e-10);
+}
 function simulate(opt){
  const principal=yenFromMan(opt.loanMan), years=Math.floor(num(opt.years)), maxMonths=years*12;
  const initialRate=num(opt.rate);
@@ -27,13 +34,13 @@ function simulate(opt){
   .map(x=>({month:Math.floor(num(x.month)),amount:yenFromMan(x.amountMan),mode:x.mode==="reduce-payment"?"reduce-payment":"reduce-term"}))
   .filter(x=>x.month>=1&&x.month<=maxMonths&&x.amount>0).sort((a,b)=>a.month-b.month);
  const rows=[],yearsData=[];
- let balance=principal,scheduled=monthlyPayment(balance,initialRate,maxMonths),activeRate=initialRate;
+ let balance=principal,scheduled=monthlyPayment(balance,initialRate,maxMonths),activeRate=initialRate,maturity=maxMonths;
  let totalInterest=0,totalExtra=0,totalPaid=0,totalScheduled=0,iChange=0,iExtra=0,firstMonthly=scheduled;
  let recalculations=[];
  for(let m=1;m<=maxMonths&&balance>0.00001;m++){
   if(iChange<rateChanges.length&&rateChanges[iChange].month===m){
     activeRate=rateChanges[iChange].rate;
-    scheduled=monthlyPayment(balance,activeRate,maxMonths-m+1);
+    scheduled=monthlyPayment(balance,activeRate,Math.max(1,maturity-m+1));
     recalculations.push({month:m,monthly:scheduled,rate:activeRate,reason:"rate"});
     iChange++;
   }
@@ -41,13 +48,13 @@ function simulate(opt){
   const regular=Math.min(balance+interest,scheduled);
   const principalPart=Math.min(balance,Math.max(0,regular-interest));
   balance=Math.max(0,balance-principalPart);
-  let extra=0,reducePayment=false;
+  let extra=0,reducePayment=false,reduceTerm=false;
   while(iExtra<extras.length&&extras[iExtra].month===m){
    const e=extras[iExtra++];
    const a=Math.min(balance,e.amount);
    balance=Math.max(0,balance-a);
    extra+=a;
-   if(e.mode==="reduce-payment")reducePayment=true;
+   if(e.mode==="reduce-payment")reducePayment=true;else reduceTerm=true;
   }
   const y=Math.ceil(m/12);
   if(!yearsData[y-1])yearsData.push({year:y,principal:0,interest:0,extra:0,paid:0,balance:0});
@@ -56,9 +63,16 @@ function simulate(opt){
   yr.paid+=regular+extra;yr.balance=balance;
   totalInterest+=interest;totalExtra+=extra;totalPaid+=regular+extra;totalScheduled+=regular;
   rows.push({month:m,year:y,rate:activeRate,scheduled:regular,principal:principalPart,interest,extra,paid:regular+extra,balance});
-  if(reducePayment&&balance>0.00001){
-    scheduled=monthlyPayment(balance,activeRate,maxMonths-m);
-    recalculations.push({month:m+1,monthly:scheduled,rate:activeRate,reason:"reduce-payment"});
+  if(balance>0.00001){
+    if(reducePayment){
+      scheduled=monthlyPayment(balance,activeRate,Math.max(1,maturity-m));
+      recalculations.push({month:m+1,monthly:scheduled,rate:activeRate,reason:"reduce-payment"});
+    }else if(reduceTerm){
+      // Keep the regular installment and preserve the shortened maturity
+      // even if a later variable-rate adjustment recalculates the installment.
+      const remaining=payoffMonths(balance,activeRate,scheduled);
+      if(Number.isFinite(remaining))maturity=Math.min(maturity,m+remaining);
+    }
   }
  }
  const paidOffMonth=rows.length;
