@@ -104,12 +104,18 @@ function init(){
   }
  }catch(e){}
  if(!restored){}
- $("advanced-root").addEventListener("input",e=>{if(e.target.matches("input,select"))calculate()});
- $("advanced-root").addEventListener("change",e=>{
-  if(e.target.matches("input,select"))calculate();
+ // v3 inputs are grouped by task: financing, prepayment and rate controls
+ // are in the primary loan column; bank, fee and DTI controls remain below.
+ const applies=e=>e.target.closest("#advanced-root,#financing-panel,#early-panel,#variable-panel");
+ document.addEventListener("input",e=>{
+  if(applies(e)&&e.target.matches("input,select"))calculate();
  });
- $("advanced-root").addEventListener("click",e=>{
-  const button=e.target.closest("button");if(!button)return;
+ document.addEventListener("change",e=>{
+  if(applies(e)&&e.target.matches("input,select"))calculate();
+ });
+ document.addEventListener("click",e=>{
+  const button=e.target.closest("button");
+  if(!button || !button.closest("#advanced-root,#financing-panel,#early-panel,#variable-panel"))return;
   if(button.classList.contains("remove-event")){button.closest(".event-row").remove();calculate();return}
   if(button.id==="add-early"){newEvent("early");calculate()}
   if(button.id==="add-rate"){newEvent("rate");calculate()}
