@@ -21,6 +21,15 @@ Với số dư nợ `P`, lãi suất tháng `r = lãi suất năm / 1200` và s�
 
 Khi `r = 0`, khoản trả tháng bằng `P/n`. Mỗi tháng lãi = dư nợ đầu kỳ × lãi suất tháng. Khoản trả trước được khấu trừ gốc sau kỳ trả thông thường của tháng được chọn.
 
+## Giao diện HomeLoan JP v4
+
+- **PC (trên 1100px):** bảng điều khiển hai cột, khu vực nhập bên trái và kết quả bên phải; bảng kết quả chính dễ theo dõi khi cuộn.
+- **Tablet (641–1100px):** luồng nhập một cột, các thông số có thể chia 2 cột, bản xem nhanh khoản thanh toán xuất hiện ngay trước biểu mẫu.
+- **Mobile (đến 640px):** ưu tiên 1 cột, thanh kéo dễ chạm, các nút tối thiểu 40–44px, thanh hiển thị khoản trả tháng không che bàn phím đang mở.
+- **Thứ tự nghiệp vụ:** giá nhà và vốn tự có → tiền vay/lãi suất/kỳ hạn → trả trước khoản vay (繰上返済) → thay đổi lãi suất (変動金利) → kết quả → chi phí mua nhà / ngân hàng / khả năng trả nợ.
+- **Thu gọn hợp lý:** trả trước được làm nổi bật (tự thu gọn trên mobile nếu chưa có lần trả trước); các phân tích chuyên sâu đóng mặc định và có thể mở theo nhu cầu.
+- **Phòng tránh lỗi khởi tạo:** trang, các module JavaScript và ID vùng kết quả có kiểm tra tính nhất quán, phiên bản tài nguyên JavaScript được đồng bộ.
+
 ## Chạy thử và kiểm thử
 
 Mở `index.html` trực tiếp trong trình duyệt hoặc phục vụ bằng một máy chủ HTTP tĩnh.
