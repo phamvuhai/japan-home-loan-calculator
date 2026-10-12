@@ -1,0 +1,39 @@
+name: Publish HomeLoan JP to GitHub Pages
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'index.html'
+      - 'bank-rates.html'
+      - 'calculator-core.js'
+      - 'advanced.js'
+      - 'data/**'
+      - '.github/workflows/deploy-pages.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+concurrency:
+  group: deploy-home-loan-pages
+  cancel-in-progress: true
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: "${{ steps.deployment.outputs.page_url }}"
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: actions/configure-pages@v5
+      - name: Prepare static website (no private API)
+        run: |
+          mkdir -p public/data
+          cp index.html bank-rates.html calculator-core.js advanced.js public/
+          cp data/latest.json data/history.json public/data/
+          touch public/.nojekyll
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          path: public
+      - id: deployment
+        uses: actions/deploy-pages@v4
