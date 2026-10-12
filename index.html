@@ -522,7 +522,7 @@
           <div class="advanced-body">
             <div class="advanced-fields"><label>Giá nhà (man)<input id="property-price" type="number" value="3400" min="1" step="10" inputmode="decimal"></label><label>Tiền tự có / đặt cọc (man)<input id="down-payment" type="number" value="0" min="0" step="10" inputmode="decimal"></label></div>
             <div class="inline-actions"><span>Tỷ lệ vay theo giá nhà</span><button type="button" data-ltv="80">80%</button><button type="button" data-ltv="90">90%</button><button type="button" data-ltv="100">100%</button><button type="button" id="property-sync">Giá nhà − tiền tự có</button></div>
-            <div class="mini-stats three"><div><span>Tỷ lệ vay / giá nhà (LTV)</span><strong id="ltv-result">—</strong></div><div><span>Tiền tự có</span><strong id="cash-down">—</strong></div><div><span>Chênh lệch giá − vốn − vay</span><strong id="loan-gap">—</strong></div></div>
+            <div class="mini-stats three"><div><span>Tỷ lệ vay / giá nhà (LTV)</span><strong id="ltv-result">—</strong></div><div><span>Tiền tự có</span><strong id="cash-down">—</strong></div><div><span>Chênh lệch giá − vốn − vay</span><strong id="loan-gap">—</strong></div></div><p class="advanced-tip" id="purchase-warning" aria-live="polite"></p>
             <h3 class="advanced-subtitle">Chi phí mua nhà ước tính</h3>
             <p class="advanced-tip">Các khoản phí do bạn nhập; giá trị 0 nghĩa là chưa dự toán, không phải miễn phí. Không tự áp mức phí cụ thể của bất kỳ ngân hàng nào.</p>
             <div class="advanced-fields">
@@ -535,7 +535,7 @@
               <label>Phí khác / sửa chữa (man)<input id="other" type="number" min="0" step="1" value="0" inputmode="decimal"></label>
               <label class="check-line"><input id="include-broker" type="checkbox"><span>Thử tính phí môi giới (giả định 3% + 6 man, cộng 10% thuế tiêu dùng; chỉ áp dụng khi có môi giới và phù hợp trường hợp giao dịch)</span></label>
             </div>
-            <div class="mini-stats three"><div><span>Tổng phí dự toán</span><strong id="fee-total">—</strong></div><div><span>Tiền mặt cần chuẩn bị</span><strong id="cash-needed">—</strong></div><div><span>Gốc, lãi và phí</span><strong id="total-housing">—</strong></div></div><p class="advanced-tip" id="fee-breakdown"></p>
+            <div class="mini-stats three"><div><span>Tổng phí dự toán</span><strong id="fee-total">—</strong></div><div><span>Tiền mặt cần (giá − vay + phí)</span><strong id="cash-needed">—</strong></div><div><span>Vốn tự có + gốc, lãi và phí</span><strong id="total-housing">—</strong></div></div><p class="advanced-tip" id="fee-breakdown"></p>
           </div>
         </details>
         <details class="advanced-panel" id="bank-panel" open>
@@ -573,7 +573,7 @@
         <button class="btn primary" id="csv" type="button"><span aria-hidden="true">↓</span> Tải bảng CSV</button>
       </div>
       <div class="table-swipe-hint">↔ Vuốt ngang để xem đầy đủ các cột</div>
-      <div class="table-wrap"><table><thead><tr><th>Năm</th><th>Gốc trả trong năm</th><th>Lãi trả trong năm</th><th>Trả trước</th><th>Tổng trả trong năm</th><th>Dư nợ cuối năm</th></tr></thead><tbody id="schedule-body"></tbody></table></div>
+      <div class="table-wrap"><table><thead><tr><th>Năm</th><th>Gốc (gồm trả trước)</th><th>Lãi trả trong năm</th><th>Trả trước (trong gốc)</th><th>Tổng trả trong năm</th><th>Dư nợ cuối năm</th></tr></thead><tbody id="schedule-body"></tbody></table></div>
     </section>
     <p class="foot"><strong>Lưu ý:</strong> Công cụ hỗ trợ mô phỏng trả trước, lãi suất thay đổi, phí mua nhà và khả năng trả nợ dựa trên thông số do bạn nhập. Các mức phí/ngân hàng chỉ là giả định và không thể dùng thay cho báo giá hoặc xét duyệt ngân hàng. Dữ liệu tính toán chạy ngay trong trình duyệt, không gửi lên máy chủ.</p>
   </main>
