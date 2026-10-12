@@ -76,6 +76,22 @@
     .detail-line{display:flex;justify-content:space-between;gap:12px;font-size:13px}
     .detail-line strong{font-size:14px;font-variant-numeric:tabular-nums}
     .detail-line>span:first-child{color:var(--muted)}
+    .repayment-chart{margin-top:27px;padding-top:21px;border-top:1px solid var(--border);min-width:0}
+    .chart-heading{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+    .chart-caption{margin:8px 0 0;font-size:12px;color:var(--muted)}
+    .chart-scroll{margin-top:13px;max-width:100%;overflow-x:auto;overflow-y:hidden;border:1px solid #e8edf6;border-radius:13px;background:linear-gradient(180deg,#fafbff 0%,#fff 100%);scrollbar-width:thin}
+    .chart-scroll svg{display:block;max-width:none}
+    .chart-grid{stroke:#e8edf6;stroke-width:1;stroke-dasharray:3 4}
+    .chart-axis{fill:#79869c;font:11px system-ui,-apple-system,"Segoe UI",sans-serif;font-variant-numeric:tabular-nums}
+    .chart-year{cursor:pointer}
+    .chart-year rect{opacity:.88;transition:opacity .15s ease,stroke .15s ease}
+    .chart-year:hover rect,.chart-year.is-selected rect,.chart-year:focus-visible rect{opacity:1;stroke:#283b77;stroke-width:1.4}
+    .chart-year:focus{outline:none}
+    .chart-summary{display:flex;align-items:center;flex-wrap:wrap;gap:8px 16px;margin-top:12px;padding:11px 13px;background:#f8faff;border:1px solid #ebeffa;border-radius:11px;font-size:12px;font-variant-numeric:tabular-nums}
+    .chart-summary>strong{font-size:13px;margin-right:2px}
+    .chart-summary span{display:inline-flex;align-items:center;gap:6px}
+    .chart-summary b{font-weight:800}
+    .chart-hint{font-size:11px;color:var(--muted);margin-top:6px}
     .error{margin:12px 0 0;padding:11px 13px;background:#fff1f1;color:var(--danger);border-radius:9px;font-size:13px;display:none}
     .schedule{margin-top:20px;margin-bottom:20px}
     .schedule-head{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:15px}
@@ -159,6 +175,22 @@
           <div class="detail-line"><span>Số kỳ thanh toán</span><strong id="payments">420 tháng</strong></div>
           <div class="detail-line"><span>Lãi tháng đầu tiên (ước tính)</span><strong id="first-interest">141.667 ¥</strong></div>
         </div>
+        <section class="repayment-chart" aria-labelledby="chart-title">
+          <div class="chart-heading">
+            <h3 id="chart-title">Biểu đồ tiền gốc và tiền lãi</h3>
+            <div class="legend"><span><i class="dot"></i> Gốc</span><span><i class="dot orange"></i> Lãi</span></div>
+          </div>
+          <p class="chart-caption">Hai cột mỗi năm thể hiện tiền gốc và tiền lãi đã trả (đơn vị: 万円).</p>
+          <div class="chart-scroll" tabindex="0" role="region" aria-label="Biểu đồ tiền gốc và lãi theo năm, có thể cuộn ngang">
+            <svg id="amortization-chart" xmlns="http://www.w3.org/2000/svg" width="600" height="252" role="group" aria-label="Biểu đồ gốc và lãi theo năm"></svg>
+          </div>
+          <div class="chart-summary" id="chart-summary" aria-live="polite">
+            <strong id="chart-year-label">Năm 1</strong>
+            <span><i class="dot"></i> Gốc: <b id="chart-year-principal">—</b></span>
+            <span><i class="dot orange"></i> Lãi: <b id="chart-year-interest">—</b></span>
+          </div>
+          <div class="chart-hint">Di chuột, chạm hoặc nhấn Enter vào cột để xem chi tiết. Vuốt ngang để xem các năm còn lại.</div>
+        </section>
       </section>
     </div>
     <section class="panel schedule" aria-labelledby="schedule-title">
@@ -178,6 +210,7 @@
     const perc = amount => amount.toLocaleString("vi-VN", {minimumFractionDigits:2, maximumFractionDigits:2}) + "%";
     let current = null;
     let yearlyRows = [];
+    let selectedChartYear = 1;
 
     // Synchronize all number inputs and slider positions. Typed values beyond
     // the normal slider scale expand its maximum without losing input precision.
@@ -223,7 +256,11 @@
         $("loan-in-yen").textContent = "—";
         $("principal-bar").style.width = "0%";
         $("schedule-body").innerHTML = "";
-        current = null; yearlyRows = [];
+        $("amortization-chart").replaceChildren();
+        $("chart-year-label").textContent = "—";
+        $("chart-year-principal").textContent = "—";
+        $("chart-year-interest").textContent = "—";
+        current = null; yearlyRows = []; selectedChartYear = 1;
         return;
       }
       const principal = man * 10000;
@@ -247,6 +284,7 @@
       $("split-label").setAttribute("aria-label", `Gốc ${perc(principalShare)}, lãi ${perc(100 - principalShare)}`);
       yearlyRows = amortization(principal, monthly, r, months);
       $("schedule-body").innerHTML = yearlyRows.map(row => `<tr><td>Năm ${row.year}</td><td>${yen(row.principal)}</td><td>${yen(row.interest)}</td><td>${yen(row.paid)}</td><td>${yen(row.balance)}</td></tr>`).join("");
+      renderAmortizationChart(yearlyRows);
       try {localStorage.setItem("home-loan-jp-inputs", JSON.stringify({man, annualPercent, years}));} catch (_) {}
     }
 
@@ -268,6 +306,83 @@
       }
       return out;
     }
+
+    // Two columns per year, in matching gốc/lãi colors. All amounts are
+    // derived from the same amortization schedule as the CSV/table.
+    function renderAmortizationChart(rows) {
+      const svg = $("amortization-chart");
+      if (!rows.length) {svg.replaceChildren();return;}
+      const left=59, right=16, top=27, bottom=202, plotHeight=157, yearStep=29;
+      const width=Math.max(560,left+right+rows.length*yearStep);
+      const peak=Math.max(...rows.map(row=>Math.max(row.principal,row.interest)))/10000;
+      const rawStep=Math.max(peak/4,0.00001);
+      const order=Math.pow(10,Math.floor(Math.log10(rawStep)));
+      const normal=rawStep/order;
+      const tickStep=(normal<=1?1:normal<=2?2:normal<=2.5?2.5:normal<=5?5:10)*order;
+      const ceiling=tickStep*4;
+      const rounded = v=>Math.round(v).toLocaleString("vi-VN");
+      const tickLabels=Array.from({length:5},(_,i)=>{
+        const yy=bottom-i*plotHeight/4;
+        return `<line x1="${left}" x2="${width-right}" y1="${yy}" y2="${yy}" class="chart-grid"/>
+        <text class="chart-axis" x="${left-9}" y="${yy+4}" text-anchor="end">${rounded(i*tickStep)}</text>`;
+      }).join("");
+      const labelFrequency=rows.length<=12?1:(rows.length<=20?2:5);
+      const bars=rows.map((row,i)=>{
+        const x=left+9+i*yearStep, bWidth=9;
+        const principalHeight=Math.max(0,(row.principal/10000)/ceiling*plotHeight);
+        const interestHeight=Math.max(0,(row.interest/10000)/ceiling*plotHeight);
+        const label=(i===0||i===rows.length-1||row.year%labelFrequency===0)
+          ?`<text class="chart-axis" x="${x+11}" y="${bottom+20}" text-anchor="middle">${row.year}</text>`:"";
+        return `<g class="chart-year" data-chart-year="${row.year}" role="button" tabindex="0" aria-label="Năm ${row.year}: tiền gốc ${yen(row.principal)}, tiền lãi ${yen(row.interest)}">
+          <title>Năm ${row.year} · Gốc: ${yen(row.principal)} · Lãi: ${yen(row.interest)}</title>
+          <rect x="${x}" y="${bottom-principalHeight}" width="${bWidth}" height="${principalHeight}" rx="2" fill="#4b6af0"/>
+          <rect x="${x+12}" y="${bottom-interestHeight}" width="${bWidth}" height="${interestHeight}" rx="2" fill="#f19c52"/>
+          <rect x="${x-2}" y="${top}" width="25" height="${bottom-top}" fill="transparent"/>
+          ${label}
+        </g>`;
+      }).join("");
+      svg.setAttribute("width",width);
+      svg.setAttribute("height",252);
+      svg.setAttribute("viewBox",`0 0 ${width} 252`);
+      svg.setAttribute("aria-label",`Biểu đồ hai cột gốc và lãi từng năm, thời hạn ${rows.length} năm; đơn vị vạn yên (万円)`);
+      svg.innerHTML=`<text class="chart-axis" x="${left}" y="16">万円 / năm</text>${tickLabels}${bars}<text class="chart-axis" x="${width-right}" y="243" text-anchor="end">Năm vay →</text>`;
+      selectChartYear(Math.min(selectedChartYear,rows.length));
+    }
+
+    function selectChartYear(year) {
+      const row=yearlyRows[year-1];
+      if (!row) return;
+      selectedChartYear=year;
+      $("chart-year-label").textContent=`Năm ${year}`;
+      $("chart-year-principal").textContent=yen(row.principal);
+      $("chart-year-interest").textContent=yen(row.interest);
+      const svg=$("amortization-chart");
+      svg.querySelector(".is-selected")?.classList.remove("is-selected");
+      svg.querySelector(`[data-chart-year="${year}"]`)?.classList.add("is-selected");
+    }
+
+    const chart=$("amortization-chart");
+    function chartYearFromTarget(target) {
+      const group=target.closest?.("[data-chart-year]");
+      return group?Number(group.getAttribute("data-chart-year")):null;
+    }
+    chart.addEventListener("pointerover",e=>{
+      const year=chartYearFromTarget(e.target);
+      if(year!==null && year!==selectedChartYear) selectChartYear(year);
+    });
+    chart.addEventListener("click",e=>{
+      const year=chartYearFromTarget(e.target);
+      if(year!==null) selectChartYear(year);
+    });
+    chart.addEventListener("focusin",e=>{
+      const year=chartYearFromTarget(e.target);
+      if(year!==null) selectChartYear(year);
+    });
+    chart.addEventListener("keydown",e=>{
+      if(e.key!=="Enter" && e.key!==" ")return;
+      const year=chartYearFromTarget(e.target);
+      if(year!==null){e.preventDefault();selectChartYear(year);}
+    });
 
     fields.forEach(id => {
       $(id).addEventListener("input", calculate);
