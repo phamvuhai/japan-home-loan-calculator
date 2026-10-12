@@ -8,6 +8,14 @@
 - Biểu đồ hai cột gốc/lãi theo từng năm ngay dưới kết quả tính toán; chọn năm để xem số tiền chính xác (¥). Biểu đồ tự cập nhật khi thay đổi khoản vay và cuộn ngang được trên điện thoại.
 - Ghi nhớ thông số trong trình duyệt. Không gửi dữ liệu cho bên thứ ba.
 
+## Giao diện responsive
+
+- **PC (trên 1050px):** hai cột thiết lập khoản vay và kết quả, biểu đồ.
+- **Tablet (641–1050px):** bố cục một cột, ô nhập chia hàng hợp lý, có tóm tắt tiền trả hằng tháng.
+- **Điện thoại (đến 640px):** vùng chạm lớn, thanh kéo dễ sử dụng, thẻ kết quả hằng tháng nổi khi đang nhập thông số.
+- Biểu đồ hỗ trợ chọn năm, chạm vào cột và vuốt ngang. Bảng trả nợ có cột Năm cố định khi cuộn ngang.
+- Không dùng framework, thư viện CDN hay máy chủ; chỉ có `index.html`.
+
 ## Sử dụng
 
 Mở `index.html` trên trình duyệt. Ví dụ 3.400 man, 5%/năm, 35 năm:
