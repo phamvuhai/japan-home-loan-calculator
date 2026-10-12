@@ -35,3 +35,26 @@ test("UI field validator remains available for numeric and required checks",()=>
  assert.match(validation,/function validateValue\(/);
  assert.match(validation,/is-invalid/);
 });
+
+test("A missing advanced result never crashes initial loan calculation",()=>{
+ const vm=require("node:vm");
+ const notices=[];
+ const controls=new Map([
+  ["rate-mode",{value:"fixed",addEventListener(){}}],
+  ["rate-change-controls",{hidden:false}],
+  ["csv-monthly",{addEventListener(){}}],
+  ["advanced-root",{addEventListener(){}}]
+ ]);
+ const sandbox={
+  window:{LoanCore:{}},
+  document:{
+   getElementById(id){return controls.get(id)||null},
+   addEventListener(){},querySelectorAll(){return []}
+  },
+  localStorage:{getItem(){return null}},
+  console:{warn(...args){notices.push(args.join(" "))}}
+ };
+ vm.runInNewContext(advanced,sandbox,{filename:"advanced.js"});
+ assert.doesNotThrow(()=>sandbox.window.LoanAdvanced.render({},{}));
+ assert.ok(notices.some(message=>message.includes("Missing advanced UI elements")));
+});
