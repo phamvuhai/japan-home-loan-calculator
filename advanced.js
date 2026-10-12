@@ -134,7 +134,7 @@ function init(){
  });
  const advancedCsv=$("csv-monthly");
  advancedCsv.addEventListener("click",()=>{
-  const c=window.loanCurrentSimulation;if(!c)return;
+  const c=window.loanCurrentSimulation;if(!c){window.LoanValidation?.revealFirst();return;}
   const header="Thang,Nam,Lai suat (%),Goc dinh ky (JPY),Lai (JPY),Tra truoc (JPY),Tong thanh toan (JPY),Du no cuoi ky (JPY)";
   const lines=[header,...c.rows.map(x=>[x.month,x.year,x.rate,x.principal,x.interest,x.extra,x.paid,x.balance].map(v=>typeof v==="number"?Math.round(v*100)/100:v).join(","))];
   const blob=new Blob(["\ufeff",lines.join("\r\n")],{type:"text/csv;charset=utf-8"});
