@@ -108,7 +108,7 @@ try{
 async function loadRates(){
 el('refresh').disabled=true;el('liveStatus').textContent='Đang đọc bản dữ liệu đã lưu…';
 try{
- const url=location.hostname.endsWith('.github.io')?'./data/latest.json':'/api/rates';
+ const url=location.hostname.endsWith('.github.io')?'https://raw.githubusercontent.com/phamvuhai/japan-home-loan-calculator/main/data/latest.json':'/api/rates';
  let res=await fetch(url,{cache:'no-store'});
  if(!res.ok)res=await fetch('./data/latest.json',{cache:'no-store'});
  if(!res.ok)throw Error('Snapshot HTTP '+res.status);
@@ -131,7 +131,7 @@ try{
 }finally{el('refresh').disabled=false;render();}
 }
 ids.forEach(id=>{const n=el(id);n.addEventListener('input',render);n.addEventListener('change',()=>{render();try{localStorage.setItem('home-loan-rate-profile-v1',JSON.stringify(Object.fromEntries(ids.map(k=>[k,el(k).type==='checkbox'?el(k).checked:el(k).value]))));}catch(_){}});});
-try{const p=JSON.parse(localStorage.getItem('home-loan-rate-profile-v1')||'null');if(p&&typeof p==='object')ids.forEach(k=>{if(Object.prototype.hasOwnProperty.call(p,k)){if(el(k).type==='checkbox')el(k).checked=!!p[k];else el(k).value=String(p[k]);}});}catch(_){}
+try{const p=JSON.parse(localStorage.getItem('home-loan-rate-profile-v1')||'null');if(p&&typeof p==='object')ids.forEach(k=>{if(Object.prototype.hasOwnProperty.call(p,k)){if(el(k).type==='checkbox')el(k).checked=!!p[k];else el(k).value=String(p[k]);}});else{const previous=JSON.parse(localStorage.getItem('home-loan-jp-inputs')||'null');if(previous&&Number.isFinite(previous.man)&&Number.isFinite(previous.years)){el('price').value=previous.man;el('down').value=0;el('years').value=previous.years;}}}catch(_){}
 el('refresh').addEventListener('click',loadRates);
 el('sort-rates').addEventListener('change',render);
 document.addEventListener('pointerdown',e=>{if(!e.target.closest('input,select,button,textarea')&&document.activeElement&&/INPUT|SELECT|TEXTAREA/.test(document.activeElement.tagName))document.activeElement.blur();});
