@@ -1,4 +1,55 @@
 {
-  "changes": [],
-  "updatedAt": null
+  "changes": [
+    {
+      "observedAt": "2026-10-12T11:29:48.819Z",
+      "bank": "smbc",
+      "id": "smbc-variable",
+      "name": "Lãi suất thả nổi (vay mới)",
+      "min": 1.225,
+      "max": 1.525,
+      "effectiveDate": "2026-10-01",
+      "source": "https://www.smbc.co.jp/gadget/loan_shinki/"
+    },
+    {
+      "observedAt": "2026-10-12T11:29:48.819Z",
+      "bank": "smbc",
+      "id": "smbc-fixed10",
+      "name": "Lãi suất cố định 10 năm đầu",
+      "min": 4.45,
+      "max": 4.75,
+      "effectiveDate": "2026-10-01",
+      "source": "https://www.smbc.co.jp/gadget/loan_shinki/"
+    },
+    {
+      "observedAt": "2026-10-12T11:29:48.819Z",
+      "bank": "suruga",
+      "id": "suruga-preferred",
+      "name": "Gói ưu đãi theo giao dịch",
+      "min": 1.575,
+      "max": 4.575,
+      "effectiveDate": "2026-10-01",
+      "source": "https://www.surugabank.co.jp/suruga/pc/Rate?formNo=00204&startUp=suruga_lkinri"
+    },
+    {
+      "observedAt": "2026-10-12T11:29:48.819Z",
+      "bank": "suruga",
+      "id": "suruga-percent",
+      "name": "Phí xử lý theo tỷ lệ",
+      "min": 2.225,
+      "max": 5.125,
+      "effectiveDate": "2026-10-01",
+      "source": "https://www.surugabank.co.jp/suruga/pc/Rate?formNo=00204&startUp=suruga_lkinri"
+    },
+    {
+      "observedAt": "2026-10-12T11:29:48.819Z",
+      "bank": "suruga",
+      "id": "suruga-flat",
+      "name": "Phí xử lý cố định",
+      "min": 2.375,
+      "max": 5.275,
+      "effectiveDate": "2026-10-01",
+      "source": "https://www.surugabank.co.jp/suruga/pc/Rate?formNo=00204&startUp=suruga_lkinri"
+    }
+  ],
+  "updatedAt": "2026-10-12T11:29:48.819Z"
 }

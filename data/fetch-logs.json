@@ -1,3 +1,14 @@
 {
-  "runs": []
+  "runs": [
+    {
+      "slot": "2026-10-12@initial",
+      "checkedAt": "2026-10-12T11:29:48.819Z",
+      "status": "ok",
+      "bankResults": {
+        "smbc": "ok",
+        "suruga": "ok"
+      },
+      "errors": []
+    }
+  ]
 }

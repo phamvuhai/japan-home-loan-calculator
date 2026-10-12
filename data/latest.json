@@ -1,9 +1,90 @@
 {
   "schemaVersion": 2,
-  "products": [],
-  "bankStatuses": {},
-  "checkedAt": null,
-  "lastSuccessAt": null,
+  "products": [
+    {
+      "bank": "smbc",
+      "id": "smbc-variable",
+      "name": "Lãi suất thả nổi (vay mới)",
+      "japanese": "変動金利型",
+      "type": "variable",
+      "min": 1.225,
+      "max": 1.525,
+      "effectiveDate": "2026-10-01",
+      "source": "https://www.smbc.co.jp/gadget/loan_shinki/",
+      "info": "Điều kiện ưu đãi, phí và khả năng được duyệt phải xác nhận với SMBC.",
+      "verifiedAt": "2026-10-12T11:29:48.819Z"
+    },
+    {
+      "bank": "smbc",
+      "id": "smbc-fixed10",
+      "name": "Lãi suất cố định 10 năm đầu",
+      "japanese": "固定金利特約型10年",
+      "type": "intro-fixed",
+      "min": 4.45,
+      "max": 4.75,
+      "effectiveDate": "2026-10-01",
+      "source": "https://www.smbc.co.jp/gadget/loan_shinki/",
+      "info": "Lãi cố định 10 năm đầu, không cố định hết kỳ vay.",
+      "verifiedAt": "2026-10-12T11:29:48.819Z"
+    },
+    {
+      "bank": "suruga",
+      "id": "suruga-preferred",
+      "name": "Gói ưu đãi theo giao dịch",
+      "japanese": "住宅ローン＜優遇金利型＞",
+      "type": "variable",
+      "min": 1.575,
+      "max": 4.575,
+      "effectiveDate": "2026-10-01",
+      "source": "https://www.surugabank.co.jp/suruga/pc/Rate?formNo=00204&startUp=suruga_lkinri",
+      "info": "Ưu đãi tùy điều kiện giao dịch.",
+      "verifiedAt": "2026-10-12T11:29:48.819Z"
+    },
+    {
+      "bank": "suruga",
+      "id": "suruga-percent",
+      "name": "Phí xử lý theo tỷ lệ",
+      "japanese": "取扱手数料定率型",
+      "type": "variable",
+      "min": 2.225,
+      "max": 5.125,
+      "effectiveDate": "2026-10-01",
+      "source": "https://www.surugabank.co.jp/suruga/pc/Rate?formNo=00204&startUp=suruga_lkinri",
+      "info": "Phí xử lý theo tỷ lệ chưa tính vào khoản trả tháng.",
+      "verifiedAt": "2026-10-12T11:29:48.819Z"
+    },
+    {
+      "bank": "suruga",
+      "id": "suruga-flat",
+      "name": "Phí xử lý cố định",
+      "japanese": "取扱手数料定額型",
+      "type": "variable",
+      "min": 2.375,
+      "max": 5.275,
+      "effectiveDate": "2026-10-01",
+      "source": "https://www.surugabank.co.jp/suruga/pc/Rate?formNo=00204&startUp=suruga_lkinri",
+      "info": "Phí xử lý cố định chưa tính vào khoản trả tháng.",
+      "verifiedAt": "2026-10-12T11:29:48.819Z"
+    }
+  ],
+  "bankStatuses": {
+    "smbc": {
+      "status": "ok",
+      "checkedAt": "2026-10-12T11:29:48.819Z",
+      "lastSuccessAt": "2026-10-12T11:29:48.819Z",
+      "source": "https://www.smbc.co.jp/gadget/loan_shinki/",
+      "count": 2
+    },
+    "suruga": {
+      "status": "ok",
+      "checkedAt": "2026-10-12T11:29:48.819Z",
+      "lastSuccessAt": "2026-10-12T11:29:48.819Z",
+      "source": "https://www.surugabank.co.jp/suruga/pc/Rate?formNo=00204&startUp=suruga_lkinri",
+      "count": 3
+    }
+  },
+  "checkedAt": "2026-10-12T11:29:48.819Z",
+  "lastSuccessAt": "2026-10-12T11:29:48.819Z",
   "errors": [],
   "source": "GitHub Actions scheduled at 08:30/20:30 JST",
   "disclaimer": "Lãi suất công bố, không phải lãi suất duyệt cá nhân."
