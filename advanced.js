@@ -47,8 +47,13 @@ function render(base,simulation){
  const feeOpts={loanMan:base.loanMan,closingPercent:val("closing-pct"),registrationMan:val("registration"),insuranceMan:val("insurance"),taxesMan:val("taxes"),otherMan:val("other"),includeBroker:$("include-broker").checked};
  const f=C.fees(feeOpts,p,val("bank-fee-pct"),val("bank-fee-man"));
  $("fee-total").textContent=money(f.total);
- $("cash-needed").textContent=money(C.yenFromMan(deposit)+f.total);
- $("total-housing").textContent=money(simulation.totalPaid+f.total);
+ const requiredOwnCash=Math.max(0,p-base.loanMan)*10000;
+ $("cash-needed").textContent=money(requiredOwnCash+f.total);
+ $("total-housing").textContent=money(simulation.totalPaid+requiredOwnCash+f.total);
+ const gap=p-deposit-base.loanMan;
+ $("purchase-warning").textContent=Math.abs(gap)>0.01
+  ?"Giá nhà, tiền tự có và khoản vay đang lệch "+man(Math.abs(gap))+". Dự toán tiền mặt tính theo giá nhà trừ khoản vay, không chỉ theo khoản đặt cọc đã nhập."
+  :"Giá nhà = khoản vay + tiền tự có. Chi phí dự kiến chưa tính phí duy trì qua các năm.";
  $("fee-breakdown").textContent="Phí ngân hàng "+money(f.bank)+" · Môi giới "+money(f.agency)+" · Phí khác "+money(f.total-f.bank-f.agency);
  const income=val("income"),other=val("other-debt"),upkeep=val("upkeep"),threshold=val("debt-threshold",30);
  const a=C.affordability(income,other,simulation.monthly,threshold,upkeep);
