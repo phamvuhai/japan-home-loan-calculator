@@ -467,6 +467,19 @@
       .financing-body .mini-stats.three{grid-template-columns:1fr}
     }
 
+  
+    /* Form validation — accessible inline feedback for desktop, tablet and mobile */
+    .field-error{display:block;margin:7px 0 12px;color:#b42318;font-size:12px;font-weight:650;line-height:1.5}
+    .field-error[hidden]{display:none!important}
+    .field.has-error> .field-header label,.has-error>label,.has-error label{color:#b42318}
+    input.is-invalid:not([type=range]),select.is-invalid{border:2px solid #d92d20!important;background:#fff4f2!important;box-shadow:0 0 0 3px rgba(217,45,32,.08)!important;border-radius:9px}
+    .field.has-error .input-group{border:2px solid #d92d20!important;background:#fff4f2;box-shadow:0 0 0 3px rgba(217,45,32,.08)}
+    .field.has-error .input-group input{border:0!important;box-shadow:none!important}
+    .event-row .field-error,.advanced-body>.field-error{grid-column:1/-1}
+    #error{line-height:1.55}
+    #error:focus{outline-offset:4px}
+    @media(max-width:540px){.field-error{font-size:12px;margin-bottom:14px}}
+
   </style>
 </head>
 <body>
@@ -544,7 +557,7 @@
           </div>
         </details></div>
         
-        <div class="input-preview" aria-live="polite'><div><span>Tạm tính mỗi tháng</span><strong id="quick-monthly">171.594 ¥</strong></div><a href="#result-title">Chi tiết <span aria-hidden="true">→</span></a></div>
+        <div class="input-preview" aria-live="polite"><div><span>Tạm tính mỗi tháng</span><strong id="quick-monthly">171.594 ¥</strong></div><a href="#result-title">Chi tiết <span aria-hidden="true">→</span></a></div>
         <div class="buttons">
           <button class="btn" id="reset" type="button"><span aria-hidden="true">↺</span> Đặt lại</button>
           <button class="btn" id="copy" type="button"><span aria-hidden="true">⧉</span> Sao chép kết quả</button>
@@ -655,7 +668,7 @@
     <p class="foot"><strong>Lưu ý:</strong> Công cụ hỗ trợ mô phỏng trả trước, lãi suất thay đổi, phí mua nhà và khả năng trả nợ dựa trên thông số do bạn nhập. Các mức phí/ngân hàng chỉ là giả định và không thể dùng thay cho báo giá hoặc xét duyệt ngân hàng. Dữ liệu tính toán chạy ngay trong trình duyệt, không gửi lên máy chủ.</p>
   </main>
   <aside class="mobile-pay" id="mobile-pay" aria-label="Thanh toán mỗi tháng"><div><span>Trả hằng tháng</span><strong id="mobile-monthly">171.594 ¥</strong></div><a href="#result-title">Xem kết quả <span aria-hidden="true">↗</span></a></aside>
-  <script src="calculator-core.js"></script><script src="advanced.js"></script><script>
+  <script src="calculator-core.js"></script><script src="advanced.js"></script><script src="validation.js"></script><script>
     "use strict";
     const $ = id => document.getElementById(id);
     const fields = ["principal", "rate", "years"];
@@ -696,16 +709,19 @@
       syncSliders();
       const man=Number($("principal").value),annualPercent=Number($("rate").value),years=Number($("years").value);
       const error=$("error");
-      const isValid=fields.every(id=>$(id).value.trim()!=="")&&Number.isFinite(man)&&Number.isFinite(annualPercent)&&Number.isInteger(years)&&man>0&&man<=20000&&annualPercent>=0&&annualPercent<=100&&years>=1&&years<=50;
+      const validation=window.LoanValidation.validate();
+       const isValid=validation.valid;
       error.style.display=isValid?"none":"block";
       if(!isValid){
-        error.textContent="Nhập tiền vay > 0 đến 20.000 man, lãi suất 0–100% và thời hạn nguyên 1–50 năm.";
+        error.textContent=validation.errors.length+" mục cần kiểm tra. Các ô sai được viền đỏ, kèm hướng dẫn ngay bên dưới. Vui lòng sửa trước khi tính tiếp.";
         $("monthly").innerHTML='— <small>¥ / tháng</small>';
         $("quick-monthly").textContent="—";$("mobile-monthly").textContent="—";
         ["total-interest","total-paid","principal-result","interest-share","payments","first-interest"].forEach(id=>$(id).textContent="—");
         $("loan-in-yen").textContent="—";$("principal-bar").style.width="0%";
         $("schedule-body").innerHTML="";$("amortization-chart").replaceChildren();
-        current=null;yearlyRows=[];window.loanCurrentSimulation=null;return;
+        ["prepay-saved","prepay-paid-off","prepay-extra","prepay-years","ltv-result","cash-down","loan-gap","fee-total","cash-needed","total-housing","debt-ratio","monthly-budget","housing-monthly","max-estimated","bank-a-monthly","bank-a-interest","bank-a-cost","bank-a-payoff","bank-b-monthly","bank-b-interest","bank-b-cost","bank-b-payoff","compare-difference"].forEach(id=>{const target=$(id);if(target)target.textContent="—";});
+         $("chart-year-label").textContent="—";$("chart-year-principal").textContent="—";$("chart-year-interest").textContent="—";
+         current=null;yearlyRows=[];window.loanCurrentSimulation=null;return;
       }
       try{
         const base={loanMan:man,rate:annualPercent,years};
@@ -882,16 +898,27 @@
     document.querySelectorAll("[data-amount]").forEach(btn => btn.addEventListener("click", () => {$("principal").value = btn.dataset.amount; calculate();}));
     document.querySelectorAll("[data-rate]").forEach(btn => btn.addEventListener("click", () => {$("rate").value = btn.dataset.rate; calculate();}));
     document.querySelectorAll("[data-years]").forEach(btn => btn.addEventListener("click", () => {$("years").value = btn.dataset.years; calculate();}));
-    $("reset").addEventListener("click", () => {$("principal").value="3400"; $("rate").value="5"; $("years").value="35"; $("notice").textContent=""; calculate();});
+    $("reset").addEventListener("click", () => {
+       document.querySelectorAll('main input:not([type="range"]),main select').forEach(input=>{
+         if(input.type==="checkbox")input.checked=input.defaultChecked;
+         else if(input.type!=="button"&&input.tagName!=="SELECT")input.value=input.defaultValue;
+         else if(input.tagName==="SELECT")input.selectedIndex=0;
+       });
+       document.querySelectorAll(".event-row").forEach(node=>node.remove());
+       $("rate-change-controls").hidden=true;
+       try{localStorage.removeItem("loan-advanced-v2");}catch(_){}
+       $("notice").textContent="";
+       calculate();
+     });
     $("copy").addEventListener("click", async () => {
-      if (!current) return;
+      if (!current) {window.LoanValidation.revealFirst();return;}
       const c = current;
       const message = `TÍNH VAY MUA NHÀ NHẬT BẢN\nVay: ${c.man.toLocaleString("vi-VN")} man (${yen(c.principal)})\nLãi suất: ${c.annualPercent}%/năm\nThời hạn: ${c.years} năm\nTrả mỗi tháng: ${yen(c.monthly)}\nTổng lãi: ${yen(c.interest)}\nTổng phải trả: ${yen(c.total)}`;
       try {await navigator.clipboard.writeText(message);$("notice").textContent="Đã sao chép kết quả!";}
       catch (_) {$("notice").textContent="Không thể sao chép tự động trong trình duyệt này.";}
     });
     $("csv").addEventListener("click", () => {
-      if (!current) return;
+      if (!current) {window.LoanValidation.revealFirst();return;}
       const lines = ["Nam,Goc tra trong nam (JPY),Lai tra trong nam (JPY),Tra truoc (JPY),Tong tra trong nam (JPY),Du no cuoi nam (JPY)"];
       for (const row of yearlyRows) lines.push([row.year,row.principal,row.interest,row.extra,row.paid,row.balance].map(Math.round).join(","));
       const blob = new Blob(["\ufeff",lines.join("\r\n")],{type:"text/csv;charset=utf-8"});
