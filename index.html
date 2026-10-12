@@ -84,8 +84,9 @@
     .chart-grid{stroke:#e8edf6;stroke-width:1;stroke-dasharray:3 4}
     .chart-axis{fill:#79869c;font:11px system-ui,-apple-system,"Segoe UI",sans-serif;font-variant-numeric:tabular-nums}
     .chart-year{cursor:pointer}
-    .chart-year rect{opacity:.88;transition:opacity .15s ease,stroke .15s ease}
-    .chart-year:hover rect,.chart-year.is-selected rect,.chart-year:focus-visible rect{opacity:1;stroke:#283b77;stroke-width:1.4}
+    .chart-year rect:not(.chart-hit){opacity:.88;transition:opacity .15s ease,stroke .15s ease}
+    .chart-year:hover rect:not(.chart-hit),.chart-year.is-selected rect:not(.chart-hit),.chart-year:focus-visible rect:not(.chart-hit){opacity:1;stroke:#283b77;stroke-width:1.4}
+    .chart-year .chart-hit{stroke:none;opacity:0;pointer-events:all}
     .chart-year:focus{outline:none}
     .chart-summary{display:flex;align-items:center;flex-wrap:wrap;gap:8px 16px;margin-top:12px;padding:11px 13px;background:#f8faff;border:1px solid #ebeffa;border-radius:11px;font-size:12px;font-variant-numeric:tabular-nums}
     .chart-summary>strong{font-size:13px;margin-right:2px}
@@ -320,7 +321,7 @@
       const normal=rawStep/order;
       const tickStep=(normal<=1?1:normal<=2?2:normal<=2.5?2.5:normal<=5?5:10)*order;
       const ceiling=tickStep*4;
-      const rounded = v=>Math.round(v).toLocaleString("vi-VN");
+      const rounded = v=>v.toLocaleString("vi-VN",{maximumFractionDigits:v<1?3:1});
       const tickLabels=Array.from({length:5},(_,i)=>{
         const yy=bottom-i*plotHeight/4;
         return `<line x1="${left}" x2="${width-right}" y1="${yy}" y2="${yy}" class="chart-grid"/>
@@ -337,7 +338,7 @@
           <title>Năm ${row.year} · Gốc: ${yen(row.principal)} · Lãi: ${yen(row.interest)}</title>
           <rect x="${x}" y="${bottom-principalHeight}" width="${bWidth}" height="${principalHeight}" rx="2" fill="#4b6af0"/>
           <rect x="${x+12}" y="${bottom-interestHeight}" width="${bWidth}" height="${interestHeight}" rx="2" fill="#f19c52"/>
-          <rect x="${x-2}" y="${top}" width="25" height="${bottom-top}" fill="transparent"/>
+          <rect class="chart-hit" x="${x-2}" y="${top}" width="25" height="${bottom-top}" fill="transparent"/>
           ${label}
         </g>`;
       }).join("");
