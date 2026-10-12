@@ -58,3 +58,32 @@ test("A missing advanced result never crashes initial loan calculation",()=>{
  assert.doesNotThrow(()=>sandbox.window.LoanAdvanced.render({},{}));
  assert.ok(notices.some(message=>message.includes("Missing advanced UI elements")));
 });
+
+
+test("Responsive workflow: upfront cash, loan, prepayment and variable rate stay in task order",()=>{
+ const nodes=["financing-panel","principal","early-panel","variable-panel","result-title","purchase-panel","income-panel","bank-panel"];
+ let prev=-1;
+ for(const id of nodes){
+  const current=html.indexOf('id="'+id+'"');
+  assert.ok(current>prev,"Incorrect position of #"+id);
+  prev=current;
+ }
+ assert.match(html,/id="prepay-quick-summary"/);
+ assert.match(html,/class="input-preview"[\s\S]*id="quick-monthly"/);
+ assert.ok(html.indexOf('id="quick-monthly"')<html.indexOf('id="financing-panel"'),"Tablet/mobile payment preview should appear before form fields");
+});
+test("Mobile, tablet and desktop have distinct responsive rules and accessible tap targets",()=>{
+ assert.match(html,/HomeLoan JP v4/);
+ assert.match(html,/@media\(min-width:1101px\)/);
+ assert.match(html,/@media\(min-width:641px\) and \(max-width:1100px\)/);
+ assert.match(html,/@media\(max-width:640px\)/);
+ assert.match(html,/body:has\(input:focus\) \.mobile-pay/);
+ assert.match(html,/#advanced-root \.advanced-grid\{grid-template-columns:1fr/);
+ assert.match(html,/#advanced-root #bank-panel\{grid-column:1\/-1\}/);
+});
+test("Additional-cost and bank sections initially collapse for shorter mobile scrolling",()=>{
+ for(const id of ["purchase-panel","income-panel","bank-panel"]){
+  assert.ok(html.includes('id="'+id+'">'),"Summary not collapsed: "+id);
+ }
+ assert.ok(html.includes('id="early-panel" open'),"prepayment should be open by default for desktop");
+});
