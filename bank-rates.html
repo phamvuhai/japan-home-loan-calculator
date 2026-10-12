@@ -92,32 +92,43 @@ const notes=['Đây là đánh giá sơ bộ theo hồ sơ, không phải kết 
 el('assessment').innerHTML='<ul>'+notes.map(n=>'<li>'+safe(n)+'</li>').join('')+'</ul>';
 document.querySelectorAll('.use-rate').forEach(b=>b.addEventListener('click',()=>{const p=products.find(x=>x.id===b.dataset.id);if(!p)return;try{localStorage.setItem('home-loan-jp-inputs',JSON.stringify({man:s.loan/10000,annualPercent:p.min,years:Math.round(s.years)}));}catch(_e){}location.href='./index.html';}));
 }
-function history(){
-try{const data=JSON.parse(localStorage.getItem('home-loan-rate-history-v1')||'[]');return Array.isArray(data)?data.slice(-160):[];}catch(_){return [];}
-}
-function saveHistory(items){
-let data=history();const seen=new Set(data.map(x=>x.id+'|'+x.effectiveDate+'|'+x.min+'|'+x.max));
-items.forEach(p=>{const key=p.id+'|'+p.effectiveDate+'|'+p.min+'|'+p.max;if(!seen.has(key)){data.push({id:p.id,name:p.name,bank:p.bank,effectiveDate:p.effectiveDate,min:p.min,max:p.max,observedAt:new Date().toISOString()});seen.add(key);}});
-data=data.slice(-160);try{localStorage.setItem('home-loan-rate-history-v1',JSON.stringify(data));}catch(_){}
-}
 function renderHistory(){
-const data=history().sort((a,b)=>String(b.observedAt).localeCompare(String(a.observedAt)));
-el('historyList').innerHTML=data.length?data.slice(0,30).map(x=>'<div>📍 '+safe(x.effectiveDate||'Không rõ ngày')+' · '+safe(x.bank==='smbc'?'SMBC':'Suruga')+' · '+safe(x.name)+' · <b>'+fmt(x.min)+'–'+fmt(x.max)+'%</b> <span class="muted"> (ghi nhận '+safe(new Date(x.observedAt).toLocaleDateString('vi-VN'))+')</span></div>').join(''):'Chưa có dữ liệu. Lịch sử bắt đầu từ lần truy cập lấy được lãi suất.';
+const entries=serverHistory.slice().sort((a,b)=>String(b.observedAt).localeCompare(String(a.observedAt)));
+el('historyList').innerHTML=entries.length?entries.slice(0,40).map(x=>'<div>📈 '+safe(x.effectiveDate||'Ngày không rõ')+' · '+safe(x.bank==='smbc'?'SMBC':'Suruga')+' · '+safe(x.name)+' · <b>'+fmt(x.min)+'–'+fmt(x.max)+'%</b> <span class="muted"> (ghi nhận '+safe(new Date(x.observedAt).toLocaleString('vi-VN',{timeZone:'Asia/Tokyo'}))+' JST)</span></div>').join(''):'Chưa ghi nhận thay đổi lãi suất nào sau khi bắt đầu theo dõi tự động.';
+}
+async function loadHistory(){
+try{
+ const url='https://raw.githubusercontent.com/phamvuhai/japan-home-loan-calculator/main/data/history.json';
+ let res=await fetch(url,{cache:'no-store'});
+ if(!res.ok)res=await fetch('./data/history.json',{cache:'no-store'});
+ if(!res.ok)throw Error('Không thể lấy lịch sử');
+ const data=await res.json();serverHistory=Array.isArray(data.changes)?data.changes:[];
+}catch(_){serverHistory=[];}renderHistory();
 }
 async function loadRates(){
-el('refresh').disabled=true;el('liveStatus').textContent='Đang kiểm tra nguồn ngân hàng…';
+el('refresh').disabled=true;el('liveStatus').textContent='Đang đọc bản dữ liệu đã lưu…';
 try{
-const res=await fetch('/api/rates',{cache:'no-store'}),data=await res.json();
-products=Array.isArray(data.products)?data.products.filter(p=>Number.isFinite(p.min)&&Number.isFinite(p.max)&&p.min>0&&p.min<=p.max):[];
-loadStamp=data.checkedAt;
-const errors=Array.isArray(data.errors)?data.errors:[];
-el('errors').style.display=errors.length?'block':'none';
-el('errors').textContent=errors.map(x=>(x.bank==='smbc'?'SMBC':'Suruga')+': '+x.message).join(' | ');
-el('liveStatus').textContent=products.length?(errors.length?'Đã cập nhật một phần — có nguồn lỗi':'Đã kiểm tra dữ liệu từ nguồn ngân hàng'):'Chưa thể xác minh dữ liệu';
-el('liveTime').textContent=(loadStamp?'Kiểm tra lúc '+new Date(loadStamp).toLocaleString('vi-VN',{timeZone:'Asia/Tokyo'})+' (JST)':'')+' · Bộ nhớ đệm máy chủ khoảng 4 giờ';
-if(products.length)saveHistory(products);renderHistory();
-}catch(e){products=[];el('liveStatus').textContent='Không thể tải lãi suất';el('liveTime').textContent='Hãy xem trang gốc của ngân hàng để kiểm tra';el('errors').style.display='block';el('errors').textContent='Lỗi kết nối: '+String(e.message||e);renderHistory();}
-finally{el('refresh').disabled=false;render();}
+ const url=location.hostname.endsWith('.github.io')?'./data/latest.json':'/api/rates';
+ let res=await fetch(url,{cache:'no-store'});
+ if(!res.ok)res=await fetch('./data/latest.json',{cache:'no-store'});
+ if(!res.ok)throw Error('Snapshot HTTP '+res.status);
+ const data=await res.json();
+ if(data.schemaVersion!==2)throw Error('Dữ liệu chưa được cập nhật sang định dạng mới');
+ products=Array.isArray(data.products)?data.products.filter(p=>Number.isFinite(p.min)&&Number.isFinite(p.max)&&p.min>0&&p.min<=p.max):[];
+ bankStatuses=data.bankStatuses||{};
+ loadStamp=data.checkedAt;
+ const errors=Array.isArray(data.errors)?data.errors:[];
+ el('errors').style.display=errors.length?'block':'none';
+ el('errors').textContent=errors.map(x=>(x.bank==='smbc'?'SMBC':x.bank==='suruga'?'Suruga':'Hệ thống')+': '+x.message).join(' | ');
+ el('liveStatus').textContent=products.length?(errors.length?'Đang hiển thị bản gần nhất — một số nguồn chưa cập nhật':'Bản lãi suất đã được lưu và xác minh'):'Chưa có snapshot lãi suất đã xác minh';
+ el('liveTime').textContent=(loadStamp?'Lịch kiểm tra gần nhất '+new Date(loadStamp).toLocaleString('vi-VN',{timeZone:'Asia/Tokyo'})+' (JST)':'Chưa có kết quả kiểm tra')+' · Lịch tự động 08:30 và 20:30 JST';
+ await loadHistory();
+}catch(e){
+ products=[];bankStatuses={};el('liveStatus').textContent='Không thể đọc snapshot';
+ el('liveTime').textContent='Vẫn có thể kiểm tra trang gốc của các ngân hàng.';
+ el('errors').style.display='block';el('errors').textContent='Lỗi dữ liệu: '+String(e.message||e);
+ renderHistory();
+}finally{el('refresh').disabled=false;render();}
 }
 ids.forEach(id=>{const n=el(id);n.addEventListener('input',render);n.addEventListener('change',()=>{render();try{localStorage.setItem('home-loan-rate-profile-v1',JSON.stringify(Object.fromEntries(ids.map(k=>[k,el(k).type==='checkbox'?el(k).checked:el(k).value]))));}catch(_){}});});
 try{const p=JSON.parse(localStorage.getItem('home-loan-rate-profile-v1')||'null');if(p&&typeof p==='object')ids.forEach(k=>{if(Object.prototype.hasOwnProperty.call(p,k)){if(el(k).type==='checkbox')el(k).checked=!!p[k];else el(k).value=String(p[k]);}});}catch(_){}
