@@ -622,6 +622,25 @@
       if(year!==null){e.preventDefault();selectChartYear(year);}
     });
 
+    // iOS Safari and iPadOS may leave the numeric keyboard open after a
+    // tap on non-editable content. Blur only when the user taps outside all
+    // editable fields; never preventDefault(), so sliders/buttons keep working.
+    function dismissKeyboardOnOutsideTap(event) {
+      const focused = document.activeElement;
+      if (!focused || !fields.includes(focused.id)) return;
+      const target = event.target;
+      if (!(target instanceof Element)) return;
+      if (target === focused) return;
+      // Switching between inputs should keep the normal native focus behavior.
+      if (target.closest('input[type="number"],input[type="text"],textarea,[contenteditable="true"]')) return;
+      const linkedLabel = target.closest("label[for]");
+      if (linkedLabel && fields.includes(linkedLabel.htmlFor)) return;
+      focused.blur();
+    }
+    document.addEventListener("pointerdown", dismissKeyboardOnOutsideTap, {passive:true});
+    // Touch fallback for older Safari versions without reliable Pointer Events.
+    document.addEventListener("touchstart", dismissKeyboardOnOutsideTap, {passive:true});
+
     fields.forEach(id => {
       $(id).addEventListener("input", calculate);
       $(id + "-slider").addEventListener("input", () => {
