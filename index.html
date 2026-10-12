@@ -36,6 +36,14 @@
     input[type=number]{appearance:textfield;-moz-appearance:textfield}
     input::-webkit-inner-spin-button,input::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
     .note{font-size:12px;color:var(--muted);margin-top:7px}
+    .slider-block{margin-top:13px}
+    .range-input{display:block;width:100%;height:26px;margin:0;cursor:pointer;appearance:none;-webkit-appearance:none;background:transparent;touch-action:pan-y}
+    .range-input::-webkit-slider-runnable-track{height:8px;border-radius:999px;background:linear-gradient(to right,var(--accent) 0%,var(--accent) var(--fill,0%),#e4eaf6 var(--fill,0%),#e4eaf6 100%)}
+    .range-input::-moz-range-track{height:8px;border-radius:999px;background:linear-gradient(to right,var(--accent) 0%,var(--accent) var(--fill,0%),#e4eaf6 var(--fill,0%),#e4eaf6 100%)}
+    .range-input::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:22px;height:22px;margin-top:-7px;border:3px solid #fff;border-radius:50%;background:var(--accent);box-shadow:0 1px 6px #253f8940,0 0 0 1px #bdc8e7}
+    .range-input::-moz-range-thumb{width:16px;height:16px;border:3px solid #fff;border-radius:50%;background:var(--accent);box-shadow:0 1px 6px #253f8940,0 0 0 1px #bdc8e7}
+    .range-input:focus-visible{outline:2px solid var(--accent);outline-offset:4px;border-radius:10px}
+    .slider-ends{display:flex;justify-content:space-between;gap:8px;margin-top:1px;color:var(--muted);font-size:11px;font-variant-numeric:tabular-nums}
     .presets{display:flex;flex-wrap:wrap;gap:7px;margin-top:9px}
     .chip{cursor:pointer;font-size:12px;background:#f3f5fa;border:1px solid #e5eaf2;color:#52627c;border-radius:8px;padding:5px 11px;font-weight:700;transition:background .15s}
     .chip:hover,.chip:focus-visible{background:#e8edff;border-color:#becafb;color:var(--accent-deep)}
@@ -100,17 +108,29 @@
         <div class="field">
           <div class="field-header"><label for="principal">Số tiền vay</label><span class="tiny">Đơn vị Nhật Bản</span></div>
           <div class="input-group"><input id="principal" type="number" value="3400" min="1" max="100000" step="10" inputmode="decimal" aria-describedby="principal-hint" /><span class="suffix">万円 (man)</span></div>
+          <div class="slider-block">
+            <input class="range-input" id="principal-slider" type="range" min="1" max="10000" step="1" value="3400" aria-label="Kéo để chỉnh số tiền vay, đơn vị man" />
+            <div class="slider-ends"><span>1 man</span><span id="principal-slider-max">10.000 man</span></div>
+          </div>
           <div id="principal-hint" class="note" aria-live="polite">Tương đương: <strong id="loan-in-yen">34.000.000 ¥</strong></div>
           <div class="presets" aria-label="Mức vay mẫu"><button type="button" class="chip" data-amount="2000">2.000 man</button><button type="button" class="chip" data-amount="3000">3.000 man</button><button type="button" class="chip" data-amount="4000">4.000 man</button></div>
         </div>
         <div class="field">
           <div class="field-header"><label for="rate">Lãi suất hằng năm</label><span class="tiny">Cố định trong phép tính</span></div>
           <div class="input-group"><input id="rate" type="number" value="5" min="0" max="100" step="0.1" inputmode="decimal" /><span class="suffix">% / năm</span></div>
+          <div class="slider-block">
+            <input class="range-input" id="rate-slider" type="range" min="0" max="10" step="0.01" value="5" aria-label="Kéo để chỉnh lãi suất hằng năm" />
+            <div class="slider-ends"><span>0%</span><span id="rate-slider-max">10%</span></div>
+          </div>
           <div class="presets" aria-label="Lãi suất mẫu"><button type="button" class="chip" data-rate="1">1%</button><button type="button" class="chip" data-rate="2.5">2,5%</button><button type="button" class="chip" data-rate="3">3%</button><button type="button" class="chip" data-rate="5">5%</button></div>
         </div>
         <div class="field">
           <div class="field-header"><label for="years">Thời hạn vay</label><span class="tiny">Tối đa 50 năm</span></div>
           <div class="input-group"><input id="years" type="number" value="35" min="1" max="50" step="1" inputmode="numeric" /><span class="suffix">năm</span></div>
+          <div class="slider-block">
+            <input class="range-input" id="years-slider" type="range" min="1" max="50" step="1" value="35" aria-label="Kéo để chỉnh thời hạn vay" />
+            <div class="slider-ends"><span>1 năm</span><span id="years-slider-max">50 năm</span></div>
+          </div>
           <div class="presets" aria-label="Thời hạn mẫu"><button type="button" class="chip" data-years="20">20 năm</button><button type="button" class="chip" data-years="30">30 năm</button><button type="button" class="chip" data-years="35">35 năm</button></div>
         </div>
         <div class="buttons">
@@ -159,7 +179,35 @@
     let current = null;
     let yearlyRows = [];
 
+    // Synchronize all number inputs and slider positions. Typed values beyond
+    // the normal slider scale expand its maximum without losing input precision.
+    const sliderSettings = {
+      principal: {baseMax:10000, max:100000, tick:1000, suffix:" man"},
+      rate: {baseMax:10, max:100, tick:5, suffix:"%"},
+      years: {baseMax:50, max:50, tick:1, suffix:" năm"}
+    };
+    function syncSliders() {
+      fields.forEach(id => {
+        const input = $(id);
+        const slider = $(id + "-slider");
+        const spec = sliderSettings[id];
+        const value = Number(input.value);
+        const isNumber = input.value.trim() !== "" && Number.isFinite(value);
+        const minimum = Number(slider.min);
+        if (isNumber && value > Number(slider.max)) {
+          const expandedMax = Math.min(spec.max, Math.ceil(value / spec.tick) * spec.tick);
+          slider.max = String(Math.max(spec.baseMax, expandedMax));
+        }
+        if (isNumber) slider.value = String(Math.max(minimum, Math.min(value, Number(slider.max))));
+        const range = Number(slider.max) - minimum;
+        const fraction = range > 0 ? (Number(slider.value) - minimum) / range : 0;
+        slider.style.setProperty("--fill", (fraction * 100).toFixed(2) + "%");
+        $(id + "-slider-max").textContent = Number(slider.max).toLocaleString("vi-VN") + spec.suffix;
+      });
+    }
+
     function calculate() {
+      syncSliders();
       const man = Number($("principal").value);
       const annualPercent = Number($("rate").value);
       const years = Number($("years").value);
@@ -221,7 +269,13 @@
       return out;
     }
 
-    fields.forEach(id => $(id).addEventListener("input", calculate));
+    fields.forEach(id => {
+      $(id).addEventListener("input", calculate);
+      $(id + "-slider").addEventListener("input", () => {
+        $(id).value = $(id + "-slider").value;
+        calculate();
+      });
+    });
     document.querySelectorAll("[data-amount]").forEach(btn => btn.addEventListener("click", () => {$("principal").value = btn.dataset.amount; calculate();}));
     document.querySelectorAll("[data-rate]").forEach(btn => btn.addEventListener("click", () => {$("rate").value = btn.dataset.rate; calculate();}));
     document.querySelectorAll("[data-years]").forEach(btn => btn.addEventListener("click", () => {$("years").value = btn.dataset.years; calculate();}));
