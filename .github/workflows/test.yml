@@ -11,6 +11,25 @@ jobs:
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
       - name: Check JavaScript syntax
-        run: node --check api/rates.js && node --check advanced.js && node --check calculator-core.js
+        run: node --check api/rates.js && node --check advanced.js && node --check calculator-core.js && node --check validation.js
       - name: Run regression tests
         run: node --test tests/*.test.js
+      - name: Verify HTML controls are parsed by a real HTML parser
+        run: |
+          python3 - <<'PY'
+          from html.parser import HTMLParser
+          class Inspector(HTMLParser):
+              def __init__(self):
+                  super().__init__()
+                  self.ids=set()
+              def handle_starttag(self,tag,attrs):
+                  for key,value in attrs:
+                      if key=="id" and value:
+                          self.ids.add(value)
+          inspect=Inspector()
+          inspect.feed(open("index.html", encoding="utf-8").read())
+          expected={"quick-monthly","reset","copy","error","monthly","principal","rate","years","property-price","down-payment","income","amortization-chart"}
+          missing=expected-inspect.ids
+          assert not missing, "HTML parser lost elements: "+str(sorted(missing))
+          print("HTML parsed; all required controls are present")
+          PY
