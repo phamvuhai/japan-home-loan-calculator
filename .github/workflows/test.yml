@@ -1,0 +1,16 @@
+name: Validate home-loan app
+on:
+  push:
+    branches: [main]
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9d9b3550 # v4.2.2
+      - name: Check JavaScript syntax
+        run: node --check api/rates.js && node --check advanced.js && node --check calculator-core.js
+      - name: Run regression tests
+        run: node --test tests/*.test.js
