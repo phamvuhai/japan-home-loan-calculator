@@ -65,6 +65,12 @@ function render(base,simulation){
  $("prepay-paid-off").textContent="Tháng "+simulation.paidOffMonth+" / "+simulation.months;
  $("prepay-extra").textContent=money(simulation.totalExtra);
  $("prepay-years").textContent=(simulation.paidOffMonth/12).toLocaleString("vi-VN",{maximumFractionDigits:1})+" năm";
+ const preview=$("prepay-quick-summary");
+ if(preview){
+  preview.textContent=simulation.totalExtra>0
+   ?"Trả thêm "+money(simulation.totalExtra)+" · Tiết kiệm lãi "+money(saved)+" · Tất toán sau "+(simulation.paidOffMonth/12).toLocaleString("vi-VN",{maximumFractionDigits:1})+" năm"
+   :"Chưa thêm khoản trả trước. Mở mục trên để thiết lập.";
+ }
  $("schedule-label").textContent=read().rateChanges.length?"Lãi suất thay đổi theo các mốc đã nhập": "Lãi suất giữ nguyên trong kỳ vay";
  const p=val("property-price",base.loanMan),deposit=val("down-payment"),ltv=p>0?base.loanMan/p*100:Infinity;
  $("ltv-result").textContent=pct(ltv);
@@ -176,6 +182,13 @@ function init(){
   $("rate-change-controls").hidden=$("rate-mode").value!=="variable";
  });
  $("rate-change-controls").hidden=$("rate-mode").value!=="variable";
+ // Mobile: collapse the detailed extra-payment form until the user needs it.
+ // When a saved repayment schedule exists, leave it expanded for easy editing.
+ const repay=$("early-panel");
+ if(repay && window.matchMedia && window.matchMedia("(max-width: 640px)").matches &&
+   !document.querySelector('[data-kind="early"]')){
+  repay.open=false;
+ }
 }
 window.LoanAdvanced={read,render,init};
 init();
