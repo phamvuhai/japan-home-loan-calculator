@@ -88,7 +88,7 @@ function render(base,simulation){
  });
  if(!seen.size)$("payment-milestones").textContent="Không có kỳ điều chỉnh tiền trả.";
  try{
-  const inputs={};document.querySelectorAll("#advanced-root input, #advanced-root select").forEach(e=>{if(e.id)inputs[e.id]=e.type==="checkbox"?e.checked:e.value});
+  const inputs={};document.querySelectorAll("#advanced-root input, #advanced-root select, #financing-panel input, #financing-panel select, #variable-panel input, #variable-panel select").forEach(e=>{if(e.id)inputs[e.id]=e.type==="checkbox"?e.checked:e.value});
   const events={early:Array.from(document.querySelectorAll('[data-kind="early"]')).map(r=>({year:r.querySelector('[data-key="year"]').value,amount:r.querySelector('[data-key="amount"]').value,mode:r.querySelector('[data-key="mode"]').value})),
    rates:Array.from(document.querySelectorAll('[data-kind="rate"]')).map(r=>({year:r.querySelector('[data-key="year"]').value,rate:r.querySelector('[data-key="rate"]').value}))};
   localStorage.setItem("loan-advanced-v2",JSON.stringify({inputs,events}));
