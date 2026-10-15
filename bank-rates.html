@@ -109,7 +109,7 @@ document.querySelectorAll('.use-rate').forEach(b=>b.addEventListener('click',()=
 }
 function renderHistory(){
 const entries=serverHistory.slice().sort((a,b)=>String(b.observedAt).localeCompare(String(a.observedAt)));
-el('historyList').innerHTML=entries.length?entries.slice(0,40).map(x=>'<div>📈 '+safe(x.effectiveDate||tr('Ngày không rõ'))+' · '+safe(x.bank==='smbc'?'SMBC':'Suruga')+' · '+safe(tr(x.name))+' · <b>'+fmt(x.min)+'–'+fmt(x.max)+'%</b> <span class="muted"> (ghi nhận '+safe(new Date(x.observedAt).toLocaleString(I()?.locale()||'vi-VN',{timeZone:'Asia/Tokyo'}))+' JST)</span></div>').join(''):'Chưa ghi nhận thay đổi lãi suất nào sau khi bắt đầu theo dõi tự động.';
+el('historyList').innerHTML=entries.length?entries.slice(0,40).map(x=>'<div>📈 '+safe(x.effectiveDate||tr('Ngày không rõ'))+' · '+safe(x.bank==='smbc'?'SMBC':'Suruga')+' · '+safe(tr(x.name))+' · <b>'+fmt(x.min)+'–'+fmt(x.max)+'%</b> <span class="muted"> ('+tr('ghi nhận')+' '+safe(new Date(x.observedAt).toLocaleString(I()?.locale()||'vi-VN',{timeZone:'Asia/Tokyo'}))+' JST)</span></div>').join(''):'Chưa ghi nhận thay đổi lãi suất nào sau khi bắt đầu theo dõi tự động.';
 }
 async function loadHistory(){
 try{
@@ -136,7 +136,7 @@ try{
  el('errors').style.display=errors.length?'block':'none';
  el('errors').textContent=errors.map(x=>(x.bank==='smbc'?'SMBC':x.bank==='suruga'?'Suruga':'Hệ thống')+': '+x.message).join(' | ');
  el('liveStatus').textContent=products.length?(errors.length?tr('Đang hiển thị bản gần nhất — một số nguồn chưa cập nhật'):tr('Bản lãi suất đã được lưu và xác minh')):tr('Chưa có snapshot lãi suất đã xác minh');
- el('liveTime').textContent=(loadStamp?tr('Lịch kiểm tra gần nhất')+' '+new Date(loadStamp).toLocaleString(I()?.locale()||'vi-VN',{timeZone:'Asia/Tokyo'})+' (JST)':'Chưa có kết quả kiểm tra')+' · '+tr('Lịch tự động 08:30 và 20:30 JST');
+ el('liveTime').textContent=(loadStamp?tr('Lịch kiểm tra gần nhất')+' '+new Date(loadStamp).toLocaleString(I()?.locale()||'vi-VN',{timeZone:'Asia/Tokyo'})+' (JST)':tr('Chưa có kết quả kiểm tra'))+' · '+tr('Lịch tự động 08:30 và 20:30 JST');
  await loadHistory();
 }catch(e){
  products=[];bankStatuses={};el('liveStatus').textContent='Không thể đọc snapshot';
