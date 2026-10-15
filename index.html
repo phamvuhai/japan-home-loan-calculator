@@ -1122,7 +1122,7 @@ body{background:linear-gradient(170deg,#eef3ff 0,#f7f9fd 380px,#f5f7fc 100%)}
         current={man,annualPercent,years,principal,monthly,total,interest,months:result.paidOffMonth};
         window.loanCurrentSimulation=result;
         $("loan-in-yen").textContent=yen(principal);
-        $("monthly").innerHTML=yen(monthly)+' <small>'+(window.HomeLoanI18n?.t("mỗi tháng (kỳ đầu)")||"mỗi tháng (kỳ đầu)")+'</small>';
+        $("monthly").innerHTML=yen(monthly)+' <small>'+(L("mỗi tháng (kỳ đầu)","（初回・月額）","/ month (initial)"))+'</small>';
         $("quick-monthly").textContent=yen(monthly);
         $("mobile-monthly").textContent=yen(monthly);
         $("total-interest").textContent=yen(interest);
@@ -1191,7 +1191,7 @@ body{background:linear-gradient(170deg,#eef3ff 0,#f7f9fd 380px,#f5f7fc 100%)}
         const interestHeight=Math.max(0,(row.interest/10000)/ceiling*plotHeight);
         const label=(i===0||i===rows.length-1||row.year%labelFrequency===0)
           ?`<text class="chart-axis" x="${x+11}" y="${bottom+20}" text-anchor="middle">${row.year}</text>`:"";
-        return `<g class="chart-year" data-chart-year="${row.year}" role="button" tabindex="0" aria-label="Năm ${row.year}: tiền gốc ${yen(row.principal)}, tiền lãi ${yen(row.interest)}">
+        return `<g class="chart-year" data-chart-year="${row.year}" role="button" tabindex="0" aria-label="${L(`Năm ${row.year}: tiền gốc ${yen(row.principal)}, tiền lãi ${yen(row.interest)}`,`${row.year}年目：元金 ${yen(row.principal)}、利息 ${yen(row.interest)}`,`Year ${row.year}: principal ${yen(row.principal)}, interest ${yen(row.interest)}`)}">
           <title>Năm ${row.year} · Gốc: ${yen(row.principal)} · Lãi: ${yen(row.interest)}</title>
           <rect x="${x}" y="${bottom-principalHeight}" width="${bWidth}" height="${principalHeight}" rx="2" fill="#4b6af0"/>
           <rect x="${x+12}" y="${bottom-interestHeight}" width="${bWidth}" height="${interestHeight}" rx="2" fill="#f19c52"/>
@@ -1202,7 +1202,7 @@ body{background:linear-gradient(170deg,#eef3ff 0,#f7f9fd 380px,#f5f7fc 100%)}
       svg.setAttribute("width",width);
       svg.setAttribute("height",252);
       svg.setAttribute("viewBox",`0 0 ${width} 252`);
-      svg.setAttribute("aria-label",L(`Biểu đồ二つ`, ``, ``));
+      svg.setAttribute("aria-label",L(`Biểu đồ hai cột gốc và lãi từng năm, thời hạn ${rows.length} năm; đơn vị vạn yên (万円)`,`年別の元金・利息を示す棒グラフ。返済期間${rows.length}年、単位：万円`,`Annual principal and interest bar chart for ${rows.length} years; unit: ¥10,000`));
       svg.innerHTML=`<text class="chart-axis" x="${left}" y="16">${L("万円 / năm","万円／年","¥10,000 / year")}</text>${tickLabels}${bars}<text class="chart-axis" x="${width-right}" y="243" text-anchor="end">${L("Năm vay →","返済年 →","Loan year →")}</text>`;
       const select=$("chart-year-select");
       if(select.options.length!==rows.length) {
