@@ -9,7 +9,7 @@ const el=(tag,cls)=>{const e=document.createElement(tag);if(cls)e.className=cls;
 function newEvent(type,data={}){
  const node=el("div","event-row");node.dataset.kind=type;
  if(type==="early"){
-  node.innerHTML='<label>Năm trả trước<input aria-label="Năm trả trước" type="number" data-key="year" min="1" max="50" step="1"></label><label>Số tiền (man)<input aria-label="Số tiền trả trước" type="number" data-key="amount" min="1" step="10" inputmode="decimal"></label><label>Phương thức<select aria-label="Kiểu trả trước" data-key="mode"><option value="reduce-term">Rút ngắn thời gian</option><option value="reduce-payment">Giảm tiền mỗi tháng</option></select></label><button type="button" class="remove-event" aria-label="Xóa lần trả trước">×</button>';
+  node.innerHTML='<div class="event-card-head"><strong class="event-card-title">Lần trả trước</strong><button type="button" class="remove-event" aria-label="Xóa lần trả trước">×</button></div><div class="event-fields"><label class="event-year">Năm trả trước<input aria-label="Năm trả trước" type="number" data-key="year" min="1" max="50" step="1" inputmode="numeric"></label><label class="event-amount">Số tiền (man)<input aria-label="Số tiền trả trước" type="number" data-key="amount" min="1" step="10" inputmode="decimal"></label><label class="event-mode">Phương thức trả trước<select aria-label="Phương thức trả trước" data-key="mode"><option value="reduce-term">Rút ngắn thời gian vay</option><option value="reduce-payment">Giảm tiền trả hàng tháng</option></select></label></div>';
   node.querySelector('[data-key="year"]').value=data.year||5;
   node.querySelector('[data-key="amount"]').value=data.amount||500;
   node.querySelector('[data-key="mode"]').value=data.mode||"reduce-term";
@@ -19,6 +19,31 @@ function newEvent(type,data={}){
   node.querySelector('[data-key="rate"]').value=data.rate??4.5;
  }
  $(type==="early"?"early-events":"rate-events").append(node);
+ if(type==="early")syncPrepaymentCards();
+}
+function syncPrepaymentCards(){
+ const cards=Array.from(document.querySelectorAll('[data-kind="early"]'));
+ const modesByYear=new Map();
+ cards.forEach((card,i)=>{
+  const title=card.querySelector(".event-card-title");
+  if(title)title.textContent="Lần trả trước #"+(i+1);
+  const remove=card.querySelector(".remove-event");
+  if(remove)remove.setAttribute("aria-label","Xóa lần trả trước #"+(i+1));
+  const yearInput=card.querySelector('[data-key="year"]');
+  const year=Number(yearInput?.value);
+  if(!yearInput || yearInput.value.trim()==="" || !Number.isInteger(year) || year<1 || year>50)return;
+  const mode=card.querySelector('[data-key="mode"]')?.value;
+  if(!modesByYear.has(year))modesByYear.set(year,new Set());
+  modesByYear.get(year).add(mode);
+ });
+ const mixed=Array.from(modesByYear.entries()).filter(([,modes])=>modes.size>1).map(([year])=>year).sort((a,b)=>a-b);
+ const warning=$("prepay-method-warning");
+ if(warning){
+  warning.hidden=mixed.length===0;
+  warning.textContent=mixed.length
+   ?"Năm "+mixed.join(", ")+" có cả hai phương thức trả trước. Theo cách tính hiện tại, hệ thống ưu tiên Giảm tiền trả hàng tháng. Hãy chọn cùng một phương thức cho mỗi năm để tránh nhầm lẫn."
+   :"";
+ }
 }
 function read(){
  const prepayments=Array.from(document.querySelectorAll('[data-kind="early"]')).map(r=>({
@@ -65,6 +90,7 @@ function render(base,simulation){
  $("prepay-paid-off").textContent="Tháng "+simulation.paidOffMonth+" / "+simulation.months;
  $("prepay-extra").textContent=money(simulation.totalExtra);
  $("prepay-years").textContent=(simulation.paidOffMonth/12).toLocaleString("vi-VN",{maximumFractionDigits:1})+" năm";
+ syncPrepaymentCards();
  const preview=$("prepay-quick-summary");
  if(preview){
   preview.textContent=simulation.totalExtra>0
@@ -146,15 +172,15 @@ function init(){
  // are in the primary loan column; bank, fee and DTI controls remain below.
  const applies=e=>e.target.closest("#advanced-root,#financing-panel,#early-panel,#variable-panel");
  document.addEventListener("input",e=>{
-  if(applies(e)&&e.target.matches("input,select"))calculate();
+  if(applies(e)&&e.target.matches("input,select")){syncPrepaymentCards();calculate();}
  });
  document.addEventListener("change",e=>{
-  if(applies(e)&&e.target.matches("input,select"))calculate();
+  if(applies(e)&&e.target.matches("input,select")){syncPrepaymentCards();calculate();}
  });
  document.addEventListener("click",e=>{
   const button=e.target.closest("button");
   if(!button || !button.closest("#advanced-root,#financing-panel,#early-panel,#variable-panel"))return;
-  if(button.classList.contains("remove-event")){button.closest(".event-row").remove();calculate();return}
+  if(button.classList.contains("remove-event")){button.closest(".event-row").remove();syncPrepaymentCards();calculate();return}
   if(button.id==="add-early"){newEvent("early");calculate()}
   if(button.id==="add-rate"){newEvent("rate");calculate()}
   if(button.dataset.ltv){
