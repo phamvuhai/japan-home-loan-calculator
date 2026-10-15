@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="theme-color" content="#f3f6fb" />
-  <meta name="application-version" content="home-loan-jp-v4.2-responsive-ux" />
+  <meta name="application-version" content="home-loan-jp-v4.3-prepayment-sticky" />
   <meta name="description" content="Công cụ tính khoản vay mua nhà Nhật Bản: tiền trả hằng tháng, tổng tiền lãi và lịch trả nợ." />
   <title>Tính Vay Mua Nhà Nhật Bản | Home Loan Calculator</title>
   <style>
@@ -660,6 +660,101 @@ body{background:linear-gradient(170deg,#eef3ff 0,#f7f9fd 380px,#f5f7fc 100%)}
     }
     @media(max-width:365px){.schedule-expand{grid-template-columns:1fr}}
 
+
+    /* v4.3: full-width repayment method in a readable prepayment card. */
+    .scenario-block .event-row[data-kind="early"]{
+      display:block;min-width:0;padding:13px;border-radius:14px;
+      background:#f8faff;border:1px solid #e0e8f5;
+    }
+    .event-row[data-kind="early"] .event-card-head{
+      display:flex;align-items:center;justify-content:space-between;
+      gap:10px;min-width:0;margin-bottom:10px;
+    }
+    .event-row[data-kind="early"] .event-card-title{
+      color:#304c89;font-size:13px;font-weight:800;
+    }
+    .scenario-block .event-row[data-kind="early"] .event-card-head .remove-event{
+      display:inline-flex;align-items:center;justify-content:center;
+      flex:0 0 44px;min-width:44px;width:44px;height:44px;min-height:44px;
+      grid-column:auto;grid-row:auto;font-size:22px;line-height:1;
+    }
+    .event-row[data-kind="early"] .event-fields{
+      display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:12px;align-items:start;min-width:0;
+    }
+    .event-row[data-kind="early"] .event-fields label{
+      min-width:0;overflow-wrap:anywhere;font-size:12px;
+    }
+    .event-row[data-kind="early"] .event-fields .event-mode{grid-column:1/-1}
+    .event-row[data-kind="early"] .event-fields input,
+    .event-row[data-kind="early"] .event-fields select{
+      display:block;width:100%;max-width:100%;min-width:0;
+      min-height:44px;font-size:16px;line-height:1.3;padding:9px 12px;
+    }
+    .event-row[data-kind="early"] .event-fields select{
+      text-overflow:ellipsis;padding-right:30px;
+    }
+    .prepay-method-warning{
+      background:#fff8e9;border:1px solid #f2d6a4;border-radius:10px;
+      color:#8d5516;font-size:12px;line-height:1.55;
+      padding:10px 12px;margin:10px 0 4px;
+    }
+    .prepay-method-warning[hidden]{display:none!important}
+    /* Universal floating summary: desktop right, tablet center, mobile full width. */
+    .mobile-pay{
+      display:flex;position:fixed;z-index:40;
+      left:auto;right:max(20px,calc((100vw - 1260px)/2));
+      bottom:max(18px,env(safe-area-inset-bottom));
+      width:min(440px,calc(100vw - 40px));max-width:440px;margin:0;
+      align-items:center;justify-content:space-between;gap:12px;
+      padding:11px 13px 11px 16px;border:1px solid #cfdbf2;
+      border-radius:16px;background:rgba(255,255,255,.96);
+      -webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);
+      box-shadow:0 9px 37px #122d6430;
+      opacity:1;transform:translateY(0);
+      transition:opacity .18s,transform .18s;
+    }
+    .mobile-pay>div{display:flex;flex-direction:column;gap:0;min-width:0}
+    .mobile-pay>div span{font-size:11px;color:#647898}
+    .mobile-pay strong{
+      font-size:20px;font-weight:850;color:#1d45bf;line-height:1.3;
+      font-variant-numeric:tabular-nums;overflow-wrap:anywhere;
+    }
+    .mobile-pay a{
+      display:inline-flex;align-items:center;justify-content:center;
+      flex-shrink:0;min-height:44px;border-radius:11px;
+      padding:0 13px;font-size:12px;font-weight:750;
+      text-decoration:none;color:#fff;background:#2a50d0;white-space:nowrap;
+    }
+    body.result-in-view .mobile-pay{
+      opacity:0;pointer-events:none;visibility:hidden;transform:translateY(18px);
+    }
+    .foot{margin-bottom:125px}
+    @media(min-width:641px) and (max-width:1100px){
+      .mobile-pay{
+        left:50%;right:auto;bottom:max(14px,env(safe-area-inset-bottom));
+        width:min(560px,calc(100vw - 32px));max-width:560px;
+        transform:translateX(-50%);
+      }
+      body.result-in-view .mobile-pay{transform:translate(-50%,18px)}
+    }
+    @media(max-width:640px){
+      .scenario-block .event-row[data-kind="early"]{padding:11px}
+      .event-row[data-kind="early"] .event-fields{gap:10px}
+      .event-row[data-kind="early"] .event-fields label{font-size:12px}
+      .mobile-pay{
+        left:10px;right:10px;bottom:max(8px,env(safe-area-inset-bottom));
+        width:auto;max-width:560px;margin:0 auto;padding:10px 11px 10px 13px;
+      }
+      .mobile-pay strong{font-size:clamp(17px,4.5vw,20px)}
+      .mobile-pay a{padding:0 11px;font-size:11px}
+      body:has(input:focus) .mobile-pay,body:has(select:focus) .mobile-pay{
+        opacity:0;pointer-events:none;visibility:hidden;transform:translateY(18px);
+      }
+      .foot{margin-bottom:105px}
+    }
+    @media(prefers-reduced-motion:reduce){.mobile-pay{transition:none}}
+
     /* Form validation — accessible inline feedback for desktop, tablet and mobile */
     .field-error{display:block;margin:7px 0 12px;color:#b42318;font-size:12px;font-weight:650;line-height:1.5}
     .field-error[hidden]{display:none!important}
@@ -674,7 +769,7 @@ body{background:linear-gradient(170deg,#eef3ff 0,#f7f9fd 380px,#f5f7fc 100%)}
 
   </style>
 </head>
-<body>
+<body class="result-in-view">
   <main class="wrap">
     
     <header class="page-header">
@@ -743,7 +838,7 @@ body{background:linear-gradient(170deg,#eef3ff 0,#f7f9fd 380px,#f5f7fc 100%)}
           <summary><span class="advanced-icon">↘</span><span><strong>Trả nợ trước hạn · 繰上返済</strong><small>Rút ngắn kỳ hạn hoặc giảm tiền hằng tháng</small></span><span class="chevron">⌄</span></summary>
           <div class="advanced-body">
             <p class="advanced-tip">Mỗi lần trả trước được thực hiện vào <strong>cuối năm</strong> đã chọn, sau kỳ thanh toán tháng đó. Tiền trả trước được trừ trực tiếp vào dư nợ gốc.</p>
-            <div id="early-events" class="event-stack"></div>
+            <div id="early-events" class="event-stack"></div><p id="prepay-method-warning" class="prepay-method-warning" role="status" aria-live="polite" hidden></p>
             <button type="button" id="add-early" class="advanced-add">+ Thêm một lần trả trước</button>
             <div class="mini-stats"><div><span>Tổng tiền trả trước thực tế</span><strong id="prepay-extra">—</strong></div><div><span>Lãi tiết kiệm so với không trả trước</span><strong id="prepay-saved">—</strong></div><div><span>Thời điểm trả hết nợ</span><strong id="prepay-paid-off">—</strong></div><div><span>Thời gian trả thực tế</span><strong id="prepay-years">—</strong></div></div>
             <p class="advanced-tip">Mô phỏng chưa trừ phí trả trước do ngân hàng áp dụng. Chọn giảm thời hạn: giữ tiền trả định kỳ trừ khi lãi suất thay đổi; chọn giảm tháng: giữ ngày đáo hạn ban đầu.</p>
@@ -879,8 +974,8 @@ body{background:linear-gradient(170deg,#eef3ff 0,#f7f9fd 380px,#f5f7fc 100%)}
     </section>
     <p class="foot"><strong>Lưu ý:</strong> Công cụ hỗ trợ mô phỏng trả trước, lãi suất thay đổi, phí mua nhà và khả năng trả nợ dựa trên thông số do bạn nhập. Các mức phí/ngân hàng chỉ là giả định và không thể dùng thay cho báo giá hoặc xét duyệt ngân hàng. Dữ liệu tính toán chạy ngay trong trình duyệt, không gửi lên máy chủ.</p>
   </main>
-  <aside class="mobile-pay" id="mobile-pay" aria-label="Thanh toán mỗi tháng"><div><span>Trả hằng tháng</span><strong id="mobile-monthly">171.594 ¥</strong></div><a href="#result-title">Xem kết quả <span aria-hidden="true">↗</span></a></aside>
-  <script src="calculator-core.js?v=20261012-responsive-v4"></script><script src="advanced.js?v=20261012-responsive-v4"></script><script src="validation.js?v=20261012-responsive-v4"></script><script>
+  <aside class="mobile-pay" id="mobile-pay" aria-label="Thanh toán mỗi tháng"><div><span>Trả hàng tháng (kỳ đầu)</span><strong id="mobile-monthly">171.594 ¥</strong></div><a href="#result-title">Xem kết quả <span aria-hidden="true">↗</span></a></aside>
+  <script src="calculator-core.js?v=20261012-responsive-v4"></script><script src="advanced.js?v=20261015-prepay-sticky-v43"></script><script src="validation.js?v=20261012-responsive-v4"></script><script>
     "use strict";
     const $ = id => document.getElementById(id);
     const fields = ["principal", "rate", "years"];
@@ -1100,11 +1195,23 @@ body{background:linear-gradient(170deg,#eef3ff 0,#f7f9fd 380px,#f5f7fc 100%)}
         scroller.scrollTo({left:Math.max(0,x-scroller.clientWidth/2),behavior:"smooth"});
       }
     });
-    if ("IntersectionObserver" in window) {
+    // Keep the floating result hidden while any part of the main summary is visible.
+    const mainResultCard=document.querySelector(".result-top");
+    function updateFloatingResult(){
+      if(!mainResultCard)return;
+      const bounds=mainResultCard.getBoundingClientRect();
+      const visible=bounds.bottom>0&&bounds.top<window.innerHeight&&bounds.right>0&&bounds.left<window.innerWidth;
+      document.body.classList.toggle("result-in-view",visible);
+    }
+    if("IntersectionObserver" in window && mainResultCard){
       const observer=new IntersectionObserver(entries=>{
-        document.body.classList.toggle("result-in-view",entries[0].intersectionRatio >= 0.35);
-      },{threshold:[0,0.35]});
-      observer.observe(document.querySelector(".result-highlight"));
+        document.body.classList.toggle("result-in-view",entries[0].isIntersecting&&entries[0].intersectionRatio>0);
+      },{threshold:0});
+      observer.observe(mainResultCard);
+    }else{
+      window.addEventListener("scroll",updateFloatingResult,{passive:true});
+      window.addEventListener("resize",updateFloatingResult,{passive:true});
+      updateFloatingResult();
     }
     const chart=$("amortization-chart");
     function chartYearFromTarget(target) {
