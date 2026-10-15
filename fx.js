@@ -45,10 +45,10 @@
   const date=snapshot.rateDates[selected];
   const delayed=age>TTL||!Number.isFinite(Date.parse(date+"T00:00:00Z"))||(Date.now()-Date.parse(date+"T00:00:00Z")>MAX_AGE);
   return (delayed?str("Tỷ giá đã lưu · ","保存済みレート・","Saved rate · "):str("Tỷ giá tham khảo · ","参考為替レート・","Indicative rate · "))
-    + "1 JPY ≈ "+fmt(rate(),selected)+" · "+date;
+    + "1 JPY ≈ "+new Intl.NumberFormat(locale(),{maximumFractionDigits:6,minimumFractionDigits:selected==="VND"?2:4}).format(rate())+" "+selected+" · "+date;
  }
  function meta(){
-  text("fx-status",stateLabel());text("fx-sticky-status",selected==="JPY"?"":str("Ước tính theo tỷ giá tham khảo","参考為替レートによる概算","Indicative FX conversion"));
+  text("fx-status",stateLabel());text("fx-bank-status",stateLabel());text("fx-sticky-status",selected==="JPY"?"":str("Ước tính theo tỷ giá tham khảo","参考為替レートによる概算","Indicative FX conversion"));
   const link=id("fx-source");if(link)link.hidden=selected==="JPY";
   const alert=id("fx-data-alert");if(alert){alert.hidden=selected==="JPY";alert.textContent=valid()?str("Chỉ dùng để tham khảo; tỷ giá chuyển tiền thực tế có thể khác.","参考値です。銀行の実際の両替・送金レートとは異なる場合があります。","For reference only; bank transfer and exchange rates may differ."):stateLabel();}
  }
@@ -102,6 +102,7 @@
  }
  function refreshBank(){
   const active=selected!=="JPY";
+  show(id("fx-bank-context"),active);
   show(id("fx-bank-summary"),active);
   if(active)text("fx-bank-loan",Number.isFinite(bankLoan)?converted(bankLoan):"—");
   for(const el of document.querySelectorAll("[data-fx-yen]")){
@@ -118,7 +119,7 @@
   document.querySelectorAll("[data-currency-select]").forEach(el=>el.value=selected);
   refresh();
   document.dispatchEvent(new CustomEvent("home-loan-currency-change",{detail:{currency:selected}}));
-  if(selected!=="JPY"&&!snapshot)load();
+  if(selected!=="JPY"&&(!snapshot||Date.now()-Date.parse(snapshot.checkedAt)>TTL))load();
  }
  async function load(){
   let s=null;
