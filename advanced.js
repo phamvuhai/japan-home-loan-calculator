@@ -1,9 +1,13 @@
 (function(){
 "use strict";
 const C=window.LoanCore, $=id=>document.getElementById(id);
-const money=n=>Number.isFinite(n)?Math.round(n).toLocaleString("vi-VN")+" ¥":"—";
-const man=n=>Number.isFinite(n)?n.toLocaleString("vi-VN",{maximumFractionDigits:2})+" man":"—";
-const pct=n=>Number.isFinite(n)?n.toLocaleString("vi-VN",{maximumFractionDigits:1})+"%":"—";
+const I=()=>window.HomeLoanI18n;
+const lang=()=>I()?.language||"vi";
+const tr=s=>I()?.t(s)||s;
+const ls=(vi,ja,en)=>lang()==="ja"?ja:lang()==="en"?en:vi;
+const money=n=>I()?I().money(n):Number.isFinite(n)?Math.round(n).toLocaleString("vi-VN")+" ¥":"—";
+const man=n=>I()?I().man(n):Number.isFinite(n)?n.toLocaleString("vi-VN",{maximumFractionDigits:2})+" man":"—";
+const pct=n=>(I()?I().number(n,{maximumFractionDigits:1}):Number.isFinite(n)?n.toLocaleString("vi-VN",{maximumFractionDigits:1}):"—")+"%";
 const val=(id,def=0)=>{const e=$(id);if(!e)return def;const n=Number(e.value);return e.value.trim()!==""&&Number.isFinite(n)?n:def};
 const el=(tag,cls)=>{const e=document.createElement(tag);if(cls)e.className=cls;return e};
 function newEvent(type,data={}){
@@ -41,7 +45,7 @@ function syncPrepaymentCards(){
  if(warning){
   warning.hidden=mixed.length===0;
   warning.textContent=mixed.length
-   ?"Năm "+mixed.join(", ")+" có cả hai phương thức trả trước. Theo cách tính hiện tại, hệ thống ưu tiên Giảm tiền trả hàng tháng. Hãy chọn cùng một phương thức cho mỗi năm để tránh nhầm lẫn."
+   ?ls("Năm "+mixed.join(", ")+" có cả hai phương thức trả trước. Theo cách tính hiện tại, hệ thống ưu tiên Giảm tiền trả hàng tháng. Hãy chọn cùng một phương thức cho mỗi năm để tránh nhầm lẫn.","同じ年（"+mixed.join("、")+"年目）に異なる繰上返済方式が設定されています。現在の計算では返済額軽減型が優先されます。誤解を避けるため同じ年は同一方式を選択してください。","Both repayment methods are selected for year(s) "+mixed.join(", ")+". The calculation prioritizes reducing monthly payments. Choose one method per year.")
    :"";
  }
 }
@@ -87,17 +91,17 @@ function render(base,simulation){
  const standard=C.simulate({...base,prepayments:[]});
  const saved=standard.totalInterest-simulation.totalInterest;
  $("prepay-saved").textContent=money(saved);
- $("prepay-paid-off").textContent="Tháng "+simulation.paidOffMonth+" / "+simulation.months;
+ $("prepay-paid-off").textContent=ls("Tháng "+simulation.paidOffMonth+" / "+simulation.months,simulation.paidOffMonth+" / "+simulation.months+"か月目","Month "+simulation.paidOffMonth+" of "+simulation.months);
  $("prepay-extra").textContent=money(simulation.totalExtra);
- $("prepay-years").textContent=(simulation.paidOffMonth/12).toLocaleString("vi-VN",{maximumFractionDigits:1})+" năm";
+ $("prepay-years").textContent=(I()?I().number(simulation.paidOffMonth/12,{maximumFractionDigits:1}):(simulation.paidOffMonth/12).toLocaleString("vi-VN",{maximumFractionDigits:1}))+ls(" năm","年"," years");
  syncPrepaymentCards();
  const preview=$("prepay-quick-summary");
  if(preview){
   preview.textContent=simulation.totalExtra>0
-   ?"Trả thêm "+money(simulation.totalExtra)+" · Tiết kiệm lãi "+money(saved)+" · Tất toán sau "+(simulation.paidOffMonth/12).toLocaleString("vi-VN",{maximumFractionDigits:1})+" năm"
+   ?ls("Trả thêm ","繰上返済額 ","Extra repayment ")+money(simulation.totalExtra)+ls(" · Tiết kiệm lãi "," · 利息軽減額 "," · Interest saved ")+money(saved)+ls(" · Tất toán sau "," · 完済まで "," · Paid off in ")+(I()?I().number(simulation.paidOffMonth/12,{maximumFractionDigits:1}):(simulation.paidOffMonth/12).toLocaleString("vi-VN",{maximumFractionDigits:1}))+ls(" năm","年"," years")
    :"Chưa thêm khoản trả trước. Mở mục trên để thiết lập.";
  }
- $("schedule-label").textContent=read().rateChanges.length?"Lãi suất thay đổi theo các mốc đã nhập": "Lãi suất giữ nguyên trong kỳ vay";
+ $("schedule-label").textContent=read().rateChanges.length?ls("Lãi suất thay đổi theo các mốc đã nhập","指定した時期に金利を変更","Rate changes at selected milestones"):ls("Lãi suất giữ nguyên trong kỳ vay","借入期間中は同一金利で試算","Rate remains constant throughout the loan");
  const p=val("property-price",base.loanMan),deposit=val("down-payment"),ltv=p>0?base.loanMan/p*100:Infinity;
  $("ltv-result").textContent=pct(ltv);
  $("cash-down").textContent=money(C.yenFromMan(deposit));
@@ -112,7 +116,7 @@ function render(base,simulation){
  $("purchase-warning").textContent=Math.abs(gap)>0.01
   ?"Giá nhà, tiền tự có và khoản vay đang lệch "+man(Math.abs(gap))+". Dự toán tiền mặt tính theo giá nhà trừ khoản vay, không chỉ theo khoản đặt cọc đã nhập."
   :"Giá nhà = khoản vay + tiền tự có. Chi phí dự kiến chưa tính phí duy trì qua các năm.";
- $("fee-breakdown").textContent="Phí ngân hàng "+money(f.bank)+" · Môi giới "+money(f.agency)+" · Phí khác "+money(f.total-f.bank-f.agency);
+ $("fee-breakdown").textContent=ls("Phí ngân hàng ","銀行手数料 ","Bank fees ")+money(f.bank)+ls(" · Môi giới "," · 仲介手数料 "," · Brokerage ")+money(f.agency)+ls(" · Phí khác "," · その他 "," · Other fees ")+money(f.total-f.bank-f.agency);
  const income=val("income"),other=val("other-debt"),upkeep=val("upkeep"),threshold=val("debt-threshold",30);
  const a=C.affordability(income,other,simulation.monthly,threshold,upkeep);
  const stress=C.maximumLoan(income,other,val("stress-rate"),base.years,threshold);
@@ -130,10 +134,10 @@ function render(base,simulation){
   const b=banks[i];$("bank-"+s+"-monthly").textContent=money(b.monthly);
   $("bank-"+s+"-interest").textContent=money(b.interest);
   $("bank-"+s+"-cost").textContent=money(b.cost);
-  $("bank-"+s+"-payoff").textContent=b.payoff+" tháng";
+  $("bank-"+s+"-payoff").textContent=b.payoff+ls(" tháng","か月"," months");
  });
  const delta=banks[0].cost-banks[1].cost;
- $("compare-difference").textContent=Math.abs(delta)<1?"Hai phương án có chi phí tương đương":(delta<0?banks[0].name:banks[1].name)+" thấp hơn "+money(Math.abs(delta))+" (gốc, lãi và phí ngân hàng).";
+ $("compare-difference").textContent=Math.abs(delta)<1?ls("Hai phương án có chi phí tương đương","両プランの総費用はほぼ同じです","Both options have similar total costs"):(delta<0?banks[0].name:banks[1].name)+ls(" thấp hơn "," の総費用が "," costs ")+money(Math.abs(delta))+ls(" (gốc, lãi và phí ngân hàng)."," 少なくなります（元利返済＋銀行手数料）。"," less (repayment and bank fees).");
  // Show rate and payment events when the user is modeling them.
  $("payment-milestones").replaceChildren();
  const seen=new Set();
@@ -141,10 +145,10 @@ function render(base,simulation){
   if(r.month===1||seen.has(r.month))return;
   seen.add(r.month);
   const item=el("span","milestone");
-  item.textContent="Từ tháng "+r.month+": "+money(r.monthly)+"/tháng · "+r.rate+"%";
+  item.textContent=ls("Từ tháng ","第","From month ")+r.month+ls(": ","か月目から：",": ")+money(r.monthly)+ls("/tháng · ","／月 · ","/month · ")+r.rate+"%";
   $("payment-milestones").append(item);
  });
- if(!seen.size)$("payment-milestones").textContent="Không có kỳ điều chỉnh tiền trả.";
+ if(!seen.size)$("payment-milestones").textContent=ls("Không có kỳ điều chỉnh tiền trả.","返済額の変更予定はありません。","No payment recalculations scheduled.");
  try{
   const inputs={};document.querySelectorAll("#advanced-root input, #advanced-root select, #financing-panel input, #financing-panel select, #variable-panel input, #variable-panel select").forEach(e=>{if(e.id)inputs[e.id]=e.type==="checkbox"?e.checked:e.value});
   const events={early:Array.from(document.querySelectorAll('[data-kind="early"]')).map(r=>({year:r.querySelector('[data-key="year"]').value,amount:r.querySelector('[data-key="amount"]').value,mode:r.querySelector('[data-key="mode"]').value})),
@@ -199,7 +203,7 @@ function init(){
  const advancedCsv=$("csv-monthly");
  advancedCsv.addEventListener("click",()=>{
   const c=window.loanCurrentSimulation;if(!c){window.LoanValidation?.revealFirst();return;}
-  const header="Thang,Nam,Lai suat (%),Goc dinh ky (JPY),Lai (JPY),Tra truoc (JPY),Tong thanh toan (JPY),Du no cuoi ky (JPY)";
+  const header=ls("Thang,Nam,Lai suat (%),Goc dinh ky (JPY),Lai (JPY),Tra truoc (JPY),Tong thanh toan (JPY),Du no cuoi ky (JPY)","月,年,金利 (%),通常元金返済額 (JPY),利息 (JPY),繰上返済額 (JPY),総返済額 (JPY),期末残高 (JPY)","Month,Year,Interest rate (%),Regular principal (JPY),Interest (JPY),Early repayment (JPY),Total payment (JPY),Ending balance (JPY)");
   const lines=[header,...c.rows.map(x=>[x.month,x.year,x.rate,x.principal,x.interest,x.extra,x.paid,x.balance].map(v=>typeof v==="number"?Math.round(v*100)/100:v).join(","))];
   const blob=new Blob(["\ufeff",lines.join("\r\n")],{type:"text/csv;charset=utf-8"});
   const u=URL.createObjectURL(blob),a=document.createElement("a");a.href=u;a.download="home-loan-lich-tra-no-thang.csv";a.click();setTimeout(()=>URL.revokeObjectURL(u),1000);
