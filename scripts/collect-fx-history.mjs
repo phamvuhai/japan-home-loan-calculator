@@ -39,6 +39,14 @@ try{
  historyOk=data.daily.length>0;
  console.log('Daily reference dates:',data.daily.length);
 }catch(e){console.error('Daily history fetch failed:',e.message);}
+if(process.env.FX_BACKFILL_ONLY==='1'){
+ if(!historyOk)throw new Error('Historical backfill failed; no verified rates were collected.');
+ data.updatedAt=observedAt;
+ fs.mkdirSync(path.dirname(DEST),{recursive:true});
+ fs.writeFileSync(DEST,JSON.stringify(data,null,2)+'\\n');
+ console.log('Backfill completed without claiming any 11:00/19:00 observation:',data.daily.length,'days');
+ process.exit(0);
+}
 const entry={date,slot,observedAt,source:'Frankfurter',status:'error',rates:{},sourceDates:{}};
 try{
  const latest=await request({base:'JPY',quotes:currencies.join(',')});
