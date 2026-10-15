@@ -1082,7 +1082,7 @@ body{background:linear-gradient(170deg,#eef3ff 0,#f7f9fd 380px,#f5f7fc 100%)}
         const range = Number(slider.max) - minimum;
         const fraction = range > 0 ? (Number(slider.value) - minimum) / range : 0;
         slider.style.setProperty("--fill", (fraction * 100).toFixed(2) + "%");
-        $(id + "-slider-max").textContent = Number(slider.max).toLocaleString("vi-VN") + spec.suffix;
+        $(id + "-slider-max").textContent = id==="principal" && window.HomeLoanI18n ? window.HomeLoanI18n.man(Number(slider.max),{maximumFractionDigits:0}) : id==="years" ? Number(slider.max)+L(" năm","年"," years") : (window.HomeLoanI18n?.number(Number(slider.max))||Number(slider.max).toLocaleString("vi-VN"))+"%";
       });
     }
 
@@ -1178,7 +1178,7 @@ body{background:linear-gradient(170deg,#eef3ff 0,#f7f9fd 380px,#f5f7fc 100%)}
       const normal=rawStep/order;
       const tickStep=(normal<=1?1:normal<=2?2:normal<=2.5?2.5:normal<=5?5:10)*order;
       const ceiling=tickStep*4;
-      const rounded = v=>v.toLocaleString("vi-VN",{maximumFractionDigits:v<1?3:1});
+      const rounded = v=>window.HomeLoanI18n?.number(v,{maximumFractionDigits:v<1?3:1})||v.toLocaleString("vi-VN",{maximumFractionDigits:v<1?3:1});
       const tickLabels=Array.from({length:5},(_,i)=>{
         const yy=bottom-i*plotHeight/4;
         return `<line x1="${left}" x2="${width-right}" y1="${yy}" y2="${yy}" class="chart-grid"/>
