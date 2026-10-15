@@ -50,7 +50,7 @@
  function meta(){
   text("fx-status",stateLabel());text("fx-bank-status",stateLabel());text("fx-sticky-status",selected==="JPY"?"":str("Ước tính theo tỷ giá tham khảo","参考為替レートによる概算","Indicative FX conversion"));
   const link=id("fx-source");if(link)link.hidden=selected==="JPY";
-  const alert=id("fx-data-alert");if(alert){alert.hidden=selected==="JPY";alert.textContent=valid()?str("Chỉ dùng để tham khảo; tỷ giá chuyển tiền thực tế có thể khác.","参考値です。銀行の実際の両替・送金レートとは異なる場合があります。","For reference only; bank transfer and exchange rates may differ."):stateLabel();}
+  const alert=id("fx-data-alert");if(alert){alert.hidden=selected==="JPY";alert.textContent=valid()?str("Toàn bộ lịch trả nợ được quy đổi theo tỷ giá tham khảo hiện tại, không phải dự báo tỷ giá tương lai. Tỷ giá chuyển tiền thực tế có thể khác.","返済予定全体を現在の参考為替レートで換算しています。将来の為替レート予測ではありません。銀行の実際の換算レートとは異なる場合があります。","The entire repayment schedule is converted at the current indicative rate, not a forecast of future exchange rates. Actual bank rates may differ."):stateLabel();}
  }
  function decorateAnnual(){
   const tbody=id("schedule-body");
