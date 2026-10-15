@@ -1032,6 +1032,8 @@ body{background:linear-gradient(170deg,#eef3ff 0,#f7f9fd 380px,#f5f7fc 100%)}
   <script src="calculator-core.js?v=20261012-responsive-v4"></script><script src="i18n.js?v=20261016-v44"></script><script src="advanced.js?v=20261016-v44"></script><script src="validation.js?v=20261016-v44"></script><script>
     "use strict";
     const $ = id => document.getElementById(id);
+    const L=(vi,ja,en)=>window.HomeLoanI18n?.language==="ja"?ja:window.HomeLoanI18n?.language==="en"?en:vi;
+    const locale=()=>window.HomeLoanI18n?.locale()||"vi-VN";
     const fields = ["principal", "rate", "years"];
     const yen = amount => window.HomeLoanI18n ? window.HomeLoanI18n.money(amount) : (Number.isFinite(amount) ? Math.round(amount).toLocaleString("vi-VN") + " ¥" : "—");
     const perc = amount => (window.HomeLoanI18n ? window.HomeLoanI18n.number(amount,{minimumFractionDigits:2,maximumFractionDigits:2}) : amount.toLocaleString("vi-VN",{minimumFractionDigits:2,maximumFractionDigits:2})) + "%";
@@ -1092,7 +1094,7 @@ body{background:linear-gradient(170deg,#eef3ff 0,#f7f9fd 380px,#f5f7fc 100%)}
       // exposing a raw TypeError or leaving the page half-rendered.
       if(!window.LoanValidation || !window.LoanCore || !window.LoanAdvanced){
         error.style.display="block";
-        error.textContent="Một phần ứng dụng chưa tải đầy đủ. Vui lòng tải lại trang (Ctrl+Shift+R). Nếu lỗi tiếp tục, hãy thử cửa sổ ẩn danh.";
+        error.textContent=L("Một phần ứng dụng chưa tải đầy đủ. Vui lòng tải lại trang (Ctrl+Shift+R). Nếu lỗi tiếp tục, hãy thử cửa sổ ẩn danh.","一部の機能を読み込めませんでした。ページを再読み込みしてください。解決しない場合はプライベートブラウズでお試しください。","Some resources failed to load. Refresh the page or try a private browsing window.");
         console.error("[HomeLoan JP] Required scripts are unavailable",{
           core:!!window.LoanCore,advanced:!!window.LoanAdvanced,validation:!!window.LoanValidation
         });
@@ -1102,8 +1104,8 @@ body{background:linear-gradient(170deg,#eef3ff 0,#f7f9fd 380px,#f5f7fc 100%)}
       const isValid=validation.valid;
       error.style.display=isValid?"none":"block";
       if(!isValid){
-        error.textContent=validation.errors.length+" mục cần kiểm tra. Các ô sai được viền đỏ, kèm hướng dẫn ngay bên dưới. Vui lòng sửa trước khi tính tiếp.";
-        $("monthly").innerHTML='— <small>¥ / tháng</small>';
+        error.textContent=L(validation.errors.length+" mục cần kiểm tra. Các ô sai được viền đỏ, kèm hướng dẫn ngay bên dưới. Vui lòng sửa trước khi tính tiếp.",validation.errors.length+"項目を確認してください。該当欄を赤枠で表示し、修正方法を下に案内しています。",validation.errors.length+" fields need attention. Invalid fields have red borders and instructions below.");
+        $("monthly").innerHTML='— <small>'+L("¥ / tháng","円／月","JPY/month")+'</small>';
         $("quick-monthly").textContent="—";$("mobile-monthly").textContent="—";
         ["total-interest","total-paid","principal-result","interest-share","payments","first-interest"].forEach(id=>$(id).textContent="—");
         $("loan-in-yen").textContent="—";$("principal-bar").style.width="0%";
@@ -1127,11 +1129,11 @@ body{background:linear-gradient(170deg,#eef3ff 0,#f7f9fd 380px,#f5f7fc 100%)}
         $("total-paid").textContent=yen(total);
         $("principal-result").textContent=yen(principal);
         $("interest-share").textContent=perc(result.interestShare);
-        $("payments").textContent=result.paidOffMonth.toLocaleString("vi-VN")+" / "+result.months+" tháng";
+        $("payments").textContent=result.paidOffMonth.toLocaleString(locale())+" / "+result.months+L(" tháng","か月"," months");
         $("first-interest").textContent=yen(principal*annualPercent/1200);
         const principalShare=total>0?principal/total*100:100;
         $("principal-bar").style.width=principalShare+"%";
-        $("split-label").setAttribute("aria-label","Gốc "+perc(principalShare)+", lãi "+perc(100-principalShare));
+        $("split-label").setAttribute("aria-label",L("Gốc ","元金 ","Principal ")+perc(principalShare)+L(", lãi ", "、利息 ", ", interest ")+perc(100-principalShare));
         yearlyRows=result.yearsData;
         renderYearlySchedule();
         renderAmortizationChart(yearlyRows);
@@ -1140,7 +1142,7 @@ body{background:linear-gradient(170deg,#eef3ff 0,#f7f9fd 380px,#f5f7fc 100%)}
       }catch(e){
         console.error("[HomeLoan JP] Could not complete calculation:",e);
         error.style.display="block";
-        error.textContent="Không thể cập nhật một số kết quả. Hãy tải lại trang để đồng bộ dữ liệu mới nhất; nếu vẫn lỗi, vui lòng gửi ảnh Console để kiểm tra.";
+        error.textContent=L("Không thể cập nhật một số kết quả. Hãy tải lại trang để đồng bộ dữ liệu mới nhất; nếu vẫn lỗi, vui lòng gửi ảnh Console để kiểm tra.","一部の試算結果を更新できませんでした。ページを再読み込みしてください。解決しない場合はコンソール画面を添えてお問い合わせください。","Some results could not be updated. Reload the page; if the issue persists, share a screenshot of the browser console.");
       }
     }
 
@@ -1200,8 +1202,8 @@ body{background:linear-gradient(170deg,#eef3ff 0,#f7f9fd 380px,#f5f7fc 100%)}
       svg.setAttribute("width",width);
       svg.setAttribute("height",252);
       svg.setAttribute("viewBox",`0 0 ${width} 252`);
-      svg.setAttribute("aria-label",`Biểu đồ hai cột gốc và lãi từng năm, thời hạn ${rows.length} năm; đơn vị vạn yên (万円)`);
-      svg.innerHTML=`<text class="chart-axis" x="${left}" y="16">万円 / năm</text>${tickLabels}${bars}<text class="chart-axis" x="${width-right}" y="243" text-anchor="end">Năm vay →</text>`;
+      svg.setAttribute("aria-label",L(`Biểu đồ二つ`, ``, ``));
+      svg.innerHTML=`<text class="chart-axis" x="${left}" y="16">${L("万円 / năm","万円／年","¥10,000 / year")}</text>${tickLabels}${bars}<text class="chart-axis" x="${width-right}" y="243" text-anchor="end">${L("Năm vay →","返済年 →","Loan year →")}</text>`;
       const select=$("chart-year-select");
       if(select.options.length!==rows.length) {
         select.replaceChildren(...rows.map(row=>new Option("Năm "+row.year,String(row.year))));
@@ -1337,9 +1339,9 @@ body{background:linear-gradient(170deg,#eef3ff 0,#f7f9fd 380px,#f5f7fc 100%)}
     $("copy").addEventListener("click", async () => {
       if (!current) {window.LoanValidation.revealFirst();return;}
       const c = current;
-      const message = `TÍNH VAY MUA NHÀ NHẬT BẢN\nVay: ${c.man.toLocaleString("vi-VN")} man (${yen(c.principal)})\nLãi suất: ${c.annualPercent}%/năm\nThời hạn: ${c.years} năm\nTrả mỗi tháng: ${yen(c.monthly)}\nTổng lãi: ${yen(c.interest)}\nTổng phải trả: ${yen(c.total)}`;
-      try {await navigator.clipboard.writeText(message);$("notice").textContent="Đã sao chép kết quả!";}
-      catch (_) {$("notice").textContent="Không thể sao chép tự động trong trình duyệt này.";}
+      const message = L(`TÍNH VAY MUA NHÀ NHẬT BẢN\nVay: ${c.man.toLocaleString("vi-VN")} man (${yen(c.principal)})\nLãi suất: ${c.annualPercent}%/năm\nThời hạn: ${c.years} năm\nTrả mỗi tháng: ${yen(c.monthly)}\nTổng lãi: ${yen(c.interest)}\nTổng phải trả: ${yen(c.total)}`,`住宅ローン返済シミュレーション\n借入額：${yen(c.principal)}\n借入金利：年利${c.annualPercent}%\n返済期間：${c.years}年\n毎月の返済額（初回）：${yen(c.monthly)}\n総支払利息：${yen(c.interest)}\n総返済額：${yen(c.total)}`,`JAPAN HOME LOAN CALCULATOR\nLoan amount: ${yen(c.principal)}\nAnnual interest rate: ${c.annualPercent}%\nLoan term: ${c.years} years\nInitial monthly payment: ${yen(c.monthly)}\nTotal interest: ${yen(c.interest)}\nTotal repayment: ${yen(c.total)}`);
+      try {await navigator.clipboard.writeText(message);$("notice").textContent=L("Đã sao chép kết quả!","試算結果をコピーしました。","Results copied!");}
+      catch (_) {$("notice").textContent=L("Không thể sao chép tự động trong trình duyệt này.","このブラウザでは自動コピーできません。","Your browser does not allow automatic copying.");;}
     });
     $("csv").addEventListener("click", () => {
       if (!current) {window.LoanValidation.revealFirst();return;}
