@@ -2,8 +2,558 @@
   "schemaVersion": 1,
   "base": "JPY",
   "historicalStart": "2026-08-16",
-  "updatedAt": null,
+  "updatedAt": "2026-10-15T17:39:52.914Z",
   "source": "Frankfurter",
-  "daily": [],
+  "daily": [
+    {
+      "date": "2026-08-16",
+      "rates": {
+        "EUR": 0.00543,
+        "USD": 0.00628,
+        "VND": 163.31
+      },
+      "kind": "daily-reference"
+    },
+    {
+      "date": "2026-08-17",
+      "rates": {
+        "EUR": 0.00542,
+        "USD": 0.00628,
+        "VND": 163.72
+      },
+      "kind": "daily-reference"
+    },
+    {
+      "date": "2026-08-18",
+      "rates": {
+        "EUR": 0.00541,
+        "USD": 0.00627,
+        "VND": 163.41
+      },
+      "kind": "daily-reference"
+    },
+    {
+      "date": "2026-08-19",
+      "rates": {
+        "EUR": 0.00541,
+        "USD": 0.00628,
+        "VND": 163.67
+      },
+      "kind": "daily-reference"
+    },
+    {
+      "date": "2026-08-20",
+      "rates": {
+        "EUR": 0.0054,
+        "USD": 0.0063,
+        "VND": 164.05
+      },
+      "kind": "daily-reference"
+    },
+    {
+      "date": "2026-08-21",
+      "rates": {
+        "EUR": 0.00539,
+        "USD": 0.0063,
+        "VND": 163.7
+      },
+      "kind": "daily-reference"
+    },
+    {
+      "date": "2026-08-22",
+      "rates": {
+        "EUR": 0.00539,
+        "USD": 0.0063,
+        "VND": 163.72
+      },
+      "kind": "daily-reference"
+    },
+    {
+      "date": "2026-08-23",
+      "rates": {
+        "EUR": 0.00539,
+        "USD": 0.00629,
+        "VND": 163.71
+      },
+      "kind": "daily-reference"
+    },
+    {
+      "date": "2026-08-24",
+      "rates": {
+        "EUR": 0.00538,
+        "USD": 0.00629,
+        "VND": 163.69
+      },
+      "kind": "daily-reference"
+    },
+    {
+      "date": "2026-08-25",
+      "rates": {
+        "EUR": 0.00538,
+        "USD": 0.00628,
+        "VND": 163.48
+      },
+      "kind": "daily-reference"
+    },
+    {
+      "date": "2026-08-26",
+      "rates": {
+        "EUR": 0.00538,
+        "USD": 0.00628,
+        "VND": 163.47
+      },
+      "kind": "daily-reference"
+    },
+    {
+      "date": "2026-08-27",
+      "rates": {
+        "EUR": 0.00538,
+        "USD": 0.00628,
+        "VND": 163.33
+      },
+      "kind": "daily-reference"
+    },
+    {
+      "date": "2026-08-28",
+      "rates": {
+        "EUR": 0.00538,
+        "USD": 0.00627,
+        "VND": 163.08
+      },
+      "kind": "daily-reference"
+    },
+    {
+      "date": "2026-08-29",
+      "rates": {
+        "EUR": 0.00538,
+        "USD": 0.00627,
+        "VND": 163.08
+      },
+      "kind": "daily-reference"
+    },
+    {
+      "date": "2026-08-30",
+      "rates": {
+        "EUR": 0.00538,
+        "USD": 0.00626,
+        "VND": 162.99
+      },
+      "kind": "daily-reference"
+    },
+    {
+      "date": "2026-08-31",
+      "rates": {
+        "EUR": 0.00539,
+        "USD": 0.00626,
+        "VND": 162.79
+      },
+      "kind": "daily-reference"
+    },
+    {
+      "date": "2026-09-01",
+      "rates": {
+        "EUR": 0.00539,
+        "USD": 0.00625,
+        "VND": 162.56
+      },
+      "kind": "daily-reference"
+    },
+    {
+      "date": "2026-09-02",
+      "rates": {
+        "EUR": 0.0054,
+        "USD": 0.00625,
+        "VND": 162.64
+      },
+      "kind": "daily-reference"
+    },
+    {
+      "date": "2026-09-03",
+      "rates": {
+        "EUR": 0.00546,
+        "USD": 0.00634,
+        "VND": 164.76
+      },
+      "kind": "daily-reference"
+    },
+    {
+      "date": "2026-09-04",
+      "rates": {
+        "EUR": 0.0055,
+        "USD": 0.00639,
+        "VND": 166.2
+      },
+      "kind": "daily-reference"
+    },
+    {
+      "date": "2026-09-05",
+      "rates": {
+        "EUR": 0.0055,
+        "USD": 0.0064,
+        "VND": 166.26
+      },
+      "kind": "daily-reference"
+    },
+    {
+      "date": "2026-09-06",
+      "rates": {
+        "EUR": 0.0055,
+        "USD": 0.0064,
+        "VND": 166.36
+      },
+      "kind": "daily-reference"
+    },
+    {
+      "date": "2026-09-07",
+      "rates": {
+        "EUR": 0.00553,
+        "USD": 0.00642,
+        "VND": 166.91
+      },
+      "kind": "daily-reference"
+    },
+    {
+      "date": "2026-09-08",
+      "rates": {
+        "EUR": 0.00558,
+        "USD": 0.00648,
+        "VND": 168.22
+      },
+      "kind": "daily-reference"
+    },
+    {
+      "date": "2026-09-09",
+      "rates": {
+        "EUR": 0.00559,
+        "USD": 0.00651,
+        "VND": 168.43
+      },
+      "kind": "daily-reference"
+    },
+    {
+      "date": "2026-09-10",
+      "rates": {
+        "EUR": 0.00559,
+        "USD": 0.0065,
+        "VND": 168.18
+      },
+      "kind": "daily-reference"
+    },
+    {
+      "date": "2026-09-11",
+      "rates": {
+        "EUR": 0.00559,
+        "USD": 0.00649,
+        "VND": 167.91
+      },
+      "kind": "daily-reference"
+    },
+    {
+      "date": "2026-09-12",
+      "rates": {
+        "EUR": 0.00559,
+        "USD": 0.00649,
+        "VND": 167.9
+      },
+      "kind": "daily-reference"
+    },
+    {
+      "date": "2026-09-13",
+      "rates": {
+        "EUR": 0.00559,
+        "USD": 0.00649,
+        "VND": 167.87
+      },
+      "kind": "daily-reference"
+    },
+    {
+      "date": "2026-09-14",
+      "rates": {
+        "EUR": 0.0056,
+        "USD": 0.00648,
+        "VND": 167.82
+      },
+      "kind": "daily-reference"
+    },
+    {
+      "date": "2026-09-15",
+      "rates": {
+        "EUR": 0.00559,
+        "USD": 0.00646,
+        "VND": 167.36
+      },
+      "kind": "daily-reference"
+    },
+    {
+      "date": "2026-09-16",
+      "rates": {
+        "EUR": 0.00558,
+        "USD": 0.00645,
+        "VND": 166.96
+      },
+      "kind": "daily-reference"
+    },
+    {
+      "date": "2026-09-17",
+      "rates": {
+        "EUR": 0.00558,
+        "USD": 0.00642,
+        "VND": 166.58
+      },
+      "kind": "daily-reference"
+    },
+    {
+      "date": "2026-09-18",
+      "rates": {
+        "EUR": 0.00555,
+        "USD": 0.00638,
+        "VND": 165.54
+      },
+      "kind": "daily-reference"
+    },
+    {
+      "date": "2026-09-19",
+      "rates": {
+        "EUR": 0.00554,
+        "USD": 0.00637,
+        "VND": 165.35
+      },
+      "kind": "daily-reference"
+    },
+    {
+      "date": "2026-09-20",
+      "rates": {
+        "EUR": 0.00554,
+        "USD": 0.00637,
+        "VND": 165.21
+      },
+      "kind": "daily-reference"
+    },
+    {
+      "date": "2026-09-21",
+      "rates": {
+        "EUR": 0.00554,
+        "USD": 0.00636,
+        "VND": 164.93
+      },
+      "kind": "daily-reference"
+    },
+    {
+      "date": "2026-09-22",
+      "rates": {
+        "EUR": 0.00553,
+        "USD": 0.00635,
+        "VND": 164.89
+      },
+      "kind": "daily-reference"
+    },
+    {
+      "date": "2026-09-23",
+      "rates": {
+        "EUR": 0.00554,
+        "USD": 0.00634,
+        "VND": 164.53
+      },
+      "kind": "daily-reference"
+    },
+    {
+      "date": "2026-09-24",
+      "rates": {
+        "EUR": 0.00554,
+        "USD": 0.00631,
+        "VND": 163.89
+      },
+      "kind": "daily-reference"
+    },
+    {
+      "date": "2026-09-25",
+      "rates": {
+        "EUR": 0.00554,
+        "USD": 0.00632,
+        "VND": 163.84
+      },
+      "kind": "daily-reference"
+    },
+    {
+      "date": "2026-09-26",
+      "rates": {
+        "EUR": 0.00555,
+        "USD": 0.00632,
+        "VND": 163.93
+      },
+      "kind": "daily-reference"
+    },
+    {
+      "date": "2026-09-27",
+      "rates": {
+        "EUR": 0.00555,
+        "USD": 0.00632,
+        "VND": 163.96
+      },
+      "kind": "daily-reference"
+    },
+    {
+      "date": "2026-09-28",
+      "rates": {
+        "EUR": 0.00557,
+        "USD": 0.00635,
+        "VND": 164.64
+      },
+      "kind": "daily-reference"
+    },
+    {
+      "date": "2026-09-29",
+      "rates": {
+        "EUR": 0.00559,
+        "USD": 0.00636,
+        "VND": 164.72
+      },
+      "kind": "daily-reference"
+    },
+    {
+      "date": "2026-09-30",
+      "rates": {
+        "EUR": 0.0056,
+        "USD": 0.00636,
+        "VND": 164.82
+      },
+      "kind": "daily-reference"
+    },
+    {
+      "date": "2026-10-01",
+      "rates": {
+        "EUR": 0.0056,
+        "USD": 0.00634,
+        "VND": 164.45
+      },
+      "kind": "daily-reference"
+    },
+    {
+      "date": "2026-10-02",
+      "rates": {
+        "EUR": 0.00561,
+        "USD": 0.00633,
+        "VND": 164.41
+      },
+      "kind": "daily-reference"
+    },
+    {
+      "date": "2026-10-03",
+      "rates": {
+        "EUR": 0.00561,
+        "USD": 0.00633,
+        "VND": 164.4
+      },
+      "kind": "daily-reference"
+    },
+    {
+      "date": "2026-10-04",
+      "rates": {
+        "EUR": 0.00562,
+        "USD": 0.00633,
+        "VND": 164.35
+      },
+      "kind": "daily-reference"
+    },
+    {
+      "date": "2026-10-05",
+      "rates": {
+        "EUR": 0.00564,
+        "USD": 0.00633,
+        "VND": 164.28
+      },
+      "kind": "daily-reference"
+    },
+    {
+      "date": "2026-10-06",
+      "rates": {
+        "EUR": 0.00563,
+        "USD": 0.00632,
+        "VND": 164.1
+      },
+      "kind": "daily-reference"
+    },
+    {
+      "date": "2026-10-07",
+      "rates": {
+        "EUR": 0.00563,
+        "USD": 0.00632,
+        "VND": 163.9
+      },
+      "kind": "daily-reference"
+    },
+    {
+      "date": "2026-10-08",
+      "rates": {
+        "EUR": 0.00564,
+        "USD": 0.00632,
+        "VND": 163.86
+      },
+      "kind": "daily-reference"
+    },
+    {
+      "date": "2026-10-09",
+      "rates": {
+        "EUR": 0.00563,
+        "USD": 0.00632,
+        "VND": 163.39
+      },
+      "kind": "daily-reference"
+    },
+    {
+      "date": "2026-10-10",
+      "rates": {
+        "EUR": 0.00563,
+        "USD": 0.00632,
+        "VND": 163.37
+      },
+      "kind": "daily-reference"
+    },
+    {
+      "date": "2026-10-11",
+      "rates": {
+        "EUR": 0.00563,
+        "USD": 0.00632,
+        "VND": 163.36
+      },
+      "kind": "daily-reference"
+    },
+    {
+      "date": "2026-10-12",
+      "rates": {
+        "EUR": 0.00563,
+        "USD": 0.00631,
+        "VND": 163.17
+      },
+      "kind": "daily-reference"
+    },
+    {
+      "date": "2026-10-13",
+      "rates": {
+        "EUR": 0.00564,
+        "USD": 0.00631,
+        "VND": 163.33
+      },
+      "kind": "daily-reference"
+    },
+    {
+      "date": "2026-10-14",
+      "rates": {
+        "EUR": 0.00564,
+        "USD": 0.00631,
+        "VND": 163.14
+      },
+      "kind": "daily-reference"
+    },
+    {
+      "date": "2026-10-15",
+      "rates": {
+        "EUR": 0.00564,
+        "USD": 0.00632,
+        "VND": 163.34
+      },
+      "kind": "daily-reference"
+    }
+  ],
   "observations": []
 }
