@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="theme-color" content="#f3f6fb" />
-  <meta name="application-version" content="home-loan-jp-v4.1-prod" />
+  <meta name="application-version" content="home-loan-jp-v4.2-responsive-ux" />
   <meta name="description" content="Công cụ tính khoản vay mua nhà Nhật Bản: tiền trả hằng tháng, tổng tiền lãi và lịch trả nợ." />
   <title>Tính Vay Mua Nhà Nhật Bản | Home Loan Calculator</title>
   <style>
@@ -596,6 +596,70 @@ body{background:linear-gradient(170deg,#eef3ff 0,#f7f9fd 380px,#f5f7fc 100%)}
       .quick-nav.main-nav a{font-size:11px;padding:8px 11px}
     }
 
+
+    /* Responsive UX v4.2 – cleaner entries and a short amortization preview */
+    .jump-results{display:none}
+    .schedule-toolbar{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px 14px;margin:0 0 12px}
+    .schedule-toolbar label{display:inline-flex;align-items:center;flex-wrap:wrap;gap:8px;color:#52617e;font-size:12px;font-weight:750}
+    .schedule-toolbar select{min-height:42px;max-width:100%;min-width:137px;padding:8px 30px 8px 11px;border:1px solid #dce5f3;border-radius:10px;background:#fff;color:#233f78;font:inherit;font-size:13px;font-weight:700}
+    .schedule-toolbar select:focus-visible{outline:3px solid #7fa0f0;outline-offset:2px}
+    .schedule-count{font-size:12px;color:#677d9f}
+    .schedule-expand{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:14px}
+    .schedule-expand .btn{min-height:44px;padding-inline:15px}
+    .schedule-expand [hidden],.schedule-expand[hidden]{display:none!important}
+    .schedule tbody tr:target{background:#eef3ff}
+    @media(min-width:641px) and (max-width:1100px){
+      .financing-quick{padding:15px}
+      .input-preview{padding:10px 14px}
+      .fields-grid>.field{margin-bottom:16px}
+      .main-nav{gap:7px}
+    }
+    @media(max-width:640px){
+      .page-header{padding-top:8px;padding-bottom:11px}
+      .topbar{padding-bottom:9px}
+      .hero{padding-top:11px}
+      .hero h1{font-size:clamp(23px,6.4vw,29px);line-height:1.17;margin:8px 0 6px}
+      .hero .subtitle{font-size:12px;line-height:1.5}
+      .main-nav{margin-top:11px;margin-bottom:0}
+      .quick-nav.main-nav{gap:6px}
+      .quick-nav.main-nav a{min-height:40px;font-size:11px;padding:7px 10px}
+      .layout>.panel{padding:15px 13px}
+      .layout .section-heading{margin-bottom:13px}
+      .layout .section-heading .section-tag{display:none}
+      .input-preview{padding:9px 11px;margin-bottom:12px;border-radius:11px}
+      .input-preview strong{font-size:19px}
+      .input-preview a{min-height:40px}
+      .financing-quick{padding:12px;margin-bottom:14px}
+      .financing-heading{margin-bottom:9px;gap:8px}
+      .financing-heading p{font-size:11px;line-height:1.4}
+      .financing-body .advanced-fields{gap:9px}
+      .financing-body .inline-actions{gap:6px}
+      .financing-body .inline-actions button{min-height:42px}
+      .financing-body .mini-stats.three{gap:6px}
+      .financing-body .mini-stats.three>div{padding:8px 9px}
+      .financing-body .mini-stats.three strong{font-size:12px}
+      .loan-section-heading{margin-bottom:10px}
+      .fields-grid>.field{margin-bottom:15px}
+      .fields-grid .presets{margin-top:5px}
+      .scenario-block{margin-top:12px}
+      .scenario-block .advanced-panel summary{min-height:62px;padding:11px}
+      .scenario-block .advanced-panel summary small{line-height:1.35}
+      .result-highlight{padding:19px 18px}
+      .result-top .metrics{gap:8px}
+      .result-top .metric{padding:12px 10px}
+      .repayment-chart{margin-top:18px;padding-top:15px}
+      .schedule-toolbar{align-items:stretch;gap:8px;margin-bottom:11px}
+      .schedule-toolbar label{justify-content:space-between;width:100%}
+      .schedule-toolbar select{font-size:16px;min-height:44px}
+      .schedule-count{font-size:11px}
+      .schedule-expand{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+      .schedule-expand .btn{padding:9px 6px;font-size:11px;min-height:44px}
+      .jump-results{display:flex;align-items:center;justify-content:center;gap:8px;min-height:46px;padding:10px 13px;margin:16px 0 12px;border-radius:11px;background:#285bd4;color:#fff;font-size:13px;font-weight:800;text-decoration:none}
+      .jump-results:focus-visible{outline:3px solid #7fa0f0;outline-offset:3px}
+      .loan-workflow .buttons{margin-top:0}
+    }
+    @media(max-width:365px){.schedule-expand{grid-template-columns:1fr}}
+
     /* Form validation — accessible inline feedback for desktop, tablet and mobile */
     .field-error{display:block;margin:7px 0 12px;color:#b42318;font-size:12px;font-weight:650;line-height:1.5}
     .field-error[hidden]{display:none!important}
@@ -621,7 +685,7 @@ body{background:linear-gradient(170deg,#eef3ff 0,#f7f9fd 380px,#f5f7fc 100%)}
       <div class="hero">
         <div class="eyebrow"><span class="live-dot"></span> TÍNH KHOẢN VAY NHANH &amp; CHÍNH XÁC</div>
         <h1>Lên kế hoạch mua nhà <span>thông minh hơn.</span></h1>
-        <p class="subtitle">Tùy chỉnh khoản vay, lãi suất và thời hạn bằng cách nhập hoặc kéo thanh. Xem ngay số tiền cần trả mỗi tháng và chi tiết gốc, lãi theo từng năm.</p>
+        <p class="subtitle">Ước tính khoản trả hằng tháng, tổng lãi và lịch trả nợ theo năm. Nhập số hoặc kéo thanh để điều chỉnh.</p>
         <div class="hero-details"><span><span class="hero-check">✓</span> Tính ngay, không cần đăng ký</span><span><span class="hero-check">✓</span> Đơn vị tiền Nhật (JPY / 万円)</span></div>
         <nav class="quick-nav main-nav" aria-label="Đi đến chức năng chính">
           <a href="#financing-panel">Giá nhà &amp; tiền tự có</a>
@@ -675,7 +739,7 @@ body{background:linear-gradient(170deg,#eef3ff 0,#f7f9fd 380px,#f5f7fc 100%)}
           <div class="presets" aria-label="Thời hạn mẫu"><button type="button" class="chip" data-years="20">20 năm</button><button type="button" class="chip" data-years="30">30 năm</button><button type="button" class="chip" data-years="35">35 năm</button></div>
         </div>
         </div>
-        <div class="scenario-block"><div class="financing-heading"><span class="flow-step">03</span><div><h3>Mô phỏng trả nợ trước hạn</h3><p>Tiết kiệm lãi bằng cách trả thêm tiền gốc.</p></div></div><details class="advanced-panel" id="early-panel" open>
+        <div class="scenario-block"><div class="financing-heading"><span class="flow-step">03</span><div><h3>Mô phỏng trả nợ trước hạn</h3><p>Tiết kiệm lãi bằng cách trả thêm tiền gốc.</p></div></div><details class="advanced-panel" id="early-panel">
           <summary><span class="advanced-icon">↘</span><span><strong>Trả nợ trước hạn · 繰上返済</strong><small>Rút ngắn kỳ hạn hoặc giảm tiền hằng tháng</small></span><span class="chevron">⌄</span></summary>
           <div class="advanced-body">
             <p class="advanced-tip">Mỗi lần trả trước được thực hiện vào <strong>cuối năm</strong> đã chọn, sau kỳ thanh toán tháng đó. Tiền trả trước được trừ trực tiếp vào dư nợ gốc.</p>
@@ -695,6 +759,7 @@ body{background:linear-gradient(170deg,#eef3ff 0,#f7f9fd 380px,#f5f7fc 100%)}
           </div>
         </details></div>
         
+        <a class="jump-results" href="#result-title">Xem chi tiết kết quả <span aria-hidden="true">↓</span></a>
         <div class="buttons">
           <button class="btn" id="reset" type="button"><span aria-hidden="true">↺</span> Đặt lại</button>
           <button class="btn" id="copy" type="button"><span aria-hidden="true">⧉</span> Sao chép kết quả</button>
@@ -801,8 +866,16 @@ body{background:linear-gradient(170deg,#eef3ff 0,#f7f9fd 380px,#f5f7fc 100%)}
         <div><div class="section-eyebrow">PHÂN TÍCH CHI TIẾT</div><h3 id="schedule-title">Lịch trả nợ theo năm</h3><p class="desc">Đối chiếu tiền gốc, tiền lãi và dư nợ của từng năm.</p></div>
         <button class="btn primary" id="csv" type="button"><span aria-hidden="true">↓</span> Tải bảng CSV</button>
       </div>
+      <div class="schedule-toolbar">
+        <label for="schedule-jump">Chuyển đến năm <select id="schedule-jump" aria-label="Chọn năm trong lịch trả nợ"><option value="">Chọn năm…</option></select></label>
+        <span class="schedule-count" id="schedule-count" role="status" aria-live="polite">Đang tải lịch trả nợ…</span>
+      </div>
       <div class="table-swipe-hint">↔ Vuốt ngang để xem đầy đủ các cột</div>
       <div class="table-wrap"><table><thead><tr><th>Năm</th><th>Gốc (gồm trả trước)</th><th>Lãi trả trong năm</th><th>Trả trước (trong gốc)</th><th>Tổng trả trong năm</th><th>Dư nợ cuối năm</th></tr></thead><tbody id="schedule-body"></tbody></table></div>
+      <div class="schedule-expand" id="schedule-expand">
+        <button class="btn" type="button" id="schedule-more" aria-controls="schedule-body">Xem thêm 10 năm</button>
+        <button class="btn" type="button" id="schedule-all" aria-controls="schedule-body">Xem tất cả các năm</button>
+      </div>
     </section>
     <p class="foot"><strong>Lưu ý:</strong> Công cụ hỗ trợ mô phỏng trả trước, lãi suất thay đổi, phí mua nhà và khả năng trả nợ dựa trên thông số do bạn nhập. Các mức phí/ngân hàng chỉ là giả định và không thể dùng thay cho báo giá hoặc xét duyệt ngân hàng. Dữ liệu tính toán chạy ngay trong trình duyệt, không gửi lên máy chủ.</p>
   </main>
@@ -816,6 +889,24 @@ body{background:linear-gradient(170deg,#eef3ff 0,#f7f9fd 380px,#f5f7fc 100%)}
     let current = null;
     let yearlyRows = [];
     let selectedChartYear = 1;
+
+    // The full simulation is retained for charts and CSV; only rows shown are paginated.
+    let visibleScheduleYears = 5;
+    function renderYearlySchedule() {
+      const total = yearlyRows.length;
+      const shown = Math.min(visibleScheduleYears,total);
+      $("schedule-body").innerHTML = yearlyRows.slice(0,shown).map(row =>
+        "<tr id='schedule-year-"+row.year+"'><td>Năm "+row.year+"</td><td>"+yen(row.principal)+"</td><td>"+yen(row.interest)+"</td><td>"+yen(row.extra)+"</td><td>"+yen(row.paid)+"</td><td>"+yen(row.balance)+"</td></tr>"
+      ).join("");
+      $("schedule-count").textContent = total ? "Đang xem "+shown+"/"+total+" năm · CSV có đủ "+total+" năm" : "Chưa có lịch trả nợ hợp lệ";
+      const jump = $("schedule-jump");
+      if (jump.options.length !== total + 1)
+        jump.replaceChildren(new Option("Chọn năm…", ""),...yearlyRows.map(row => new Option("Năm "+row.year,String(row.year))));
+      jump.disabled = total === 0;
+      $("schedule-more").hidden = shown >= total;
+      $("schedule-all").hidden = shown >= total;
+      $("schedule-expand").hidden = shown >= total;
+    }
 
     // Synchronize all number inputs and slider positions. Typed values beyond
     // the normal slider scale expand its maximum without losing input precision.
@@ -867,7 +958,7 @@ body{background:linear-gradient(170deg,#eef3ff 0,#f7f9fd 380px,#f5f7fc 100%)}
         $("quick-monthly").textContent="—";$("mobile-monthly").textContent="—";
         ["total-interest","total-paid","principal-result","interest-share","payments","first-interest"].forEach(id=>$(id).textContent="—");
         $("loan-in-yen").textContent="—";$("principal-bar").style.width="0%";
-        $("schedule-body").innerHTML="";$("amortization-chart").replaceChildren();
+        yearlyRows=[];renderYearlySchedule();$("amortization-chart").replaceChildren();
         ["prepay-saved","prepay-paid-off","prepay-extra","prepay-years","ltv-result","cash-down","loan-gap","fee-total","cash-needed","total-housing","debt-ratio","monthly-budget","housing-monthly","max-estimated","bank-a-monthly","bank-a-interest","bank-a-cost","bank-a-payoff","bank-b-monthly","bank-b-interest","bank-b-cost","bank-b-payoff","compare-difference"].forEach(id=>{const target=$(id);if(target)target.textContent="—";});
          $("chart-year-label").textContent="—";$("chart-year-principal").textContent="—";$("chart-year-interest").textContent="—";
          current=null;yearlyRows=[];window.loanCurrentSimulation=null;return;
@@ -893,7 +984,7 @@ body{background:linear-gradient(170deg,#eef3ff 0,#f7f9fd 380px,#f5f7fc 100%)}
         $("principal-bar").style.width=principalShare+"%";
         $("split-label").setAttribute("aria-label","Gốc "+perc(principalShare)+", lãi "+perc(100-principalShare));
         yearlyRows=result.yearsData;
-        $("schedule-body").innerHTML=yearlyRows.map(row=>`<tr><td>Năm ${row.year}</td><td>${yen(row.principal)}</td><td>${yen(row.interest)}</td><td>${yen(row.extra)}</td><td>${yen(row.paid)}</td><td>${yen(row.balance)}</td></tr>`).join("");
+        renderYearlySchedule();
         renderAmortizationChart(yearlyRows);
         window.LoanAdvanced.render(base,result);
         try{localStorage.setItem("home-loan-jp-inputs",JSON.stringify({man,annualPercent,years}))}catch(_){}
@@ -982,6 +1073,23 @@ body{background:linear-gradient(170deg,#eef3ff 0,#f7f9fd 380px,#f5f7fc 100%)}
       svg.querySelector(`[data-chart-year="${year}"]`)?.classList.add("is-selected");
     }
 
+
+    $("schedule-more").addEventListener("click", () => {
+      visibleScheduleYears = Math.min(yearlyRows.length,visibleScheduleYears + 10);
+      renderYearlySchedule();
+    });
+    $("schedule-all").addEventListener("click", () => {
+      visibleScheduleYears = yearlyRows.length;
+      renderYearlySchedule();
+    });
+    $("schedule-jump").addEventListener("change", e => {
+      const year = Number(e.target.value);
+      if (!Number.isInteger(year) || year < 1 || year > yearlyRows.length) return;
+      visibleScheduleYears = Math.max(visibleScheduleYears,year);
+      renderYearlySchedule();
+      const target = $("schedule-year-"+year);
+      if (target) target.scrollIntoView({behavior:window.matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth",block:"center"});
+    });
     $("chart-year-select").addEventListener("change",e=>{
       const year=Number(e.target.value);
       selectChartYear(year);
@@ -994,8 +1102,8 @@ body{background:linear-gradient(170deg,#eef3ff 0,#f7f9fd 380px,#f5f7fc 100%)}
     });
     if ("IntersectionObserver" in window) {
       const observer=new IntersectionObserver(entries=>{
-        document.body.classList.toggle("result-in-view",entries[0].isIntersecting);
-      },{threshold:0.05});
+        document.body.classList.toggle("result-in-view",entries[0].intersectionRatio >= 0.35);
+      },{threshold:[0,0.35]});
       observer.observe(document.querySelector(".result-highlight"));
     }
     const chart=$("amortization-chart");
@@ -1052,6 +1160,8 @@ body{background:linear-gradient(170deg,#eef3ff 0,#f7f9fd 380px,#f5f7fc 100%)}
     document.querySelectorAll("[data-rate]").forEach(btn => btn.addEventListener("click", () => {$("rate").value = btn.dataset.rate; calculate();}));
     document.querySelectorAll("[data-years]").forEach(btn => btn.addEventListener("click", () => {$("years").value = btn.dataset.years; calculate();}));
     $("reset").addEventListener("click", () => {
+       visibleScheduleYears=5;
+       $("schedule-jump").value="";
        document.querySelectorAll('main input:not([type="range"]),main select').forEach(input=>{
          if(input.type==="checkbox")input.checked=input.defaultChecked;
          else if(input.type!=="button"&&input.tagName!=="SELECT")input.value=input.defaultValue;
