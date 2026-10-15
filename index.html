@@ -1264,6 +1264,7 @@ body{background:linear-gradient(170deg,#eef3ff 0,#f7f9fd 380px,#f5f7fc 100%)}
       const svg=$("amortization-chart");
       svg.querySelector(".is-selected")?.classList.remove("is-selected");
       svg.querySelector(`[data-chart-year="${year}"]`)?.classList.add("is-selected");
+      window.HomeLoanFX?.refreshChart();
     }
 
 
