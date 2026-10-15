@@ -23,6 +23,7 @@ html[lang="ja"] .ratecard h3,html[lang="en"] .ratecard h3{overflow-wrap:anywhere
 .fx-bank-converted[hidden],.fx-bank-sub[hidden]{display:none!important}
 .rate-metric strong{overflow-wrap:anywhere}
 .fx-bank-fx-notice{color:#6b7891;font-size:11px;margin:9px 0;line-height:1.5}
+.bank-fx-note{margin:-5px 0 14px;padding:10px 13px;background:#edf3ff;border:1px solid #d8e5fa;border-radius:11px;color:#49648f;font-size:12px;line-height:1.5}.bank-fx-note a{font-size:11px}.bank-fx-note[hidden]{display:none!important}
 @media(max-width:740px){.bank-currency{margin-left:0}}
 @media(max-width:390px){.bank-currency select{max-width:91px}.bank-currency{padding-inline:6px}}
 </style></head>
@@ -30,6 +31,7 @@ html[lang="ja"] .ratecard h3,html[lang="en"] .ratecard h3{overflow-wrap:anywhere
 <header class="top"><a class="brand" href="./index.html">⌂ HomeLoan <b>JP</b></a><nav class="nav" aria-label="Điều hướng"><a href="./index.html">Máy tính vay</a><a class="active" href="./bank-rates.html" aria-current="page">Lãi suất ngân hàng</a><a href="#history">Lịch sử cập nhật</a></nav><label class="bank-language"><span aria-hidden="true">🌐</span><select data-language-select aria-label="Chọn ngôn ngữ / 言語 / Language"><option value="vi">Tiếng Việt</option><option value="ja">日本語</option><option value="en">English</option></select></label><label class="bank-currency"><span aria-hidden="true">💱</span><select data-currency-select aria-label="Chọn tiền tệ / 表示通貨 / Display currency"><option value="JPY">JPY · ¥</option><option value="VND">VND · ₫</option><option value="USD">USD · $</option><option value="EUR">EUR · €</option></select></label></header>
 <section class="hero"><div class="eyebrow">Japan mortgage rate monitor</div><h1>Lãi suất vay nhà Nhật Bản<br>theo hồ sơ của bạn</h1><p class="sub">Theo dõi hai lần kiểm tra mỗi ngày (08:30 và 20:30 JST) từ <b>SMBC</b> và <b>Suruga Bank</b>. Điều kiện gốc tiếng Nhật được giải thích bằng tiếng Việt, đọc bản đã lưu khi truy cập, tính thử khoản trả dựa trên hồ sơ của bạn.</p></section>
 <div class="statusbar"><div><strong id="liveStatus">Đang đọc dữ liệu đã lưu...</strong><div><span id="liveTime">Chưa xác minh nguồn</span></div></div><button id="refresh" class="btn" type="button">↻ Xem bản dữ liệu mới nhất</button></div>
+<div class="bank-fx-note" id="fx-bank-context" hidden><span id="fx-bank-status"></span> · <a href="https://frankfurter.dev/" target="_blank" rel="noopener noreferrer">Nguồn tỷ giá: Frankfurter ↗</a></div>
 <div class="layout">
 <aside><section class="panel"><div class="step-title">01 · THÔNG TIN CĂN NHÀ</div><h2>Giá nhà và phương án vay</h2><p class="caption">Nhập giá nhà và tiền trả trước. Hệ thống tự tính khoản cần vay.</p>
 <div class="field"><label for="price">Giá nhà (物件価格)</label><div class="control"><input id="price" type="number" min="100" max="20000" step="10" inputmode="decimal" value="3200"><span>万円</span></div></div>
