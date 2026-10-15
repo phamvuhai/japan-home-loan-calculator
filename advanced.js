@@ -153,6 +153,16 @@ function render(base,simulation){
   $("payment-milestones").append(item);
  });
  if(!seen.size)$("payment-milestones").textContent=ls("Không có kỳ điều chỉnh tiền trả.","返済額の変更予定はありません。","No payment recalculations scheduled.");
+ window.HomeLoanFX?.setAdvanced({
+  "prepay-saved":saved,"prepay-extra":simulation.totalExtra,
+  "cash-down":C.yenFromMan(deposit),"loan-gap":C.yenFromMan(p-deposit-base.loanMan),
+  "fee-total":f.total,"cash-needed":requiredOwnCash+f.total,
+  "total-housing":simulation.totalPaid+requiredOwnCash+f.total,
+  "monthly-budget":a.monthlyCapacity,"housing-monthly":a.housingCashflow,
+  "max-estimated":C.yenFromMan(stress),
+  "bank-a-monthly":banks[0].monthly,"bank-a-interest":banks[0].interest,"bank-a-cost":banks[0].cost,
+  "bank-b-monthly":banks[1].monthly,"bank-b-interest":banks[1].interest,"bank-b-cost":banks[1].cost
+ });
  try{
   const inputs={};document.querySelectorAll("#advanced-root input, #advanced-root select, #financing-panel input, #financing-panel select, #variable-panel input, #variable-panel select").forEach(e=>{if(e.id)inputs[e.id]=e.type==="checkbox"?e.checked:e.value});
   const events={early:Array.from(document.querySelectorAll('[data-kind="early"]')).map(r=>({year:r.querySelector('[data-key="year"]').value,amount:r.querySelector('[data-key="amount"]').value,mode:r.querySelector('[data-key="mode"]').value})),
@@ -207,8 +217,14 @@ function init(){
  const advancedCsv=$("csv-monthly");
  advancedCsv.addEventListener("click",()=>{
   const c=window.loanCurrentSimulation;if(!c){window.LoanValidation?.revealFirst();return;}
-  const header=ls("Thang,Nam,Lai suat (%),Goc dinh ky (JPY),Lai (JPY),Tra truoc (JPY),Tong thanh toan (JPY),Du no cuoi ky (JPY)","月,年,金利 (%),通常元金返済額 (JPY),利息 (JPY),繰上返済額 (JPY),総返済額 (JPY),期末残高 (JPY)","Month,Year,Interest rate (%),Regular principal (JPY),Interest (JPY),Early repayment (JPY),Total payment (JPY),Ending balance (JPY)");
-  const lines=[header,...c.rows.map(x=>[x.month,x.year,x.rate,x.principal,x.interest,x.extra,x.paid,x.balance].map(v=>typeof v==="number"?Math.round(v*100)/100:v).join(","))];
+  const fx=window.HomeLoanFX?.csvRate();
+  let header=ls("Thang,Nam,Lai suat (%),Goc dinh ky (JPY),Lai (JPY),Tra truoc (JPY),Tong thanh toan (JPY),Du no cuoi ky (JPY)","月,年,金利 (%),通常元金返済額 (JPY),利息 (JPY),繰上返済額 (JPY),総返済額 (JPY),期末残高 (JPY)","Month,Year,Interest rate (%),Regular principal (JPY),Interest (JPY),Early repayment (JPY),Total payment (JPY),Ending balance (JPY)");
+  if(fx)header+=",Principal ("+fx.currency+", "+fx.rateDate+"),Interest ("+fx.currency+"),Early repayment ("+fx.currency+"),Total payment ("+fx.currency+"),Balance ("+fx.currency+")";
+  const lines=[header,...c.rows.map(x=>{
+   const nums=[x.month,x.year,x.rate,x.principal,x.interest,x.extra,x.paid,x.balance].map(v=>typeof v==="number"?Math.round(v*100)/100:v);
+   if(fx)nums.push(...[x.principal,x.interest,x.extra,x.paid,x.balance].map(v=>Math.round(v*fx.rate*100)/100));
+   return nums.join(",");
+  })];
   const blob=new Blob(["\ufeff",lines.join("\r\n")],{type:"text/csv;charset=utf-8"});
   const u=URL.createObjectURL(blob),a=document.createElement("a");a.href=u;a.download="home-loan-lich-tra-no-thang.csv";a.click();setTimeout(()=>URL.revokeObjectURL(u),1000);
  });
