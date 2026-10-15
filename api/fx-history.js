@@ -37,6 +37,11 @@ module.exports=async function handler(req,res){
   const response=await fetch(OBS,{headers:{Accept:'application/json'},signal:AbortSignal.timeout(6000)});
   if(response.ok){
    const raw=await response.json();
+   if(raw?.schemaVersion===1&&Array.isArray(raw.daily)&&!daily.length){
+    const backup=raw.daily.filter(row=>row?.date>=start&&row?.date<=end&&CODES.every(c=>Number(row.rates?.[c])>0));
+    daily=backup.map(row=>({date:row.date,kind:'daily-reference',rates:Object.fromEntries(CODES.map(c=>[c,Number(row.rates[c])])),sourceDate:row.date})).sort((a,b)=>a.date.localeCompare(b.date));
+    if(daily.length)historyError='Using last verified stored daily history';
+   }
    if(raw?.schemaVersion===1&&Array.isArray(raw.observations)){
     observations=raw.observations.filter(o=>o&&typeof o.observedAt==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(o.date||'')&&o.date>=start&&o.date<=end&&['11:00','19:00'].includes(o.slot)&&['ok','error'].includes(o.status)).map(o=>({
       date:o.date,slot:o.slot,kind:'scheduled-observation',status:o.status,
@@ -47,7 +52,7 @@ module.exports=async function handler(req,res){
    }
   }else observationError='Scheduled observations not initialized';
  }catch(_){observationError='Scheduled observation store unavailable'}
- res.setHeader('Cache-Control','public, s-maxage=3600, stale-while-revalidate=3600');
+ res.setHeader('Cache-Control','public, s-maxage=300, stale-while-revalidate=900');
  return res.status(daily.length||observations.length?200:503).json({
   schemaVersion:1,base:'JPY',from:start,to:end,checkedAt:new Date().toISOString(),
   currencies:CODES,source:'Frankfurter',sourceUrl:'https://frankfurter.dev/',
