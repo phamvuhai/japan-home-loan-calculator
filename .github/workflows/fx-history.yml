@@ -4,6 +4,10 @@ on:
     - cron: "0 2 * * *"  # 11:00 JST
     - cron: "0 10 * * *" # 19:00 JST
   workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/fx-history.trigger"
 permissions:
   contents: write
 concurrency:
@@ -26,6 +30,7 @@ jobs:
       - name: Fetch historical JPY rates and record actual observation
         env:
           FX_SLOT: ${{ github.event.schedule == '0 2 * * *' && '11:00' || github.event.schedule == '0 10 * * *' && '19:00' || '' }}
+          FX_BACKFILL_ONLY: ${{ github.event_name != 'schedule' && '1' || '0' }}
         run: |
           node "$GITHUB_WORKSPACE/scripts/collect-fx-history.mjs" "$RUNNER_TEMP/fx-history-data/data/fx-history.json"
       - name: Commit data only (never trigger application deployment)
