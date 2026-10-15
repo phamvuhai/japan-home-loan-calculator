@@ -7,7 +7,7 @@ const tr=s=>I()?.t(s)||s;
 const ls=(vi,ja,en)=>lang()==="ja"?ja:lang()==="en"?en:vi;
 const money=n=>I()?I().money(n):Number.isFinite(n)?Math.round(n).toLocaleString("vi-VN")+" ¥":"—";
 const man=n=>I()?I().man(n):Number.isFinite(n)?n.toLocaleString("vi-VN",{maximumFractionDigits:2})+" man":"—";
-const pct=n=>(I()?I().number(n,{maximumFractionDigits:1}):Number.isFinite(n)?n.toLocaleString("vi-VN",{maximumFractionDigits:1}):"—")+"%";
+const pct=n=>Number.isFinite(n)?(I()?I().number(n,{maximumFractionDigits:1}):n.toLocaleString("vi-VN",{maximumFractionDigits:1}))+"%":"—";
 const val=(id,def=0)=>{const e=$(id);if(!e)return def;const n=Number(e.value);return e.value.trim()!==""&&Number.isFinite(n)?n:def};
 const el=(tag,cls)=>{const e=document.createElement(tag);if(cls)e.className=cls;return e};
 function newEvent(type,data={}){
@@ -99,7 +99,7 @@ function render(base,simulation){
  if(preview){
   preview.textContent=simulation.totalExtra>0
    ?ls("Trả thêm ","繰上返済額 ","Extra repayment ")+money(simulation.totalExtra)+ls(" · Tiết kiệm lãi "," · 利息軽減額 "," · Interest saved ")+money(saved)+ls(" · Tất toán sau "," · 完済まで "," · Paid off in ")+(I()?I().number(simulation.paidOffMonth/12,{maximumFractionDigits:1}):(simulation.paidOffMonth/12).toLocaleString("vi-VN",{maximumFractionDigits:1}))+ls(" năm","年"," years")
-   :"Chưa thêm khoản trả trước. Mở mục trên để thiết lập.";
+   :tr("Chưa thêm khoản trả trước. Mở mục trên để thiết lập.");
  }
  $("schedule-label").textContent=read().rateChanges.length?ls("Lãi suất thay đổi theo các mốc đã nhập","指定した時期に金利を変更","Rate changes at selected milestones"):ls("Lãi suất giữ nguyên trong kỳ vay","借入期間中は同一金利で試算","Rate remains constant throughout the loan");
  const p=val("property-price",base.loanMan),deposit=val("down-payment"),ltv=p>0?base.loanMan/p*100:Infinity;
@@ -114,8 +114,8 @@ function render(base,simulation){
  $("total-housing").textContent=money(simulation.totalPaid+requiredOwnCash+f.total);
  const gap=p-deposit-base.loanMan;
  $("purchase-warning").textContent=Math.abs(gap)>0.01
-  ?"Giá nhà, tiền tự có và khoản vay đang lệch "+man(Math.abs(gap))+". Dự toán tiền mặt tính theo giá nhà trừ khoản vay, không chỉ theo khoản đặt cọc đã nhập."
-  :"Giá nhà = khoản vay + tiền tự có. Chi phí dự kiến chưa tính phí duy trì qua các năm.";
+  ?ls("Giá nhà, tiền tự có và khoản vay đang lệch ","物件価格・頭金・借入額の差額は ","Price, down payment and loan differ by ")+man(Math.abs(gap))+ls(". Dự toán tiền mặt tính theo giá nhà trừ khoản vay, không chỉ theo khoản đặt cọc đã nhập."," です。必要現金は物件価格と借入額の差額に基づきます。",". Required cash is calculated from price minus loan, not only the entered deposit.")
+  :ls("Giá nhà = khoản vay + tiền tự có. Chi phí dự kiến chưa tính phí duy trì qua các năm.","物件価格＝借入額＋頭金です。継続的な維持費は含んでいません。","Property price equals loan plus down payment. Ongoing upkeep is excluded.");
  $("fee-breakdown").textContent=ls("Phí ngân hàng ","銀行手数料 ","Bank fees ")+money(f.bank)+ls(" · Môi giới "," · 仲介手数料 "," · Brokerage ")+money(f.agency)+ls(" · Phí khác "," · その他 "," · Other fees ")+money(f.total-f.bank-f.agency);
  const income=val("income"),other=val("other-debt"),upkeep=val("upkeep"),threshold=val("debt-threshold",30);
  const a=C.affordability(income,other,simulation.monthly,threshold,upkeep);
@@ -124,7 +124,11 @@ function render(base,simulation){
  $("monthly-budget").textContent=money(a.monthlyCapacity);
  $("housing-monthly").textContent=money(a.housingCashflow);
  $("max-estimated").textContent=man(stress);
- $("afford-status").textContent=!Number.isFinite(a.ratio)?"Hãy nhập thu nhập hợp lệ":a.underThreshold?"Trong ngưỡng mô phỏng ("+threshold+"%)":"Vượt ngưỡng mô phỏng ("+threshold+"%)";
+ $("afford-status").textContent=!Number.isFinite(a.ratio)
+   ?ls("Hãy nhập thu nhập hợp lệ","有効な年収を入力してください","Enter valid income")
+   :a.underThreshold
+     ?ls("Trong ngưỡng mô phỏng (","仮定の返済負担率以内（","Within estimated threshold (")+threshold+ls("%)","％）","%)")
+     :ls("Vượt ngưỡng mô phỏng (","仮定の返済負担率を超過（","Above estimated threshold (")+threshold+ls("%)","％）","%)");
  $("afford-status").className="state-label "+(a.underThreshold?"good":"warn");
  const banks=C.compareBanks({...base,prepayments:read().prepayments,rateChanges:[]},[
   {name:($("bank-a-name").value||"Ngân hàng A"),rate:val("bank-a-rate"),feePercent:val("bank-a-fee-pct"),feeMan:val("bank-a-fee")},
