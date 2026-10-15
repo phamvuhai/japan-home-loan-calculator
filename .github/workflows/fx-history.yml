@@ -1,0 +1,40 @@
+name: JPY FX history (11:00 and 19:00 JST)
+on:
+  schedule:
+    - cron: "0 2 * * *"  # 11:00 JST
+    - cron: "0 10 * * *" # 19:00 JST
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: fx-history-collector
+  cancel-in-progress: false
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout application and collector
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: true
+      - name: Prepare independent data branch
+        run: |
+          git fetch origin fx-history-data
+          git worktree add --detach "$RUNNER_TEMP/fx-history-data" origin/fx-history-data
+      - name: Fetch historical JPY rates and record actual observation
+        env:
+          FX_SLOT: ${{ github.event.schedule == '0 2 * * *' && '11:00' || github.event.schedule == '0 10 * * *' && '19:00' || '' }}
+        run: |
+          node "$GITHUB_WORKSPACE/scripts/collect-fx-history.mjs" "$RUNNER_TEMP/fx-history-data/data/fx-history.json"
+      - name: Commit data only (never trigger application deployment)
+        run: |
+          cd "$RUNNER_TEMP/fx-history-data"
+          git config user.name "home-loan-fx-bot"
+          git config user.email "home-loan-fx-bot@users.noreply.github.com"
+          git add data/fx-history.json
+          if ! git diff --cached --quiet; then
+            git commit -m "FX observations: $(date -u +%FT%TZ)"
+            git push origin HEAD:fx-history-data
+          fi
