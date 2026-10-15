@@ -266,7 +266,7 @@ function table(p){
 }
 function render(){
  renderLabels();const p=records();
- if(selected===null||selected>=p.length)selected=p.length-1;
+ if(selected===null||selected<0||selected>=p.length)selected=p.length-1;
  summary(p);draw(p);detail(p);table(p);
 }
 function setCurrency(code){
