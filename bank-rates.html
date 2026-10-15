@@ -86,30 +86,30 @@ const intro=p.type==='intro-fixed';
 const incomplete=warnings(s,p.bank).length;
 return '<article class="ratecard">'+
  '<div class="rate-heading"><div class="bank">'+safe(bankName)+'</div>'+badge('Cần thẩm định cá nhân','unknown')+'</div>'+
- '<div class="rate-main"><div><h3>'+safe(tr(p.name))+'</h3><div class="jp" lang="ja">'+safe(p.japanese)+'</div></div><div class="rate">'+fmt(p.min)+'% <small>– '+fmt(p.max)+'%/năm</small></div></div>'+
+ '<div class="rate-main"><div><h3>'+safe(tr(p.name))+'</h3><div class="jp" lang="ja">'+safe(p.japanese)+'</div></div><div class="rate">'+fmt(p.min)+'% <small>– '+fmt(p.max)+ls('%/năm','％（年利）','% p.a.')+'</small></div></div>'+
  '<div class="rate-grid">'+
  '<div class="rate-metric"><small>Trả mỗi tháng · mức lãi thấp</small><strong>'+money(lower)+'</strong></div>'+
  '<div class="rate-metric"><small>Trả tháng · mức lãi cao</small><strong>'+money(higher)+'</strong></div>'+
  '<div class="rate-metric"><small>Phí và tổng chi phí</small><strong>Chưa xác minh</strong></div>'+
  '</div>'+
- '<div class="bank-fresh">Lãi công bố có hiệu lực '+safe(p.effectiveDate||'chưa rõ')+' · Xác minh lần cuối '+safe(lastOK?new Date(lastOK).toLocaleString(I()?.locale()||'vi-VN',{timeZone:'Asia/Tokyo'}):'chưa xác minh')+' JST</div>'+
- '<div>'+ (failed?badge('Ngân hàng đang lỗi, hiển thị bản cũ','unknown'):badge('Bản đã lưu','valid'))+' '+badge(incomplete+' lưu ý hồ sơ','unknown')+'</div>'+
+ '<div class="bank-fresh">'+tr('Lãi công bố có hiệu lực')+' '+safe(p.effectiveDate||tr('chưa rõ'))+' · '+tr('Xác minh lần cuối')+' '+safe(lastOK?new Date(lastOK).toLocaleString(I()?.locale()||'vi-VN',{timeZone:'Asia/Tokyo'}):tr('chưa xác minh'))+' JST</div>'+
+ '<div>'+ (failed?badge('Ngân hàng đang lỗi, hiển thị bản cũ','unknown'):badge('Bản đã lưu','valid'))+' '+badge(incomplete+' '+tr('lưu ý hồ sơ'),'unknown')+'</div>'+
  (intro?'<p class="fine">⚠ Đây là lãi cố định 10 năm đầu. Khoản trả tháng chỉ minh họa trong giai đoạn đầu, không đại diện tổng chi phí cả kỳ vay.</p>':'')+
- '<p class="fine">'+safe(tr(p.info))+' '+(dti===null?'':'DTI mô phỏng mức lãi cao: '+fmt(dti)+'%.')+'</p>'+
+ '<p class="fine">'+safe(tr(p.info))+' '+(dti===null?'':tr('DTI mô phỏng mức lãi cao:')+' '+fmt(dti)+'%.')+'</p>'+
  '<div class="actions"><button class="btn primary use-rate" type="button" data-id="'+safe(p.id)+'">Dùng lãi thấp nhất để tính ↗</button><a class="btn" target="_blank" rel="noopener noreferrer" href="'+safe(p.source)+'">Nguồn gốc tiếng Nhật ↗</a></div></article>';
 }
 function render(){
 const s=state();
 el('borrow').textContent=fmt(s.loan/10000)+' 万円';el('ltv').textContent=fmt(s.ltv)+'%';
-if(products.length){el('cards').innerHTML=products.slice().sort((a,b)=>{const sort=el('sort-rates').value;return sort==='bank'?a.bank.localeCompare(b.bank)||a.min-b.min:sort==='monthly'?pmt(s.loan,a.min,s.years*12)-pmt(s.loan,b.min,s.years*12):a.min-b.min;}).map(p=>card(p,s)).join('');}else{el('cards').innerHTML='<div id="placeholder">Không có số liệu có thể xác minh lúc này. Kiểm tra trực tiếp: <a target="_blank" rel="noopener" href="https://www.smbc.co.jp/gadget/loan_shinki/">SMBC ↗</a> hoặc <a target="_blank" rel="noopener" href="https://www.surugabank.co.jp/suruga/pc/Rate?formNo=00204&amp;startUp=suruga_lkinri">Suruga ↗</a>.</div>';}
+if(products.length){el('cards').innerHTML=products.slice().sort((a,b)=>{const sort=el('sort-rates').value;return sort==='bank'?a.bank.localeCompare(b.bank)||a.min-b.min:sort==='monthly'?pmt(s.loan,a.min,s.years*12)-pmt(s.loan,b.min,s.years*12):a.min-b.min;}).map(p=>card(p,s)).join('');}else{el('cards').innerHTML='<div id="placeholder">Không có số liệu có thể xác minh lúc này. Kiểm tra trực tiếp: <a target="_blank" rel="noopener" href="https://www.smbc.co.jp/gadget/loan_shinki/">SMBC ↗</a> '+ls('hoặc','または','or')+' <a target="_blank" rel="noopener" href="https://www.surugabank.co.jp/suruga/pc/Rate?formNo=00204&amp;startUp=suruga_lkinri">Suruga ↗</a>.</div>';}
 const maxDti=products.length&&s.income>0?Math.max(...products.map(p=>(pmt(s.loan,p.max,s.years*12)+s.debts*10000)/(s.income*10000/12)*100)):null;
-const notes=['Đây là đánh giá sơ bộ theo hồ sơ, không phải kết quả 事前審査 hay xác suất được duyệt.','SMBC: '+warnings(s,'smbc').join(' '),'Suruga: '+warnings(s,'suruga').join(' '),'LTV '+fmt(s.ltv)+'%; '+(maxDti===null?'chưa có DTI.':'DTI tham khảo ở mức lãi cao nhất trong sản phẩm được lấy: '+fmt(maxDti)+'%.')+' DTI không phải ngưỡng chính thức của ngân hàng.'].filter(v=>v.trim());
+const notes=[tr('Đây là đánh giá sơ bộ theo hồ sơ, không phải kết quả 事前審査 hay xác suất được duyệt.'),'SMBC: '+warnings(s,'smbc').join(' '),'Suruga: '+warnings(s,'suruga').join(' '),'LTV '+fmt(s.ltv)+'%; '+(maxDti===null?tr('chưa có DTI.'):tr('DTI tham khảo ở mức lãi cao nhất trong sản phẩm được lấy:')+' '+fmt(maxDti)+'%.')+ ' '+tr('DTI không phải ngưỡng chính thức của ngân hàng.')].filter(v=>v.trim());
 el('assessment').innerHTML='<ul>'+notes.map(n=>'<li>'+safe(n)+'</li>').join('')+'</ul>';
 document.querySelectorAll('.use-rate').forEach(b=>b.addEventListener('click',()=>{const p=products.find(x=>x.id===b.dataset.id);if(!p)return;try{localStorage.setItem('home-loan-jp-inputs',JSON.stringify({man:s.loan/10000,annualPercent:p.min,years:Math.round(s.years)}));}catch(_e){}location.href='./index.html';}));
 }
 function renderHistory(){
 const entries=serverHistory.slice().sort((a,b)=>String(b.observedAt).localeCompare(String(a.observedAt)));
-el('historyList').innerHTML=entries.length?entries.slice(0,40).map(x=>'<div>📈 '+safe(x.effectiveDate||'Ngày không rõ')+' · '+safe(x.bank==='smbc'?'SMBC':'Suruga')+' · '+safe(x.name)+' · <b>'+fmt(x.min)+'–'+fmt(x.max)+'%</b> <span class="muted"> (ghi nhận '+safe(new Date(x.observedAt).toLocaleString(I()?.locale()||'vi-VN',{timeZone:'Asia/Tokyo'}))+' JST)</span></div>').join(''):'Chưa ghi nhận thay đổi lãi suất nào sau khi bắt đầu theo dõi tự động.';
+el('historyList').innerHTML=entries.length?entries.slice(0,40).map(x=>'<div>📈 '+safe(x.effectiveDate||tr('Ngày không rõ'))+' · '+safe(x.bank==='smbc'?'SMBC':'Suruga')+' · '+safe(tr(x.name))+' · <b>'+fmt(x.min)+'–'+fmt(x.max)+'%</b> <span class="muted"> (ghi nhận '+safe(new Date(x.observedAt).toLocaleString(I()?.locale()||'vi-VN',{timeZone:'Asia/Tokyo'}))+' JST)</span></div>').join(''):'Chưa ghi nhận thay đổi lãi suất nào sau khi bắt đầu theo dõi tự động.';
 }
 async function loadHistory(){
 try{
@@ -136,12 +136,12 @@ try{
  el('errors').style.display=errors.length?'block':'none';
  el('errors').textContent=errors.map(x=>(x.bank==='smbc'?'SMBC':x.bank==='suruga'?'Suruga':'Hệ thống')+': '+x.message).join(' | ');
  el('liveStatus').textContent=products.length?(errors.length?'Đang hiển thị bản gần nhất — một số nguồn chưa cập nhật':'Bản lãi suất đã được lưu và xác minh'):'Chưa có snapshot lãi suất đã xác minh';
- el('liveTime').textContent=(loadStamp?'Lịch kiểm tra gần nhất '+new Date(loadStamp).toLocaleString(I()?.locale()||'vi-VN',{timeZone:'Asia/Tokyo'})+' (JST)':'Chưa có kết quả kiểm tra')+' · Lịch tự động 08:30 và 20:30 JST';
+ el('liveTime').textContent=(loadStamp?tr('Lịch kiểm tra gần nhất')+' '+new Date(loadStamp).toLocaleString(I()?.locale()||'vi-VN',{timeZone:'Asia/Tokyo'})+' (JST)':'Chưa có kết quả kiểm tra')+' · Lịch tự động 08:30 và 20:30 JST';
  await loadHistory();
 }catch(e){
  products=[];bankStatuses={};el('liveStatus').textContent='Không thể đọc snapshot';
  el('liveTime').textContent='Vẫn có thể kiểm tra trang gốc của các ngân hàng.';
- el('errors').style.display='block';el('errors').textContent='Lỗi dữ liệu: '+String(e.message||e);
+ el('errors').style.display='block';el('errors').textContent=tr('Lỗi dữ liệu:')+' '+String(e.message||e);
  renderHistory();
 }finally{el('refresh').disabled=false;render();}
 }
