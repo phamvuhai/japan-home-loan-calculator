@@ -43,7 +43,7 @@ if(process.env.FX_BACKFILL_ONLY==='1'){
  if(!historyOk)throw new Error('Historical backfill failed; no verified rates were collected.');
  data.updatedAt=observedAt;
  fs.mkdirSync(path.dirname(DEST),{recursive:true});
- fs.writeFileSync(DEST,JSON.stringify(data,null,2)+'\\n');
+ fs.writeFileSync(DEST,JSON.stringify(data,null,2)+'\n');
  console.log('Backfill completed without claiming any 11:00/19:00 observation:',data.daily.length,'days');
  process.exit(0);
 }
