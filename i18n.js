@@ -13,6 +13,7 @@ rows.push(
  ["đang hiển thị","表示中","showing"]
 );
 rows.push(...[["Giá trị quy đổi tham khảo (","参考換算額（","Indicative converted values ("],["Giá trị quy đổi tham khảo","参考換算額","Indicative converted value"],["Nguồn tỷ giá: Frankfurter ↗","為替レート提供：Frankfurter ↗","FX data by Frankfurter ↗"],["Giá trị khoản vay quy đổi:","借入額の換算値：","Converted loan amount:"],["Quy đổi:","換算額：","Converted:"]]);
+rows.push(["Lịch sử tỷ giá JPY ↗","円の為替レート履歴 ↗","JPY rate history ↗"]);
 const dict={ja:new Map(),en:new Map()};
 for(const [vi,ja,en] of rows){dict.ja.set(vi,ja);dict.en.set(vi,en);}
 const KEY="home-loan-jp-language";
