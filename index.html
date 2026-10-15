@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="theme-color" content="#f3f6fb" />
-  <meta name="application-version" content="home-loan-jp-v4.3-prepayment-sticky" />
+  <meta name="application-version" content="home-loan-jp-v4.3.1-pc-floating-result" />
   <meta name="description" content="Công cụ tính khoản vay mua nhà Nhật Bản: tiền trả hằng tháng, tổng tiền lãi và lịch trả nợ." />
   <title>Tính Vay Mua Nhà Nhật Bản | Home Loan Calculator</title>
   <style>
@@ -660,6 +660,16 @@ body{background:linear-gradient(170deg,#eef3ff 0,#f7f9fd 380px,#f5f7fc 100%)}
     }
     @media(max-width:365px){.schedule-expand{grid-template-columns:1fr}}
 
+
+    /* Desktop: let the main result scroll out naturally, then show the floating summary.
+       The old desktop sticky rule prevented the off-screen state during loan setup. */
+    @media(min-width:1101px){
+      .result-top{
+        position:static;
+        top:auto;
+        box-shadow:none;
+      }
+    }
 
     /* v4.3: full-width repayment method in a readable prepayment card. */
     .scenario-block .event-row[data-kind="early"]{
