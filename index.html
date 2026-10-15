@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="theme-color" content="#f3f6fb" />
-  <meta name="application-version" content="home-loan-jp-v4.3.2-centered-pc-result" />
+  <meta name="application-version" content="home-loan-jp-v4.4-multilingual" />
   <meta name="description" content="Công cụ tính khoản vay mua nhà Nhật Bản: tiền trả hằng tháng, tổng tiền lãi và lịch trả nợ." />
   <title>Tính Vay Mua Nhà Nhật Bản | Home Loan Calculator</title>
   <style>
@@ -784,6 +784,31 @@ body{background:linear-gradient(170deg,#eef3ff 0,#f7f9fd 380px,#f5f7fc 100%)}
     }
     @media(prefers-reduced-motion:reduce){.mobile-pay{transition:none}}
 
+
+    /* Responsive language picker and long Japanese/English labels. */
+    .topbar-tools{display:flex;align-items:center;justify-content:flex-end;gap:10px;flex-wrap:wrap;min-width:0}
+    .language-picker{display:inline-flex;align-items:center;gap:6px;flex-shrink:0;min-height:44px;padding:4px 8px 4px 11px;border:1px solid #dbe5f4;border-radius:12px;background:#fff;box-shadow:0 2px 8px #132d4710}
+    .language-picker select{max-width:135px;min-height:36px;padding:5px 21px 5px 3px;font-size:13px;line-height:1.3;background:#fff;border:0;color:#304b85;font-weight:750;cursor:pointer}
+    .language-picker select:focus-visible{outline:2px solid #315bd9;border-radius:6px;outline-offset:2px}
+    .quick-nav.main-nav{flex-wrap:wrap;white-space:normal;overflow-x:visible;scroll-snap-type:none}
+    .quick-nav.main-nav a{white-space:normal;overflow-wrap:anywhere;flex-shrink:1;max-width:100%;text-align:center}
+    .section-heading-content,.financing-heading>div{min-width:0}
+    html[lang="ja"]{font-family:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Hiragino Sans","Yu Gothic",Meiryo,sans-serif}
+    html[lang="ja"] .section-heading h2,html[lang="ja"] .financing-heading h3{letter-spacing:0;overflow-wrap:anywhere}
+    html[lang="ja"] .advanced-panel summary strong{overflow-wrap:anywhere;line-height:1.45}
+    html[lang="ja"] .btn,html[lang="en"] .btn{line-height:1.4;white-space:normal}
+    html[lang="ja"] .metric .label,html[lang="en"] .metric .label{overflow-wrap:anywhere}
+    @media(max-width:640px){
+      .topbar{gap:8px}
+      .topbar-tools{gap:6px}
+      .language-picker{padding:3px 5px 3px 7px;min-height:40px}
+      .language-picker select{max-width:100px;font-size:12px;min-height:34px}
+      .quick-nav.main-nav{gap:6px}
+      .quick-nav.main-nav a{font-size:11px;padding:8px 10px}
+      .advanced-fields label,.scenario-block .event-fields label{overflow-wrap:anywhere}
+      .metric .value{overflow-wrap:anywhere}
+    }
+
     /* Form validation — accessible inline feedback for desktop, tablet and mobile */
     .field-error{display:block;margin:7px 0 12px;color:#b42318;font-size:12px;font-weight:650;line-height:1.5}
     .field-error[hidden]{display:none!important}
@@ -804,7 +829,7 @@ body{background:linear-gradient(170deg,#eef3ff 0,#f7f9fd 380px,#f5f7fc 100%)}
     <header class="page-header">
       <div class="topbar">
         <div class="brand"><div class="brand-mark" aria-hidden="true">¥</div><div><strong>HomeLoan <span>JP</span></strong><small>Máy tính vay mua nhà</small></div></div>
-        <span class="topbar-pill"><span class="live-dot"></span> Dành cho người mua nhà tại Nhật</span>
+        <div class="topbar-tools"><span class="topbar-pill"><span class="live-dot"></span> Dành cho người mua nhà tại Nhật</span><label class="language-picker"><span aria-hidden="true">🌐</span><select data-language-select aria-label="Chọn ngôn ngữ / 言語 / Language"><option value="vi">Tiếng Việt</option><option value="ja">日本語</option><option value="en">English</option></select></label></div>
       </div>
       <div class="hero">
         <div class="eyebrow"><span class="live-dot"></span> TÍNH KHOẢN VAY NHANH &amp; CHÍNH XÁC</div>
@@ -1004,12 +1029,12 @@ body{background:linear-gradient(170deg,#eef3ff 0,#f7f9fd 380px,#f5f7fc 100%)}
     <p class="foot"><strong>Lưu ý:</strong> Công cụ hỗ trợ mô phỏng trả trước, lãi suất thay đổi, phí mua nhà và khả năng trả nợ dựa trên thông số do bạn nhập. Các mức phí/ngân hàng chỉ là giả định và không thể dùng thay cho báo giá hoặc xét duyệt ngân hàng. Dữ liệu tính toán chạy ngay trong trình duyệt, không gửi lên máy chủ.</p>
   </main>
   <aside class="mobile-pay" id="mobile-pay" aria-label="Thanh toán mỗi tháng"><div><span>Trả hàng tháng (kỳ đầu)</span><strong id="mobile-monthly">171.594 ¥</strong></div><a href="#result-title">Xem kết quả <span aria-hidden="true">↗</span></a></aside>
-  <script src="calculator-core.js?v=20261012-responsive-v4"></script><script src="advanced.js?v=20261015-prepay-sticky-v43"></script><script src="validation.js?v=20261012-responsive-v4"></script><script>
+  <script src="calculator-core.js?v=20261012-responsive-v4"></script><script src="i18n.js?v=20261016-v44"></script><script src="advanced.js?v=20261016-v44"></script><script src="validation.js?v=20261016-v44"></script><script>
     "use strict";
     const $ = id => document.getElementById(id);
     const fields = ["principal", "rate", "years"];
-    const yen = amount => Number.isFinite(amount) ? Math.round(amount).toLocaleString("vi-VN") + " ¥" : "—";
-    const perc = amount => amount.toLocaleString("vi-VN", {minimumFractionDigits:2, maximumFractionDigits:2}) + "%";
+    const yen = amount => window.HomeLoanI18n ? window.HomeLoanI18n.money(amount) : (Number.isFinite(amount) ? Math.round(amount).toLocaleString("vi-VN") + " ¥" : "—");
+    const perc = amount => (window.HomeLoanI18n ? window.HomeLoanI18n.number(amount,{minimumFractionDigits:2,maximumFractionDigits:2}) : amount.toLocaleString("vi-VN",{minimumFractionDigits:2,maximumFractionDigits:2})) + "%";
     let current = null;
     let yearlyRows = [];
     let selectedChartYear = 1;
@@ -1095,7 +1120,7 @@ body{background:linear-gradient(170deg,#eef3ff 0,#f7f9fd 380px,#f5f7fc 100%)}
         current={man,annualPercent,years,principal,monthly,total,interest,months:result.paidOffMonth};
         window.loanCurrentSimulation=result;
         $("loan-in-yen").textContent=yen(principal);
-        $("monthly").innerHTML=monthly.toLocaleString("vi-VN",{maximumFractionDigits:0})+' <small>¥ / tháng (kỳ đầu)</small>';
+        $("monthly").innerHTML=yen(monthly)+' <small>'+(window.HomeLoanI18n?.t("mỗi tháng (kỳ đầu)")||"mỗi tháng (kỳ đầu)")+'</small>';
         $("quick-monthly").textContent=yen(monthly);
         $("mobile-monthly").textContent=yen(monthly);
         $("total-interest").textContent=yen(interest);
@@ -1318,7 +1343,13 @@ body{background:linear-gradient(170deg,#eef3ff 0,#f7f9fd 380px,#f5f7fc 100%)}
     });
     $("csv").addEventListener("click", () => {
       if (!current) {window.LoanValidation.revealFirst();return;}
-      const lines = ["Nam,Goc tra trong nam (JPY),Lai tra trong nam (JPY),Tra truoc (JPY),Tong tra trong nam (JPY),Du no cuoi nam (JPY)"];
+      const lang=window.HomeLoanI18n?.language||"vi";
+      const headers={
+        vi:"Nam,Goc tra trong nam (JPY),Lai tra trong nam (JPY),Tra truoc (JPY),Tong tra trong nam (JPY),Du no cuoi nam (JPY)",
+        ja:"年,元金返済額 (JPY),年間利息 (JPY),繰上返済額 (JPY),年間返済総額 (JPY),年末借入残高 (JPY)",
+        en:"Year,Principal repaid (JPY),Interest paid (JPY),Early repayment (JPY),Total paid (JPY),Ending balance (JPY)"
+      };
+      const lines=[headers[lang]||headers.vi];
       for (const row of yearlyRows) lines.push([row.year,row.principal,row.interest,row.extra,row.paid,row.balance].map(Math.round).join(","));
       const blob = new Blob(["\ufeff",lines.join("\r\n")],{type:"text/csv;charset=utf-8"});
       const url = URL.createObjectURL(blob);
@@ -1331,6 +1362,7 @@ body{background:linear-gradient(170deg,#eef3ff 0,#f7f9fd 380px,#f5f7fc 100%)}
         $("principal").value=old.man;$("rate").value=old.annualPercent;$("years").value=old.years;
       }
     } catch (_) {}
+    document.addEventListener("home-loan-language-change",()=>calculate());
     calculate();
   </script>
 </body>
