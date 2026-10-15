@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="vi">
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+ <meta name="theme-color" content="#f5f8ff">
+ <meta name="description" content="Lịch sử tỷ giá JPY VND USD EUR từ tháng 8 năm 2026, biểu đồ tăng giảm, xem theo năm tháng ngày và quan sát 11:00 / 19:00 JST.">
+ <title>Lịch sử tỷ giá JPY | HomeLoan JP</title>
+ <style>
+ :root{font-family:Inter,-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",Meiryo,system-ui,sans-serif;color:#233553;background:#f5f8ff}
+ *{box-sizing:border-box}body{margin:0;min-height:100vh}button,select{font:inherit}button{cursor:pointer}a{color:#2758bb;text-decoration:none}
+ .shell{max-width:1250px;margin:0 auto;padding:24px 22px 60px}.head{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;padding-bottom:20px}
+ .logo{font-weight:850;color:#1e3d8c;font-size:21px;white-space:nowrap}.logo b{color:#4874de}
+ .head-tools{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+ .head-tools a,.head-tools label{display:inline-flex;align-items:center;gap:7px;min-height:42px;background:#fff;padding:7px 11px;border:1px solid #dce5f3;border-radius:11px;font-weight:700;color:#36517d;font-size:12px}
+ .head-tools select{border:0;outline-color:#3861c9;background:#fff;font-size:13px;color:#203b77;font-weight:700;min-height:28px}
+ .hero{border-radius:22px;padding:26px 29px 24px;background:linear-gradient(120deg,#1841ad,#466fe3);color:#fff;box-shadow:0 15px 45px #1e4bb426}
+ .hero .eyebrow{font-weight:800;letter-spacing:.08em;font-size:11px;opacity:.8}.hero h1{font-size:clamp(24px,3vw,35px);line-height:1.25;margin:10px 0}
+ .hero p{max-width:900px;line-height:1.65;color:#e9efff;font-size:13px;margin:0}.hero .pill{display:inline-flex;margin-top:15px;border:1px solid #b3c5ff80;padding:7px 10px;border-radius:999px;font-size:11px;background:#ffffff14}
+ .layout{display:grid;grid-template-columns:minmax(235px,270px) minmax(0,1fr);gap:18px;margin-top:20px;align-items:start}
+ .panel{background:#fff;border:1px solid #e0e7f4;border-radius:17px;padding:19px;box-shadow:0 5px 24px #233d6910;min-width:0}
+ .sidebar{display:grid;gap:15px}.panel h2{font-size:16px;margin:0 0 12px}.field{display:grid;gap:6px;margin-bottom:16px}.field label,.field>span{color:#536a8f;font-size:12px;font-weight:700}
+ .select{width:100%;padding:11px 12px;min-height:46px;border:1px solid #d4def0;border-radius:10px;background:#fff;color:#1e396c;font-size:15px;font-weight:700}
+ .seg{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;background:#edf2fb;border-radius:11px;padding:4px}.seg button{padding:10px 3px;min-height:43px;border:0;background:none;border-radius:8px;color:#5a6e91;font-size:13px;font-weight:800}
+ .seg button[aria-pressed=true]{background:#fff;color:#2451bd;box-shadow:0 2px 8px #1229511a}
+ .period-switch{display:flex;align-items:center;gap:10px;justify-content:space-between}.period-switch strong{font-size:14px;overflow-wrap:anywhere;text-align:center}
+ .arrow{border:1px solid #d9e3f5;border-radius:9px;background:#fff;color:#2c58af;min-width:42px;min-height:42px;font-size:20px}
+ .timing{display:grid;gap:8px}.time-row{display:flex;align-items:center;justify-content:space-between;background:#f5f8ff;border-radius:10px;padding:11px;font-size:12px;gap:10px}.time-row strong{color:#2c4da2}
+ .subtle{font-size:11px;color:#6b7e9d;line-height:1.65;margin:0}.soft{background:#f5f8ff;border:1px solid #e6edfa;border-radius:12px;padding:13px}
+ .content{display:grid;gap:16px;min-width:0}.stat-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+ .stat{background:#f7faff;border:1px solid #e2eafb;border-radius:11px;padding:13px;min-width:0}
+ .stat small{display:block;font-size:11px;color:#667b9a;margin-bottom:8px;line-height:1.4}.stat strong{display:block;color:#223f8a;font-size:clamp(13px,1.4vw,18px);font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+ .chart-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap}.chart-head h2{margin-bottom:5px}
+ .chart-head p{margin:0;font-size:12px;color:#6d809a}.status{font-size:11px;background:#eef3fc;border-radius:20px;padding:7px 11px;color:#526992;font-weight:700}
+ .chart-scroll{width:100%;overflow:auto hidden;margin-top:15px;border-radius:12px;background:linear-gradient(#fff,#fafdff);border:1px solid #e8eef7}
+ #fx-chart{display:block;min-height:305px;width:100%;touch-action:pan-x pan-y}
+ #fx-chart .y-axis,#fx-chart .x-axis{font-size:12px;fill:#607492}
+ #fx-chart .grid{stroke:#e6ebf5;stroke-width:1;stroke-dasharray:3 6}
+ #fx-chart .line{fill:none;stroke-width:3;stroke-linejoin:round;stroke-linecap:round}
+ #fx-chart .point{cursor:pointer;stroke:#fff;stroke-width:2.5;outline:none}
+ #fx-chart .point:focus-visible{stroke:#183b98;stroke-width:5}
+ #fx-chart .point.selected{stroke:#172a70;stroke-width:4}
+ .legend{display:flex;flex-wrap:wrap;gap:15px;color:#7284a0;font-size:11px;margin-top:12px}.legend .dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:5px;background:#2e5ec4}.legend .up{background:#21a874}.legend .down{background:#eb6a78}
+ .chart-placeholder{min-height:290px;display:flex;align-items:center;justify-content:center;text-align:center;padding:24px;color:#6c7b98;font-size:13px}
+ .detail{background:#f6f9ff;border:1px solid #dee7f8;border-radius:13px;padding:17px;display:grid;gap:9px}
+ .detail h3{font-size:14px;margin:0;color:#3457a0}
+ .detail-line{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;font-size:13px;padding:5px 0}
+ .detail-line span{color:#71809a}.detail-line strong{text-align:right;overflow-wrap:anywhere;color:#233f82}
+ .delta.up{color:#14885f}.delta.down{color:#cd4e63}.delta.flat{color:#5e7499}
+ .table-wrap{overflow-x:auto;width:100%;border:1px solid #e5eaf5;border-radius:10px}
+ table{width:100%;border-collapse:collapse;font-size:12px;min-width:540px}thead{background:#f1f6ff;color:#49618b}th,td{padding:11px 12px;text-align:left;border-bottom:1px solid #ecf0f8;white-space:nowrap}
+ tbody tr{cursor:pointer}tbody tr:hover{background:#f3f7ff}tbody tr.selected{background:#e8f0ff}tbody tr:last-child td{border:0}
+ .hint{font-size:11px;color:#8091ab;margin:10px 0}.empty{color:#8b9bb0;text-align:center;padding:20px;font-size:12px}
+ .foot{color:#6b7c98;font-size:11px;line-height:1.7;margin:22px 0}
+ .status.error{color:#a54b43;background:#fff4f1}
+ button:focus-visible,a:focus-visible,select:focus-visible{outline:3px solid #5a80eb;outline-offset:2px}
+ @media(max-width:900px){.layout{grid-template-columns:1fr}.sidebar{grid-template-columns:1fr 1fr;align-items:stretch}.stat-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+ @media(max-width:620px){.shell{padding:12px 11px 40px}.head{padding-bottom:14px;gap:10px}.head-tools{width:100%;justify-content:space-between;gap:5px}.head-tools a,.head-tools label{padding:6px 9px;font-size:11px;min-height:40px}.head-tools select{font-size:12px;max-width:105px}.hero{padding:19px 17px;border-radius:16px}.hero h1{font-size:25px}.layout{margin-top:12px;gap:12px}.sidebar{grid-template-columns:1fr}.panel{padding:15px}.stat-grid{gap:8px}.stat{padding:12px}.stat strong{font-size:15px}.chart-scroll{margin-top:10px}.chart-head{gap:8px}}
+ @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+ </style>
+</head>
+<body>
+<div class="shell">
+ <header class="head">
+  <a class="logo" href="./index.html">⌂ HomeLoan <b>JP</b></a>
+  <div class="head-tools">
+   <a href="./index.html" data-t="calculator">← Máy tính vay</a>
+   <a href="./bank-rates.html" data-t="bankRates">Lãi suất ngân hàng</a>
+   <label>🌐 <select id="language" data-language-select aria-label="Language">
+    <option value="vi">Tiếng Việt</option><option value="ja">日本語</option><option value="en">English</option></select></label>
+   <label>💱 <select id="currency" aria-label="Currency">
+    <option value="VND">JPY → VND</option><option value="USD">JPY → USD</option><option value="EUR">JPY → EUR</option></select></label>
+  </div>
+ </header>
+ <section class="hero">
+  <div class="eyebrow">JPY EXCHANGE RATE HISTORY</div>
+  <h1 data-t="title">Lịch sử tỷ giá JPY</h1>
+  <p data-t="intro">Dữ liệu lịch sử theo ngày từ 16/08/2026; ghi nhận thực tế lúc 11:00 và 19:00 JST từ khi hệ thống thu thập. Bấm vào điểm trên biểu đồ để xem tỷ giá tại thời điểm đó.</p>
+  <span class="pill">JPY → VND / USD / EUR · Frankfurter · <span data-t="indication">Tỷ giá tham khảo</span></span>
+ </section>
+ <div class="layout">
+  <aside class="sidebar">
+   <section class="panel">
+    <h2 data-t="filters">Bộ lọc lịch sử</h2>
+    <div class="field"><label for="currency-duplicate" data-t="pair">Loại tiền</label>
+      <select id="currency-duplicate" class="select"><option value="VND">1 JPY → VND</option><option value="USD">1 JPY → USD</option><option value="EUR">1 JPY → EUR</option></select>
+    </div>
+    <div class="field"><label data-t="period">Xem theo</label>
+      <div class="seg" role="group" aria-label="Time scale">
+       <button data-period="year" aria-pressed="false" type="button" data-t="year">Năm</button>
+       <button data-period="month" aria-pressed="true" type="button" data-t="month">Tháng</button>
+       <button data-period="day" aria-pressed="false" type="button" data-t="day">Ngày</button>
+      </div>
+    </div>
+    <div class="field"><span data-t="selectedPeriod">Thời gian đã chọn</span>
+      <div class="period-switch"><button type="button" class="arrow" id="prev" aria-label="Previous">‹</button><strong id="period-label">10/2026</strong><button type="button" class="arrow" id="next" aria-label="Next">›</button></div>
+    </div>
+    <p class="subtle" data-t="jumpHint">Chạm vào điểm hoặc chọn hàng trong bảng để xem chi tiết. Chọn tháng hoặc ngày để đi sâu hơn.</p>
+   </section>
+   <section class="panel">
+    <h2 data-t="scheduleTitle">Lịch thu thập</h2>
+    <div class="timing"><div class="time-row"><span data-t="morning">Lần 1 – Buổi trưa</span><strong>11:00 JST</strong></div><div class="time-row"><span data-t="evening">Lần 2 – Buổi tối</span><strong>19:00 JST</strong></div></div>
+    <p class="subtle" data-t="scheduleNote" style="margin-top:12px">Hai lần kiểm tra có thể cho cùng một tỷ giá tham khảo vì nguồn được cập nhật theo ngày.</p>
+   </section>
+  </aside>
+  <main class="content">
+   <section class="panel">
+    <div class="chart-head"><div><h2 data-t="overview">Tổng hợp biến động</h2><p id="summary-range">1 JPY → VND</p></div><span class="status" id="data-status" aria-live="polite" data-t="loading">Đang tải dữ liệu thực tế…</span></div>
+    <div class="stat-grid" style="margin-top:14px">
+     <div class="stat"><small data-t="first">Đầu kỳ</small><strong id="stat-first">—</strong></div>
+     <div class="stat"><small data-t="last">Cuối kỳ</small><strong id="stat-last">—</strong></div>
+     <div class="stat"><small data-t="low">Thấp nhất</small><strong id="stat-min">—</strong></div>
+     <div class="stat"><small data-t="high">Cao nhất</small><strong id="stat-max">—</strong></div>
+    </div>
+    <div class="chart-scroll" id="chart-scroll" aria-label="JPY exchange rate historical chart"><svg id="fx-chart" viewBox="0 0 900 305" role="group" aria-label="Interactive exchange rate chart"></svg></div>
+    <div class="legend"><span><i class="dot"></i><span data-t="point">Điểm tỷ giá thực tế</span></span><span><i class="dot up"></i><span data-t="up">Tăng</span></span><span><i class="dot down"></i><span data-t="down">Giảm</span></span></div>
+    <p class="hint" data-t="chartHint">Click, chạm hoặc dùng Tab + Enter vào điểm để xem tỷ giá chi tiết. Trên điện thoại có thể vuốt biểu đồ ngang.</p>
+   </section>
+   <section class="panel"><h2 data-t="selectedDetail">Chi tiết điểm đã chọn</h2>
+    <div class="detail" aria-live="polite">
+     <h3 id="detail-title">—</h3>
+     <div class="detail-line"><span data-t="date">Ngày / giờ</span><strong id="detail-time">—</strong></div>
+     <div class="detail-line"><span data-t="value">Tỷ giá 1 JPY</span><strong id="detail-rate">—</strong></div>
+     <div class="detail-line"><span data-t="change">Thay đổi so với trước</span><strong class="delta flat" id="detail-delta">—</strong></div>
+     <div class="detail-line"><span data-t="rateDate">Ngày hiệu lực nguồn</span><strong id="detail-effective">—</strong></div>
+     <div class="detail-line"><span data-t="source">Nguồn</span><strong id="detail-source">Frankfurter</strong></div>
+     <p class="subtle" id="detail-note"></p>
+    </div>
+   </section>
+   <section class="panel"><div class="chart-head"><h2 data-t="detailTable">Bảng chi tiết tỷ giá</h2><span class="status" id="count">—</span></div>
+    <p class="hint" data-t="tableHint">Chọn một hàng để đánh dấu điểm tương ứng trên biểu đồ.</p>
+    <div class="table-wrap"><table><thead><tr><th data-t="time">Thời điểm</th><th data-t="value">Tỷ giá 1 JPY</th><th data-t="change">Biến động</th><th data-t="kind">Loại dữ liệu</th></tr></thead><tbody id="rows"><tr><td colspan="4" class="empty">Đang tải dữ liệu…</td></tr></tbody></table></div>
+   </section>
+  </main>
+ </div>
+ <p class="foot" data-t="disclaimer">Tỷ giá dùng để tham khảo, không phải giá mua/bán tại ngân hàng. Dữ liệu 2 tháng quá khứ là tham chiếu theo ngày, không có giờ 11:00/19:00. Các mốc giờ chỉ áp dụng với các lần quan sát thực tế sau khi hệ thống thu thập. Dữ liệu thị trường có thể được công bố trễ vào cuối tuần/ngày lễ.</p>
+</div>
+<script src="./i18n.js?v=20261016-v44"></script>
+<script src="./fx-history.js?v=20261016-v46"></script>
+</body></html>
