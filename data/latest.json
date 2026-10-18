@@ -12,7 +12,7 @@
       "effectiveDate": "2026-10-01",
       "source": "https://www.smbc.co.jp/gadget/loan_shinki/",
       "info": "Điều kiện ưu đãi, phí và khả năng được duyệt phải xác nhận với SMBC.",
-      "verifiedAt": "2026-10-18T01:19:58.727Z"
+      "verifiedAt": "2026-10-18T14:43:03.263Z"
     },
     {
       "bank": "smbc",
@@ -25,7 +25,7 @@
       "effectiveDate": "2026-10-01",
       "source": "https://www.smbc.co.jp/gadget/loan_shinki/",
       "info": "Lãi cố định 10 năm đầu, không cố định hết kỳ vay.",
-      "verifiedAt": "2026-10-18T01:19:58.727Z"
+      "verifiedAt": "2026-10-18T14:43:03.263Z"
     },
     {
       "bank": "suruga",
@@ -38,7 +38,7 @@
       "effectiveDate": "2026-10-01",
       "source": "https://www.surugabank.co.jp/suruga/pc/Rate?formNo=00204&startUp=suruga_lkinri",
       "info": "Ưu đãi tùy điều kiện giao dịch.",
-      "verifiedAt": "2026-10-18T01:19:58.727Z"
+      "verifiedAt": "2026-10-18T14:43:03.263Z"
     },
     {
       "bank": "suruga",
@@ -51,7 +51,7 @@
       "effectiveDate": "2026-10-01",
       "source": "https://www.surugabank.co.jp/suruga/pc/Rate?formNo=00204&startUp=suruga_lkinri",
       "info": "Phí xử lý theo tỷ lệ chưa tính vào khoản trả tháng.",
-      "verifiedAt": "2026-10-18T01:19:58.727Z"
+      "verifiedAt": "2026-10-18T14:43:03.263Z"
     },
     {
       "bank": "suruga",
@@ -64,27 +64,27 @@
       "effectiveDate": "2026-10-01",
       "source": "https://www.surugabank.co.jp/suruga/pc/Rate?formNo=00204&startUp=suruga_lkinri",
       "info": "Phí xử lý cố định chưa tính vào khoản trả tháng.",
-      "verifiedAt": "2026-10-18T01:19:58.727Z"
+      "verifiedAt": "2026-10-18T14:43:03.263Z"
     }
   ],
   "bankStatuses": {
     "smbc": {
       "status": "ok",
-      "checkedAt": "2026-10-18T01:19:58.727Z",
-      "lastSuccessAt": "2026-10-18T01:19:58.727Z",
+      "checkedAt": "2026-10-18T14:43:03.263Z",
+      "lastSuccessAt": "2026-10-18T14:43:03.263Z",
       "source": "https://www.smbc.co.jp/gadget/loan_shinki/",
       "count": 2
     },
     "suruga": {
       "status": "ok",
-      "checkedAt": "2026-10-18T01:19:58.727Z",
-      "lastSuccessAt": "2026-10-18T01:19:58.727Z",
+      "checkedAt": "2026-10-18T14:43:03.263Z",
+      "lastSuccessAt": "2026-10-18T14:43:03.263Z",
       "source": "https://www.surugabank.co.jp/suruga/pc/Rate?formNo=00204&startUp=suruga_lkinri",
       "count": 3
     }
   },
-  "checkedAt": "2026-10-18T01:19:58.727Z",
-  "lastSuccessAt": "2026-10-18T01:19:58.727Z",
+  "checkedAt": "2026-10-18T14:43:03.263Z",
+  "lastSuccessAt": "2026-10-18T14:43:03.263Z",
   "errors": [],
   "source": "GitHub Actions scheduled at 08:30/20:30 JST",
   "disclaimer": "Lãi suất công bố, không phải lãi suất duyệt cá nhân."
