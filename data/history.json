@@ -49,7 +49,37 @@
       "max": 5.275,
       "effectiveDate": "2026-10-01",
       "source": "https://www.surugabank.co.jp/suruga/pc/Rate?formNo=00204&startUp=suruga_lkinri"
+    },
+    {
+      "observedAt": "2026-10-30T17:04:48.391Z",
+      "bank": "suruga",
+      "id": "suruga-preferred",
+      "name": "Gói ưu đãi theo giao dịch",
+      "min": 1.575,
+      "max": 4.575,
+      "effectiveDate": "2026-11-02",
+      "source": "https://www.surugabank.co.jp/suruga/pc/Rate?formNo=00204&startUp=suruga_lkinri"
+    },
+    {
+      "observedAt": "2026-10-30T17:04:48.391Z",
+      "bank": "suruga",
+      "id": "suruga-percent",
+      "name": "Phí xử lý theo tỷ lệ",
+      "min": 2.225,
+      "max": 5.125,
+      "effectiveDate": "2026-11-02",
+      "source": "https://www.surugabank.co.jp/suruga/pc/Rate?formNo=00204&startUp=suruga_lkinri"
+    },
+    {
+      "observedAt": "2026-10-30T17:04:48.391Z",
+      "bank": "suruga",
+      "id": "suruga-flat",
+      "name": "Phí xử lý cố định",
+      "min": 2.375,
+      "max": 5.275,
+      "effectiveDate": "2026-11-02",
+      "source": "https://www.surugabank.co.jp/suruga/pc/Rate?formNo=00204&startUp=suruga_lkinri"
     }
   ],
-  "updatedAt": "2026-10-30T02:45:23.538Z"
+  "updatedAt": "2026-10-30T17:04:48.391Z"
 }
