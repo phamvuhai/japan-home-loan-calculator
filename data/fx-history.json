@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "base": "JPY",
   "historicalStart": "2026-08-16",
-  "updatedAt": "2026-10-31T15:33:03.582Z",
+  "updatedAt": "2026-11-01T08:27:16.146Z",
   "source": "Frankfurter",
   "daily": [
     {
@@ -688,6 +688,15 @@
         "VND": 163.37
       },
       "kind": "daily-reference"
+    },
+    {
+      "date": "2026-11-01",
+      "rates": {
+        "EUR": 0.0056752,
+        "USD": 0.0063427,
+        "VND": 163.44
+      },
+      "kind": "daily-reference"
     }
   ],
   "observations": [
@@ -1199,6 +1208,23 @@
         "EUR": "2026-10-30",
         "USD": "2026-10-30",
         "VND": "2026-10-30"
+      }
+    },
+    {
+      "date": "2026-11-01",
+      "slot": "11:00",
+      "observedAt": "2026-11-01T08:27:16.146Z",
+      "source": "Frankfurter",
+      "status": "ok",
+      "rates": {
+        "EUR": 0.0056752,
+        "USD": 0.0063427,
+        "VND": 163.44
+      },
+      "sourceDates": {
+        "EUR": "2026-11-01",
+        "USD": "2026-11-01",
+        "VND": "2026-11-01"
       }
     },
     {
