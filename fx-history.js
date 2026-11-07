@@ -25,7 +25,7 @@ const dict={
   noteAverage:'Giá trị trung bình của các ngày có dữ liệu trong tháng, không phải tỷ giá tại một thời điểm cụ thể.',
   noteNone:'Chọn một điểm trên biểu đồ hoặc bảng để xem chi tiết.',count:'điểm',viewMonth:'Xem chi tiết tháng',viewDay:'Xem chi tiết ngày',
   average:'TB tháng',sourceMissing:'Nguồn chưa có dữ liệu mới trong ngày',dataLoaded:'Dữ liệu tham chiếu thực',sourceError:'Nguồn dữ liệu đang lỗi',
-  previous:'Thời gian trước',next:'Thời gian sau'
+  previous:'Thời gian trước',next:'Thời gian sau',scrollChart:'↔ Vuốt ngang để xem đầy đủ các ngày'
  },
  ja:{
   calculator:'← 返済シミュレーター',bankRates:'銀行金利',title:'円の為替レート履歴',
@@ -47,7 +47,7 @@ const dict={
   noteAverage:'データが存在する日の日次参考レート平均です。特定時点の価格ではありません。',
   noteNone:'グラフまたは表からポイントを選択してください。',count:'ポイント',viewMonth:'この月を表示',viewDay:'この日を表示',
   average:'月平均',sourceMissing:'当日の新しい公表値がありません',dataLoaded:'確認済み参考データ',sourceError:'データ提供元エラー',
-  previous:'前の期間',next:'次の期間'
+  previous:'前の期間',next:'次の期間',scrollChart:'↔ 横にスワイプして日付を確認'
  },
  en:{
   calculator:'← Loan calculator',bankRates:'Bank rates',title:'JPY exchange-rate history',
@@ -69,7 +69,7 @@ const dict={
   noteAverage:'Average of available daily reference rates in this month, not a price at one instant.',
   noteNone:'Select a point in the chart or table.',count:'points',viewMonth:'View this month',viewDay:'View this day',
   average:'Monthly avg.',sourceMissing:'No new source rate published today',dataLoaded:'Verified reference data',sourceError:'Provider error',
-  previous:'Previous period',next:'Next period'
+  previous:'Previous period',next:'Next period',scrollChart:'↔ Swipe horizontally to explore dates'
  }
 };
 let locale='vi',currency='VND',period='month',focus='2026-10-16',selected=null,daily=[],observations=[],loadState='loading',loadedTo='',lastError='';
@@ -153,6 +153,7 @@ function renderLabels(){
  document.querySelectorAll('[data-period]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.period===period)));
  $('period-label').textContent=periodText();
  $('summary-range').textContent='1 JPY → '+currency+' · '+periodText();
+ $('fx-axis-unit').textContent='1 JPY → '+currency;
  $('prev').setAttribute('aria-label',t('previous')) ;$('next').setAttribute('aria-label',t('next'));
  const newPrev=shiftDate(focus,-1,period),newNext=shiftDate(focus,1,period);
  $('prev').disabled=newPrev<initDate;$('next').disabled=newNext>todayJST();
@@ -183,39 +184,60 @@ function svgNode(tag,attrs,txt){
  return el;
 }
 function draw(p){
- const svg=$('fx-chart');while(svg.firstChild)svg.removeChild(svg.firstChild);
- const wrap=$('chart-scroll');
- if(!p.length){svg.setAttribute('width','100%');svg.setAttribute('viewBox','0 0 900 305');svg.append(svgNode('text',{x:450,y:148,'text-anchor':'middle',fill:'#8292a8','font-size':16},t('noData')));return}
- const W=Math.max(850,(p.length-1)*37+145),H=305,left=76,right=28,top=24,bottom=55;
- svg.style.width=W+'px';svg.setAttribute('viewBox',`0 0 ${W} ${H}`);
+ const svg=$('fx-chart'),axis=$('fx-y-axis'),wrap=$('chart-scroll');
+ svg.replaceChildren();axis.replaceChildren();
+ const H=305,top=32,bottom=55,axisW=90,left=28,right=30;
+ axis.setAttribute('viewBox','0 0 '+axisW+' '+H);
+ if(!p.length){
+  svg.style.width='100%';svg.setAttribute('viewBox','0 0 400 305');
+  svg.append(svgNode('text',{x:200,y:148,'text-anchor':'middle',fill:'#8292a8','font-size':14},t('noData')));
+  return;
+ }
+ const W=Math.max(wrap?.clientWidth||0,(p.length-1)*44+left+right,320);
+ svg.style.width=W+'px';svg.setAttribute('viewBox','0 0 '+W+' '+H);
  const all=p.map(x=>x.rate),max=Math.max(...all),min=Math.min(...all);
- const range=max-min||Math.max(max*0.002,1e-7),pad=range*0.2;
- const ymin=Math.max(0,min-pad),ymax=max+pad;
- const cx=i=>left+i*(W-left-right)/Math.max(1,p.length-1);
+ const spread=max-min||Math.max(Math.abs(max)*0.002,currency==='VND'?0.1:0.000001);
+ const pad=spread*0.18,ymin=Math.max(0,min-pad),ymax=max+pad;
+ const cx=i=>p.length===1?W/2:left+i*(W-left-right)/(p.length-1);
  const cy=v=>top+(H-top-bottom)*(1-(v-ymin)/(ymax-ymin));
+ axis.append(svgNode('text',{x:10,y:17,class:'axis-title'},currency+' / JPY'));
  for(let i=0;i<=4;i++){
   const value=ymin+i*(ymax-ymin)/4,y=cy(value);
-  svg.append(svgNode('line',{x1:left,y1:y,x2:W-right,y2:y,class:'grid'}));
-  svg.append(svgNode('text',{x:left-8,y:y+4,'text-anchor':'end',class:'y-axis'},shortRate(value)));
+  svg.append(svgNode('line',{x1:0,y1:y,x2:W,y2:y,class:'grid'}));
+  axis.append(svgNode('line',{x1:axisW-7,y1:y,x2:axisW,y2:y,stroke:'#c4d2e8','stroke-width':1.3}));
+  axis.append(svgNode('text',{x:axisW-11,y:y+4,'text-anchor':'end',class:'y-axis'},shortRate(value)));
  }
- const step=Math.max(1,Math.ceil(p.length/9));
+ const defs=svgNode('defs'),gradient=svgNode('linearGradient',{id:'fx-area-gradient',x1:'0%',y1:'0%',x2:'0%',y2:'100%'});
+ gradient.append(svgNode('stop',{offset:'0%','stop-color':'#4a79da','stop-opacity':0.23}));
+ gradient.append(svgNode('stop',{offset:'100%','stop-color':'#4a79da','stop-opacity':0.01}));
+ defs.append(gradient);svg.append(defs);
+ const coordinates=p.map((r,i)=>[cx(i),cy(r.rate)]);
+ const area='M '+cx(0)+' '+(H-bottom)+' L '+coordinates.map(q=>q.join(' ')).join(' L ')+' L '+cx(p.length-1)+' '+(H-bottom)+' Z';
+ svg.append(svgNode('path',{d:area,fill:'url(#fx-area-gradient)'}));
+ svg.append(svgNode('polyline',{points:coordinates.map(q=>q.join(',')).join(' '),stroke:'#396bd0',class:'line'}));
+ if(selected>=0&&selected<p.length){
+  const x=cx(selected),y=cy(p[selected].rate);
+  svg.append(svgNode('line',{x1:x,y1:top,x2:x,y2:H-bottom,stroke:'#9bb4ee','stroke-dasharray':'4 5','stroke-width':1.5}));
+  svg.append(svgNode('line',{x1:0,y1:y,x2:W,y2:y,stroke:'#9bb4ee','stroke-dasharray':'4 5','stroke-width':1}));
+ }
+ svg.append(svgNode('line',{x1:0,y1:H-bottom,x2:W,y2:H-bottom,stroke:'#dce5f4'}));
+ const step=Math.max(1,Math.ceil(p.length/Math.max(8,Math.floor(W/110))));
  p.forEach((r,i)=>{
   if(i%step===0||i===p.length-1){
-   const label=period==='year'?r.key?.slice(5)||r.date.slice(5,7):period==='month'?r.date.slice(8):r.slot||r.date.slice(8);
+   const label=period==='year'?r.key?.slice(5)||r.date.slice(5,7):period==='month'?r.date.slice(8)+'/'+r.date.slice(5,7):r.slot||r.date.slice(8);
    svg.append(svgNode('text',{x:cx(i),y:H-25,'text-anchor':'middle',class:'x-axis'},label));
-  }
-  if(i>0){
-   svg.append(svgNode('line',{x1:cx(i-1),y1:cy(p[i-1].rate),x2:cx(i),y2:cy(r.rate),stroke:r.rate>p[i-1].rate?'#20a276':r.rate<p[i-1].rate?'#e56f74':'#3766c8',class:'line'}));
   }
  });
  p.forEach((r,i)=>{
   const n=svgNode('circle',{cx:cx(i),cy:cy(r.rate),r:i===selected?7:5,fill:i===selected?'#284cb3':r.delta>0?'#20a276':r.delta<0?'#e56f74':'#396dca',class:'point'+(i===selected?' selected':''),tabindex:0,role:'button','aria-label':(r.kind==='monthly-average'?r.key:r.observedAt||r.date)+' · '+fullRate(r.rate),'data-index':i});
+  n.append(svgNode('title',{},pointTime(r)+' · '+fullRate(r.rate)));
   n.addEventListener('click',()=>selectPoint(i));
   n.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();selectPoint(i)}});
   svg.append(n);
  });
  if(wrap&&p.length>14&&selected===p.length-1)wrap.scrollLeft=wrap.scrollWidth-wrap.clientWidth;
 }
+
 function pointTime(r){
  if(r.kind==='monthly-average')return (r.key||r.date.slice(0,7));
  if(r.kind==='scheduled-observation')return dateLabel(r.date)+' · '+r.slot+' JST ('+(r.observedAt?new Intl.DateTimeFormat(localeCode(),{timeZone:'Asia/Tokyo',hour:'2-digit',minute:'2-digit'}).format(new Date(r.observedAt)):'—')+')';
@@ -293,6 +315,7 @@ function setup(){
  $('prev').addEventListener('click',()=>{focus=clamp(shiftDate(focus,-1,period));selected=null;render()});
  $('next').addEventListener('click',()=>{focus=clamp(shiftDate(focus,1,period));selected=null;render()});
  document.addEventListener('home-loan-language-change',e=>{locale=e.detail?.language||window.HomeLoanI18n?.language||'vi';render()});
+ window.addEventListener('resize',()=>draw(records()),{passive:true});
  render();load();
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',setup,{once:true});else setup();
