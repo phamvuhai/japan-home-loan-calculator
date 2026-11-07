@@ -32,8 +32,16 @@
  .stat small{display:block;font-size:11px;color:#667b9a;margin-bottom:8px;line-height:1.4}.stat strong{display:block;color:#223f8a;font-size:clamp(13px,1.4vw,18px);font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
  .chart-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap}.chart-head h2{margin-bottom:5px}
  .chart-head p{margin:0;font-size:12px;color:#6d809a}.status{font-size:11px;background:#eef3fc;border-radius:20px;padding:7px 11px;color:#526992;font-weight:700}
- .chart-scroll{width:100%;overflow:auto hidden;margin-top:15px;border-radius:12px;background:linear-gradient(#fff,#fafdff);border:1px solid #e8eef7}
- #fx-chart{display:block;min-height:305px;width:100%;touch-action:pan-x pan-y}
+ .chart-context{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-top:17px;margin-bottom:8px}
+ .axis-unit{font-size:12px;font-weight:850;color:#274c9b;background:#eef3ff;border:1px solid #dae5fa;border-radius:8px;padding:6px 10px}
+ .scroll-hint{font-size:11px;color:#647998;font-weight:650}
+ .chart-frame{display:grid;grid-template-columns:90px minmax(0,1fr);width:100%;overflow:hidden;border:1px solid #dfe8f7;border-radius:14px;background:#fff;box-shadow:0 3px 14px #315ba40a}
+ .chart-fixed-axis{position:relative;z-index:2;min-width:0;background:#f6f9ff;border-right:1px solid #dde6f4;box-shadow:3px 0 9px #23488a0b}
+ #fx-y-axis{display:block;width:100%;height:305px}
+ #fx-y-axis .y-axis{font-size:12px;fill:#4c6286;font-variant-numeric:tabular-nums;font-weight:650}
+ #fx-y-axis .axis-title{font-size:10px;fill:#5c7192;font-weight:750}
+ .chart-scroll{min-width:0;width:100%;overflow-x:auto;overflow-y:hidden;background:linear-gradient(#fff,#fafdff);-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain;scrollbar-width:thin}
+ #fx-chart{display:block;height:305px;min-height:305px;width:100%;touch-action:pan-x pan-y}
  #fx-chart .y-axis,#fx-chart .x-axis{font-size:12px;fill:#607492}
  #fx-chart .grid{stroke:#e6ebf5;stroke-width:1;stroke-dasharray:3 6}
  #fx-chart .line{fill:none;stroke-width:3;stroke-linejoin:round;stroke-linecap:round}
@@ -55,7 +63,7 @@
  .status.error{color:#a54b43;background:#fff4f1}
  button:focus-visible,a:focus-visible,select:focus-visible{outline:3px solid #5a80eb;outline-offset:2px}
  @media(max-width:900px){.layout{grid-template-columns:1fr}.sidebar{grid-template-columns:1fr 1fr;align-items:stretch}.stat-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
- @media(max-width:620px){.shell{padding:12px 11px 40px}.head{padding-bottom:14px;gap:10px}.head-tools{width:100%;justify-content:space-between;gap:5px}.head-tools a,.head-tools label{padding:6px 9px;font-size:11px;min-height:40px}.head-tools select{font-size:12px;max-width:105px}.hero{padding:19px 17px;border-radius:16px}.hero h1{font-size:25px}.layout{margin-top:12px;gap:12px}.sidebar{grid-template-columns:1fr}.panel{padding:15px}.stat-grid{gap:8px}.stat{padding:12px}.stat strong{font-size:15px}.chart-scroll{margin-top:10px}.chart-head{gap:8px}}
+ @media(max-width:620px){.shell{padding:12px 11px 40px}.head{padding-bottom:14px;gap:10px}.head-tools{width:100%;justify-content:space-between;gap:5px}.head-tools a,.head-tools label{padding:6px 9px;font-size:11px;min-height:40px}.head-tools select{font-size:12px;max-width:105px}.hero{padding:19px 17px;border-radius:16px}.hero h1{font-size:25px}.layout{margin-top:12px;gap:12px}.sidebar{grid-template-columns:1fr}.panel{padding:15px}.stat-grid{gap:8px}.stat{padding:12px}.stat strong{font-size:15px}.chart-frame{grid-template-columns:80px minmax(0,1fr)}.chart-context{margin-top:12px}.scroll-hint{font-size:10px}.chart-head{gap:8px}}
  @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
  </style>
 </head>
@@ -112,7 +120,8 @@
      <div class="stat"><small data-t="low">Thấp nhất</small><strong id="stat-min">—</strong></div>
      <div class="stat"><small data-t="high">Cao nhất</small><strong id="stat-max">—</strong></div>
     </div>
-    <div class="chart-scroll" id="chart-scroll" aria-label="JPY exchange rate historical chart"><svg id="fx-chart" viewBox="0 0 900 305" role="group" aria-label="Interactive exchange rate chart"></svg></div>
+    <div class="chart-context"><span class="axis-unit" id="fx-axis-unit">1 JPY → VND</span><span class="scroll-hint" data-t="scrollChart">↔ Vuốt ngang để xem toàn bộ ngày</span></div>
+    <div class="chart-frame" role="group" aria-label="JPY exchange rate historical chart"><div class="chart-fixed-axis"><svg id="fx-y-axis" viewBox="0 0 90 305" role="img" aria-label="Fixed vertical exchange rate value axis"></svg></div><div class="chart-scroll" id="chart-scroll" aria-label="Scroll exchange-rate dates horizontally"><svg id="fx-chart" viewBox="0 0 900 305" role="group" aria-label="Interactive exchange rate chart"></svg></div></div>
     <div class="legend"><span><i class="dot"></i><span data-t="point">Điểm tỷ giá thực tế</span></span><span><i class="dot up"></i><span data-t="up">Tăng</span></span><span><i class="dot down"></i><span data-t="down">Giảm</span></span></div>
     <p class="hint" data-t="chartHint">Click, chạm hoặc dùng Tab + Enter vào điểm để xem tỷ giá chi tiết. Trên điện thoại có thể vuốt biểu đồ ngang.</p>
    </section>
@@ -136,5 +145,5 @@
  <p class="foot" data-t="disclaimer">Tỷ giá dùng để tham khảo, không phải giá mua/bán tại ngân hàng. Dữ liệu 2 tháng quá khứ là tham chiếu theo ngày, không có giờ 11:00/19:00. Các mốc giờ chỉ áp dụng với các lần quan sát thực tế sau khi hệ thống thu thập. Dữ liệu thị trường có thể được công bố trễ vào cuối tuần/ngày lễ.</p>
 </div>
 <script src="./i18n.js?v=20261016-v44"></script>
-<script src="./fx-history.js?v=20261016-v46"></script>
+<script src="./fx-history.js?v=20261107-v47"></script>
 </body></html>
