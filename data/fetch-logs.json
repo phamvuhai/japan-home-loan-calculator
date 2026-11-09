@@ -529,6 +529,16 @@
         "suruga": "ok"
       },
       "errors": []
+    },
+    {
+      "slot": "2026-11-09@08:30",
+      "checkedAt": "2026-11-09T02:52:04.034Z",
+      "status": "ok",
+      "bankResults": {
+        "smbc": "ok",
+        "suruga": "ok"
+      },
+      "errors": []
     }
   ]
 }
