@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "base": "JPY",
   "historicalStart": "2026-08-16",
-  "updatedAt": "2026-11-15T08:38:41.064Z",
+  "updatedAt": "2026-11-15T16:42:47.319Z",
   "source": "Frankfurter",
   "daily": [
     {
@@ -791,45 +791,45 @@
     {
       "date": "2026-11-11",
       "rates": {
-        "EUR": 0.0056331,
-        "USD": 0.0062962,
-        "VND": 161.63
+        "EUR": 0.0056333,
+        "USD": 0.0062959,
+        "VND": 161.62
       },
       "kind": "daily-reference"
     },
     {
       "date": "2026-11-12",
       "rates": {
-        "EUR": 0.0056433,
-        "USD": 0.0062685,
-        "VND": 161.4
+        "EUR": 0.0056435,
+        "USD": 0.006267,
+        "VND": 161.36
       },
       "kind": "daily-reference"
     },
     {
       "date": "2026-11-13",
       "rates": {
-        "EUR": 0.0056444,
-        "USD": 0.0062577,
-        "VND": 161.14
+        "EUR": 0.0056445,
+        "USD": 0.0062561,
+        "VND": 161.09
       },
       "kind": "daily-reference"
     },
     {
       "date": "2026-11-14",
       "rates": {
-        "EUR": 0.0056448,
-        "USD": 0.0062557,
-        "VND": 161.04
+        "EUR": 0.005645,
+        "USD": 0.0062544,
+        "VND": 161.01
       },
       "kind": "daily-reference"
     },
     {
       "date": "2026-11-15",
       "rates": {
-        "EUR": 0.0056457,
-        "USD": 0.0062545,
-        "VND": 160.99
+        "EUR": 0.0056463,
+        "USD": 0.0062538,
+        "VND": 160.97
       },
       "kind": "daily-reference"
     }
@@ -1853,6 +1853,23 @@
         "EUR": "2026-11-14",
         "USD": "2026-11-14",
         "VND": "2026-11-14"
+      }
+    },
+    {
+      "date": "2026-11-16",
+      "slot": "19:00",
+      "observedAt": "2026-11-15T16:42:47.319Z",
+      "source": "Frankfurter",
+      "status": "ok",
+      "rates": {
+        "EUR": 0.0056463,
+        "USD": 0.0062538,
+        "VND": 160.97
+      },
+      "sourceDates": {
+        "EUR": "2026-11-15",
+        "USD": "2026-11-15",
+        "VND": "2026-11-15"
       }
     }
   ]
